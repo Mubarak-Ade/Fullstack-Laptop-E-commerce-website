@@ -1,0 +1,33 @@
+import {CartCard} from '@/components/Cart/CartCard';
+import {SummaryCard} from '@/components/Cart/SummaryCard';
+import {RelatedProduct} from '@/components/layout/RelatedProduct';
+import {Icon} from '@/components/shared/Icon';
+import {useProductStore} from '@/store/ProductStore';
+import {Frown} from 'lucide-react';
+
+export const CartPage=() => {
+  const cart=useProductStore(s => s.cart)
+  console.log(cart);
+
+  return (
+    <div className="bg-light-fg dark:bg-dark-bg">
+      <div className='max-w-6xl p-5 w-full m-auto min-h-screen'>
+        <h1 className='text-5xl text-coral-black dark:text-white font-display font-bold'>Shopping Cart</h1>
+        <div className="mt-5 flex gap-5 items-center justify-between">
+          <ul className="space-y-4 scrollbar-thumb scrollbar-webkit scrollbar-thin max-w-xl w-full overflow-y-auto flex flex-col bg-light-fg dark:bg-dark-fg h-100 rounded-xl">
+            {cart.length!==0? cart.map((product) => (
+              <CartCard {...product} />
+            )):(
+              <div className="flex items-center h-full text-coral-black dark:text-white gap-2 w-full justify-center">
+                  <p className='text-xl font-technical text-center '>Cart is Empty</p>
+                  <Icon icon={Frown} size={30} />
+              </div>
+            )}
+          </ul>
+          <SummaryCard />
+        </div>
+        <RelatedProduct />
+      </div>
+    </div>
+  )
+}
