@@ -4,7 +4,7 @@ import createHttpError from "http-errors";
 import { Product as CreateProductDTO } from "../schema/product.schema.js";
 
 export const createProductService = async ( data: CreateProductDTO ) => {
-    const { name, brand, price, discountPrice, images, specs, stocks } = data;
+    const { name, brand, price, discountPrice, images, stocks } = data;
 
     if ( discountPrice && discountPrice >= price ) {
         throw createHttpError( 400, "Discount price must be less than original price" );
@@ -28,7 +28,9 @@ export const createProductService = async ( data: CreateProductDTO ) => {
         throw createHttpError( 400, "Product already exist" );
     }
 
-    const product = await Product.create( data );
+    const product = new Product( data );
+
+    await product.save()
 
     return product;
 };

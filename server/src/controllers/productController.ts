@@ -22,18 +22,33 @@ export const getSingleProduct: RequestHandler = async ( req, res, next ): Promis
     next( error );
   }
 };
-export const createProduct: RequestHandler = async ( req, res, next ): Promise<void> => {
+export const createProduct: RequestHandler = async (req, res, next): Promise<void> => {
   try {
     const files = req.files as Express.Multer.File[];
-    const imagePaths = files.map( file => file.path );
-
-    const parse = ProductSchema.safeParse( { ...req.body, images: imagePaths, price: Number( req.body.price ), discountPrice: Number( req.body.discountPrice ), stocks: Number( req.body.stocks ), specs: JSON.parse(req.body.specs) } );
-    if ( !parse.success ) {
-      throw createHttpError( 400, parse.error.flatten() );
+    
+    // Add logging to debug
+    console.log("Request body:", req.body);
+    console.log("Files:", files);
+    console.log("Specs string:", req.body.specs);
+    
+    if (!files || files.length === 0) {
+      throw createHttpError(400, "At least one product image is required");
     }
-    const product = createProductService( parse.data );
-    res.status( 201 ).json( { message: "Product created Successfully", product } );
-  } catch ( error ) {
-    next( error );
+
+    const imagePaths = files.map(file => file.path);
+
+    // Check if specs exists before parsing
+
+    const parse = ProductSchema.safeParse({...req.body, price: Number(req.body.price), discountPrice: Number(req.body.discountPrice), stocks: Number(req.body.stocks), images: imagePaths});
+
+    if (!parse.success) {
+      console.error("Validation errors:", parse.error.flatten());
+      throw createHttpError(400, parse.error.flatten());
+    }
+
+    const product = await createProductService(parse.data);
+    res.status(201).json({ message: "Product created successfully", product });
+  } catch (error) {
+    next(error);
   }
 };

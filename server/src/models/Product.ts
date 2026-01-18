@@ -47,7 +47,6 @@ const ProductSchema = new Schema( {
     },
     slug: {
         type: String,
-        required: true,
         unique: true,
         index: true
     },
@@ -60,13 +59,16 @@ const ProductSchema = new Schema( {
 
 type Product = InferSchemaType<typeof ProductSchema>;
 
-ProductSchema.pre('save', function (next) {
-    if (this.isModified('name') || this.isNew) {
-        this.slug = slugify(this.name, {
-            lowercase: true
-        })
+ProductSchema.pre( 'save', function ()
+{
+    // Generate slug for category name
+    if ( this.isModified( 'name' ) || this.isNew )
+    {
+        this.slug = slugify( this.name, {
+            lowercase: true,
+        } );
     }
-})
+} )
 
 const Product = model<Product>( "Product", ProductSchema );
 
