@@ -1,33 +1,27 @@
-import {Eye,ShoppingCart,Star} from "lucide-react"
-import {Icon} from "./shared/Icon"
-import {AnimatePresence,motion} from "motion/react"
-import {useNavigate} from "react-router"
+import { Eye, ShoppingCart, Star } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useNavigate } from "react-router";
+import { Icon } from "./shared/Icon";
 // import type {Cart, Product} from "@/features/cart/types"
-import slugify from "slugify"
-import {useProductStore} from "@/store/ProductStore"
-import { type Product } from "@/schema/product.schema"
+import { type Product } from "@/schema/product.schema";
+import { useProductStore } from "@/store/ProductStore";
+import { formatImage } from "@/utils/imageFormat";
 
 
 export const ProductCard=(product: Product) => {
-    const {image,name,price,specs, brand}=product??{}
+    const {images,name,price, cpu, gpu, storage, slug}=product??{}
  
-    const {cpu, gpu, storage} = specs
-
     const spec=`${cpu} . ${gpu} . ${storage}`
     const navigate=useNavigate()
 
     const addToCard=useProductStore(s => s.addToCart)
-
-    const slug=slugify(name,{
-        lower: true,
-        strict: true
-    })
-
     
 
-    const handleNavigate=(id: string) => {
+    const handleNavigate=() => {
         navigate(`/products/${slug}`)
     }
+
+    
     return (
         <AnimatePresence>
 
@@ -44,12 +38,12 @@ export const ProductCard=(product: Product) => {
                         variants={{
                             hover: {scale: 1.1}
                         }}
-                        src={image[0]} alt="" className="h-full w-full" />
+                        src={formatImage(images[0])} alt="" className="h-full w-full" />
                 </div>
                 <div className="p-5 space-y-2">
                     <span className="flex gap-2">
-                        {[...Array(5)].map((_) => (
-                            <Icon icon={Star} className="text-yellow-400" />
+                        {[...Array(5)].map((_, index) => (
+                            <Icon icon={Star} key={index} className="text-yellow-400" />
                         ))}
                     </span>
                     <motion.h4
@@ -81,7 +75,7 @@ export const ProductCard=(product: Product) => {
                             whileTap={{
                                 scale: 0.8
                             }}
-                            onClick={() => addToCard(product)}
+                            // onClick={() => addToCard(product)}
                             className="p-3 bg-primary text-white rounded-full">
                             <Icon icon={ShoppingCart} />
                         </motion.button>

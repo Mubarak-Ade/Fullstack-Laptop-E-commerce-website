@@ -10,6 +10,7 @@ import {HomePage} from './pages/HomePage';
 import {ProductDetail} from './pages/ProductDetail';
 import {ProductPage} from './pages/ProductPage';
 import {useThemeStore} from './store/ThemeStore';
+import { Preview } from './components/product-detail/Preview';
 
 function App () {
 

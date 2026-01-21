@@ -1,26 +1,26 @@
-import {useState} from "react";
-import {ProductCard} from "../ProductCard"
-import {Data} from "@/data"
-import {motion} from "motion/react";
-import {CTASection} from "./CTASection";
-import { useFetchProducts } from "@/features/product/hooks";
+import { Data } from "@/data";
+import { useProducts } from "@/features/product/hooks";
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { ProductCard } from "../ProductCard";
+import { CTASection } from "./CTASection";
 
 export const ProductList=() => {
 
-    const {data, isLoading} = useFetchProducts()
+    const {data, isLoading} = useQuery(useProducts())
+    const [active,setActive]=useState("all")
+
 
     if (isLoading) {
-        return <p>Loading...</p>
+        <p>Loading...</p>
     }
 
     const brands=[...new Set(Data.map(prod => prod.brand))]
 
 
 
-    console.log(brands);
-    const [active,setActive]=useState("all")
-
-    const filterProduct=active==="all"? data:data.filter((product) => product.brand===active)
+    const filterProduct=active==="all"? data:data?.filter((product) => product.brand===active)
 
 
     return (
@@ -61,14 +61,15 @@ export const ProductList=() => {
                             whileTap={{
                                 scale: 0.8
                             }}
+                            key={brand}
                             onClick={() => setActive(brand)} className={`px-6 py-2 cursor-pointer rounded-full ${active===brand? "bg-blue-700 text-white":"dark:text-secondary"}`}>{brand}</motion.button>
                     ))}
                 </motion.div>
             </div>
             <div className="p-5">
                 <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch place-items-center gap-5">
-                    {filterProduct.slice(0,4).map((product) => (
-                        <ProductCard {...product} />
+                    {filterProduct?.slice(0,4).map((product) => (
+                        <ProductCard {...product} key={product._id} />
                     ))}
                 </div>
             </div>

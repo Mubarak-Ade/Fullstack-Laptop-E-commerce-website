@@ -17,15 +17,12 @@ const ProductSchema = new Schema( {
     discountPrice: {
         type: Number
     },
-    specs: {
-        _id: false,
-        ram:  String,
-        storage: String,
-        cpu: String,
-        gpu: String,
-        screenSize: String,
-        battery: String
-    },
+    ram:  String,
+    storage: String,
+    cpu: String,
+    gpu: String,
+    screenSize: String,
+    battery: String,
     images: { 
         type: [ String ],
         default: []

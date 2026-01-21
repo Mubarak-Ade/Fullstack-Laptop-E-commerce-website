@@ -1,15 +1,18 @@
 import { SideBar } from '@/components/layout/SideBar';
 import { ProductCard } from '@/components/ProductCard';
 import BreadCrumbs from '@/components/shared/BreadCrumbs';
-import { Data } from '@/data';
-import { useFetchProducts } from '@/features/product/hooks';
+import { useProducts } from '@/features/product/hooks';
+import { useQuery } from '@tanstack/react-query';
 
 export const ProductPage = () => {
-    const { data, isLoading } = useFetchProducts();
+    const { data: products, isFetching } = useQuery(useProducts());
 
-    if ( isLoading ) {
+    if ( isFetching ) {
         return <p>Loading...</p>;
     }
+
+    console.log(products);
+    
 
     return (
         <div>
@@ -17,8 +20,8 @@ export const ProductPage = () => {
             <div className="p-10 flex gap-10 max-w-7xl w-full">
                 <SideBar />
                 <div className="grid gap-5 grid-cols-3">
-                    { data.slice( 0, 9 ).map( ( product ) => (
-                        <ProductCard { ...product } /> ) ) }
+                    { products?.map( ( product ) => (
+                        <ProductCard { ...product } key={product._id} /> ) ) }
                 </div>
             </div>
         </div>

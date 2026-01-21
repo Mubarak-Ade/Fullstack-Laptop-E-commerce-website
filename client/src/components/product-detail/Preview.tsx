@@ -1,14 +1,15 @@
 import React from 'react'
 import {Icon} from '../shared/Icon'
 import {CheckCircle, ShieldCheck, ShoppingCart, Star, Truck} from 'lucide-react'
+import { formatImage } from '@/utils/imageFormat';
 
 interface Props {
     image: string[], 
     name: string,
     price: string,
     brand: string,
-    processor: string,
-    memory: string,
+    processor?: string,
+    memory?: string,
 }
 
 export const Preview=({image, name, price, brand, memory, processor }: Props) => {
@@ -16,7 +17,7 @@ export const Preview=({image, name, price, brand, memory, processor }: Props) =>
         <div className="flex mt-5 gap-10">
             <div className="">
                 <div className="dark:bg-dark-surface rounded-2xl p-15 max-w-2xl w-full">
-                    <img src={image[0]} alt="" className="" />
+                    <img src={formatImage(image[0])} alt="" className="" />
                 </div>
             </div>
             <div className="">

@@ -3,23 +3,51 @@ import { z } from "zod";
 
 /* ---------------- PRODUCT ---------------- */
 
-export const ProductSchema = z.object( {
-  name: z.string().min(2, "Product name is required"),
-  brand: z.string().min(1, "Brand is required"),
-  price: z.string().min(1, "Price is required"),
+export const ProductSchema = z.object({
+  _id: z.string().optional(),
+  name: z.string(),
+  brand: z.string(),
+  price: z.string(),
   discountPrice: z.string().optional(),
-  stocks: z.string().min(1, "Stock quantity is required"),
-  cpu: z.string().min(1, "CPU is required"),
-  ram: z.string().min(1, "RAM is required"),
-  storage: z.string().min(1, "Storage is required"),
-  screenSize: z.string().min(1, "Screen size is required"),
+  stock: z.string().optional(),
+  stocks: z.string().optional(),
+  images: z.custom<FileList>().optional(),
+  slug: z.string().optional(),
+  isActive: z.boolean().optional(),
+  ratings: z.number().optional(),
+  numReviews: z.number().optional(),
+  
+  // Optional fields that might come later
+  cpu: z.string().optional(),
+  ram: z.string().optional(),
+  storage: z.string().optional(),
+  screenSize: z.string().optional(),
   gpu: z.string().optional(),
   os: z.string().optional(),
   battery: z.string().optional(),
-  images: z.any().refine(
-    (files) => files?.length >= 1 && files?.length <= 5,
-    "Please upload 1-5 images"
-  ),
-} );
+}).passthrough(); // Allow extra fields without validation
 
-export type Product = z.infer<typeof ProductSchema>;
+export const ProductApiSchema = z.object({
+  _id: z.string(),
+  name: z.string(),
+  brand: z.string(),
+
+  price: z.number(),
+  discountPrice: z.number().optional(),
+  stocks: z.number().optional(),
+
+  images: z.array(z.string()),
+
+  slug: z.string().optional(),
+  isActive: z.boolean(),
+  ratings: z.number(),
+  numReviews: z.number(),
+
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  __v: z.number().optional(),
+});
+
+export type Product = z.infer<typeof ProductApiSchema>;
+
+export type ProductFormInput = z.infer<typeof ProductSchema>;

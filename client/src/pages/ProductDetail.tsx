@@ -1,33 +1,29 @@
-import {RelatedProduct} from "@/components/layout/RelatedProduct"
-import {Preview} from "@/components/product-detail/Preview"
-import BreadCrumbs from "@/components/shared/BreadCrumbs"
-import {Data} from "@/data"
+import { RelatedProduct } from "@/components/layout/RelatedProduct";
+import { Preview } from "@/components/product-detail/Preview";
+import BreadCrumbs from "@/components/shared/BreadCrumbs";
+import { useProduct } from "@/features/product/hooks";
 import type { Product } from "@/schema/product.schema";
+import { useQuery } from "@tanstack/react-query";
 // import type {Product} from "@/features/cart/types"
-import {useParams} from "react-router"
-import slugify from "slugify"
+import { useParams } from "react-router";
 
-export const ProductDetail=() => {
-    const {slug}=useParams()
+export const ProductDetail = () => {
+    const { slug } = useParams();
 
-    const product=Data.find((prod) => {
-        const productName=slugify(prod.name,{
-            lower: true,
-            strict: true
-        })
-        return productName===slug
-    })
+    const { data: product, isFetching } = useQuery( useProduct( slug as string ) );
 
-    console.log(product);
+    if (isFetching) {
+        return <p>Loading...</p>
+    }
+
+    const { name, images, brand, price, cpu, storage, ram, gpu, os, screenSize, battery } = product;
 
 
-    const {name,image,brand,price, specs,} = product as Product
-    const {cpu,storage,ram,gpu,os,screenSize, battery} = specs
     return (
         <div className="p-5">
             <BreadCrumbs />
 
-            <Preview brand={brand} name={name} image={image} memory={ram} processor={cpu} price={price} />
+            <Preview brand={ brand } name={ name } image={ images } memory={ ram } processor={ cpu } price={ price } />
 
             <hr className="dark:border-dark-border border-light-border mt-15 mb-5" />
 
@@ -36,39 +32,39 @@ export const ProductDetail=() => {
                 <ul className="grid mt-5 grid-cols-1 gap-5 lg:grid-cols-2">
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">Processor</span>
-                        <p className="dark:text-white text-coral-block font-medium">{cpu}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ cpu }</p>
                     </li>
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">GPU</span>
-                        <p className="dark:text-white text-coral-block font-medium">{gpu}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ gpu }</p>
                     </li>
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">Memory</span>
-                        <p className="dark:text-white text-coral-block font-medium">{ram}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ ram }</p>
                     </li>
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">Storage</span>
-                        <p className="dark:text-white text-coral-block font-medium">{storage}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ storage }</p>
                     </li>
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">Resoulution</span>
-                        <p className="dark:text-white text-coral-block font-medium">{cpu}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ cpu }</p>
                     </li>
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">Screen Size</span>
-                        <p className="dark:text-white text-coral-block font-medium">{screenSize}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ screenSize }</p>
                     </li>
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">OS</span>
-                        <p className="dark:text-white text-coral-block font-medium">{os}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ os }</p>
                     </li>
                     <li className="flex justify-between p-5 border-b dark:border-dark-border border-light-border">
                         <span className="text-secondary">Battery</span>
-                        <p className="dark:text-white text-coral-block font-medium">{battery}</p>
+                        <p className="dark:text-white text-coral-block font-medium">{ battery }</p>
                     </li>
                 </ul>
             </div>
             <RelatedProduct />
         </div>
-    )
-}
+    );
+};

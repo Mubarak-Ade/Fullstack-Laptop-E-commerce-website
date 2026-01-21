@@ -1,22 +1,56 @@
 import { z } from "zod";
+import { omit, partial } from "zod/mini";
 
-export const ProductSchema = z.object( {
-  name: z.string().min( 2 ),
+export const ProductSchema = z.object({
+  name: z.string(),
   brand: z.string(),
-  price: z.number().positive(),
-  discountPrice: z.number().nonnegative().optional(),
-  stocks: z.number().int().nonnegative(),
-  images: z.array( z.string() ).min( 1 ).max( 5 ),
-  screenSize: z.string(),
-  cpu: z.string(),
-  gpu: z.string().default( "" ),
-  ram: z.string(),
-  storage: z.string(),
-  os: z.string().default( "" ),
-  battery: z.string().default( "" ),
+  price: z.coerce.number(),
+  discountPrice: z.coerce.number().optional(),
+  stocks: z.coerce.number().optional(),
+  slug: z.string().optional(),
+  isActive: z.boolean().optional(),
+  ratings: z.number().optional(),
+  numReviews: z.number().optional(),
+  
+  // Optional fields that might come later
+  cpu: z.string().optional(),
+  ram: z.string().optional(),
+  storage: z.string().optional(),
+  screenSize: z.string().optional(),
+  gpu: z.string().optional(),
+  os: z.string().optional(),
+  battery: z.string().optional(),
+}) // Allow extra fields without validation
+
+export const UpdateProductSchema = z.object({
+  name: z.string().optional(),
+  brand: z.string().optional(),
+  price: z.coerce.number().optional(),
+  discountPrice: z.coerce.number().optional(),
+  stocks: z.coerce.number().optional(),
+  removedImage: z.array(z.string()).optional(),
+  slug: z.string().optional(),
+  isActive: z.boolean().optional(),
+  ratings: z.number().optional(),
+  numReviews: z.number().optional(),
+  
+  // Optional fields that might come later
+  cpu: z.string().optional(),
+  ram: z.string().optional(),
+  storage: z.string().optional(),
+  screenSize: z.string().optional(),
+  gpu: z.string().optional(),
+  os: z.string().optional(),
+  battery: z.string().optional(),
+})
+export type Product = z.infer<typeof ProductSchema>;
+
+export type UpdateProductDTO = z.infer<typeof UpdateProductSchema>
+
+export const ProductSlugSchema = z.object( {
+  slug: z.string()
 } );
 
-export type Product = z.infer<typeof ProductSchema>;
-export const ProductIdSchema = z.object( {
-  id: z.string().regex( /^[0-9a-fA-F]{24}$/ ),
-} );
+export const ProductIdSchema = z.object({
+  id: z.string()
+})

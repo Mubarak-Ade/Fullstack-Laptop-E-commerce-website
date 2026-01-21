@@ -34,8 +34,6 @@ export const Navbar=() => {
 
     },[isFixed])
 
-    console.log(isFixed);
-
 
     return (
         <header className={`flex ${isFixed? "fixed top-0 shadow-2xl":"static"} z-50 w-full bg-light-bg/3 backdrop-blur-md border-b dark:border-dark-border border-light-border justify-between items-center px-8 py-4`}>

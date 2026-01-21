@@ -1,73 +1,89 @@
-import {DashboardHeader} from '@/components/product-management/DashboardHeader'
-import {ReusableTable} from '@/components/shared/dashboard/ReusableTable'
-import {Icon} from '@/components/shared/Icon'
-import {Button} from '@/components/ui/button'
-import {Data} from '@/data'
-import type {Product} from '@/features/cart/types'
-import type {ColumnDef} from '@tanstack/react-table'
-import {Eye, PenBox, Plus, Trash2} from 'lucide-react'
-import {Link, useNavigate} from 'react-router'
+import { DashboardHeader } from '@/components/product-management/DashboardHeader';
+import { ReusableTable } from '@/components/shared/dashboard/ReusableTable';
+import { Icon } from '@/components/shared/Icon';
+import { Button } from '@/components/ui/button';
+import { useProducts } from '@/features/product/hooks';
+import { type Product } from '@/schema/product.schema';
+import { useQuery } from '@tanstack/react-query';
+import type { ColumnDef } from '@tanstack/react-table';
+import { Eye, PenBox, Plus, Trash2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router';
 
-const columns: ColumnDef<Product>[]=[
-	{
-		header: "Quiz Name",
-		accessorFn: (row) => row.name||"N/A"
-	},
-	{
-		header: "Brand",
-		accessorFn: (row) => row.brand
-	},
-	{
-		header: "Price",
-		accessorFn: (row) => row.price
-	},
-	{
-		header: "Stocks",
-		accessorFn: (row) => 0
-	},
-	{
-		id: "action",
-		header: "Action",
-		cell: ({row}) => {
 
-			return (
-				<div className="">
-					<Button
-						size={"icon"}
-						variant={"ghost"}
-						className="cursor-pointer text-red-500"
-					>
-						<Trash2 />
-					</Button>
-					<Button
-						size={"icon"}
-						variant={"ghost"}
-						className="cursor-pointer text-blue-500"
-					>
-						<PenBox />
-					</Button>
-					<Button
-						size={"icon"}
-						variant={"ghost"}
-						className="cursor-pointer text-green-500"
-					// onClick={handleClick}
-					>
-						<Eye />
-					</Button>
-				</div>
-			);
+
+export const ProductManagement = () => {
+
+	const { data: products, isFetching } = useQuery( useProducts() );
+	const navigate = useNavigate();
+	const columns: ColumnDef<Product>[] = [
+		{
+			header: "Quiz Name",
+			accessorFn: ( row ) => row.name || "N/A"
 		},
-	},
-];
+		{
+			header: "Brand",
+			accessorFn: ( row ) => row.brand
+		},
+		{
+			header: "Price",
+			accessorFn: ( row ) => row.price
+		},
+		{
+			header: "Stocks",
+			accessorFn: ( row ) => row.stocks ?? 0
+		},
+		{
+			id: "action",
+			header: "Action",
+			cell: ( { row } ) => {
 
+				const id = row.original._id;
 
-export const ProductManagement=() => {
+				const handleEdit = () => {
+					navigate( "/dashboard/add", { state: id } );
+				};
+
+				return (
+					<div className="">
+						<Button
+							size={ "icon" }
+							variant={ "ghost" }
+							className="cursor-pointer text-red-500"
+						>
+							<Trash2 />
+						</Button>
+						<Button
+							onClick={ handleEdit }
+							size={ "icon" }
+							variant={ "ghost" }
+							className="cursor-pointer text-blue-500"
+						>
+							<PenBox />
+						</Button>
+						<Button
+							size={ "icon" }
+							variant={ "ghost" }
+							className="cursor-pointer text-green-500"
+						// onClick={handleClick}
+						>
+							<Eye />
+						</Button>
+					</div>
+				);
+			},
+		},
+	];
+
+	if ( isFetching || !products ) {
+		return <p>Loading ...</p>;
+	}
+
 	return (
 		<div className=''>
-			<DashboardHeader title='Product Management' actions={(<Link to="/dashboard/add" className='flex gap-2 text-white bg-primary items-center px-4 py-3 rounded-xl'><Icon icon={Plus} /> Add New Product</Link>)} />
+			<DashboardHeader title='Product Management' actions={ ( <Link to="/dashboard/add" className='flex gap-2 text-white bg-primary items-center px-4 py-3 rounded-xl'><Icon icon={ Plus } /> Add New Product</Link> ) } />
 			<div className="max-w-4xl m-auto mt-10 w-full">
-				<ReusableTable columns={columns} data={Data} />
+				<ReusableTable columns={ columns } data={ products } />
 			</div>
 		</div>
-	)
-}
+	);
+};
