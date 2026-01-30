@@ -1,16 +1,22 @@
 import React from 'react'
 import {Icon} from '../shared/Icon'
 import {ChevronRight, CreditCard} from 'lucide-react'
+import { priceFormat } from '@/utils/format';
 
-export const SummaryCard=() => {
+interface Props {
+    totalItems: number,
+    totalPrice: number
+}
+
+export const SummaryCard=({totalItems, totalPrice}: Props) => {
     return (
         <div className='max-w-md p-5 rounded-xl w-full bg-light-bg dark:bg-dark-surface'>
             <h2 className='text-xl dark:text-white text-coral-black font-bold'>Order Summary</h2>
 
             <ul className="mt-5 border-b dark:border-dark-border border-light-border p-4">
                 <li className="flex justify-between p-2">
-                    <span className="text-secondary">Subtotal</span>
-                    <p className="dark:text-white text-coral-block font-bold">$2,477.00</p>
+                    <span className="text-secondary">Total Items</span>
+                    <p className="dark:text-white text-coral-block font-bold">{totalItems}</p>
                 </li>
                 <li className="flex justify-between p-2">
                     <span className="text-secondary">Shipping</span>
@@ -23,7 +29,7 @@ export const SummaryCard=() => {
             </ul>
             <div className="flex justify-between mt-5">
                 <h4 className='text-xl font-bold text-coral-black dark:text-white'>Total</h4>
-                <h2 className='text-2xl font-bold text-primary font-technical'>$2675.16</h2>
+                <h2 className='text-2xl font-bold text-primary font-technical'>{priceFormat(totalPrice)}</h2>
             </div>
 
             <button className='w-full py-3 text-white mt-5 justify-center font-semibold rounded-xl text-base flex items-center gap-5 bg-primary'>

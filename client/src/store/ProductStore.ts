@@ -1,27 +1,30 @@
-import type {Cart} from "@/features/cart/types";
-import {create} from "zustand";
-import { type Product, type ProductFormInput } from "@/schema/product.schema";
+import type { Cart } from '@/features/cart/types';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface CartState {
-    cart: Cart[],
-    preview: null | ProductFormInput
-    addToPreview: (preview: Product) => void
-    addToCart: (item: Cart) => void,
-    removeItem: (id: string) => void
+    cart: Cart[];
+    guestId: null | string;
+    setGuestId: () => void;
+    clearGuestId: () => void;
 }
 
-export const useProductStore = create<CartState>((set, get) => ({
-    cart: [],
-    preview: null,
-    addToPreview: (preview) => set({preview}),
-    addToCart: (item) => {
-        const items = get().cart
-        const exist = items.some((itm) => itm.idx === item.idx)
-        const newItem = !exist ? [...items, item] : items
-        set({cart: newItem})
-    },
-    removeItem: (id) => {
-        const filterProduct = get().cart.filter((item) => item.idx !== id)
-        set({cart: filterProduct})
-    }
-})) 
+export const useProductStore = create<CartState>()(
+    persist(
+        (set, get) => ({
+            cart: [],
+            guestId: null,
+            setGuestId: () => {
+                if (get().guestId) return;
+                const id = crypto.randomUUID();
+                set({ guestId: id });
+            },
+            clearGuestId: () => {
+                set({ guestId: null });
+            },
+        }),
+        {
+            name: 'guest',
+        }
+    )
+);

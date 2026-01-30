@@ -5,11 +5,12 @@ export const Footer=() => {
     return (
         <motion.footer 
         initial={{
-            y: 200
+            y: 60
         }}
         whileInView={{
             y: 0
         }}
+        viewport={{once: true}}
         transition={{
             duration: 1.5
         }}

@@ -71,7 +71,7 @@ body {
 
 @layer base {
   body {
-    @apply bg-light-bg dark:bg-dark-bg font-display;
+    @apply bg-light-bg dark:bg-dark-bg font-display overflow-x-hidden;
   }
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {

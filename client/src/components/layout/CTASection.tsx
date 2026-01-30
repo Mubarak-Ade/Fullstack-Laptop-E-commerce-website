@@ -5,18 +5,7 @@ import {motion} from "motion/react"
 export const CTASection=() => {
     return (
         <motion.div 
-        initial={{
-            scale: 0
-        }}
-        whileInView={{
-            scale: 1
-        }}
-
-        transition={{
-            type: "spring",
-            stiffness: 100,
-            duration: 1
-        }}
+        
         className="mt-24 p-16 rounded-4xl backdrop-blur-md border border-slate-200 dark:border-dark-border text-center flex flex-col items-center justify-center bg-light-bg dark:bg-dark-surface shadow-2xl dark:shadow-dark-surface/50 shadow-slate-200/90">
             <span>
                 <Icon icon={Award} className="text-blue-700" size={80} />

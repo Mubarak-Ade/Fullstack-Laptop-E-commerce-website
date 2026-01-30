@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {Icon} from '../shared/Icon'
 import {CheckCircle, ShieldCheck, ShoppingCart, Star, Truck} from 'lucide-react'
 import { formatImage } from '@/utils/imageFormat';
+import { motion } from 'motion/react';
 
 interface Props {
-    image: string[], 
+    images: string[], 
     name: string,
     price: string,
     brand: string,
@@ -12,12 +13,35 @@ interface Props {
     memory?: string,
 }
 
-export const Preview=({image, name, price, brand, memory, processor }: Props) => {
+export const Preview=({images, name, price, brand, memory, processor }: Props) => {
+
+    const [currentIndex, setCurrentIndex] = useState(0)
+
     return (
         <div className="flex mt-5 gap-10">
-            <div className="">
-                <div className="dark:bg-dark-surface rounded-2xl p-15 max-w-2xl w-full">
-                    <img src={formatImage(image[0])} alt="" className="" />
+            <div className="max-w-2xl w-full">
+                <div className="dark:bg-dark-fg bg-light-fg rounded-2xl h-140">
+                    <img src={formatImage(images![currentIndex])} alt="" className="size-full aspect-square object-cover" />
+                </div>
+                <div className="p-5 flex items-center gap-5 w-160 overflow-auto">
+                    {Array.from(images).map((img, index) => (
+                        <motion.div 
+                        whileHover={{
+                            backgroundColor: "var(--color-light-)",
+                            border: "2px solid var(--color-primary)"
+                        }}
+                        whileTap={{
+                            scale: 0.9
+                        }}
+                        onClick={() => setCurrentIndex(index)}
+                        key={index} className={`size-35 aspect-square bg-light-fg dark:bg-dark-fg p-2 border-2 rounded-xl cursor-pointer ${currentIndex === index ? "border-primary" : "border-secondary"}`}>
+                            <motion.img 
+                            whileHover={{
+                                scale: 1.1
+                            }}
+                            src={formatImage(img)} alt="" className='size-full object-cover' />
+                        </motion.div>
+                    ))}
                 </div>
             </div>
             <div className="">

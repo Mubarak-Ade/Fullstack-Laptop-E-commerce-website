@@ -5,6 +5,7 @@ import { uptime } from "process";
 import { isHttpError } from "http-errors";
 import morgan from "morgan";
 import productRoutes from "./routes/productRoutes.js"
+import cartRoutes from "./routes/cartRoutes.js"
 import path from "path";
 
 const app = express();
@@ -18,6 +19,7 @@ const __dirname = path.resolve()
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
 app.use("/api/product", productRoutes)
+app.use("/api/cart", cartRoutes)
 
 app.get( "/", ( req, res ) => {
     res.send( {

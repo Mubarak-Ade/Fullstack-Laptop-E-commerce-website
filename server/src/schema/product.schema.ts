@@ -13,7 +13,7 @@ export const ProductSchema = z.object({
   numReviews: z.number().optional(),
   
   // Optional fields that might come later
-  cpu: z.string().optional(),
+  cpu: z.string().optional(), 
   ram: z.string().optional(),
   storage: z.string().optional(),
   screenSize: z.string().optional(),

@@ -14,7 +14,12 @@ export const getProducts = async (): Promise<Product[]> => {
 };
 
 export const getSingleProduct = async ( param: string ): Promise<ProductFormInput> => {
-    const res = await api.get( `/product/${ param }` );
+    const res = await api.get( `/product/id/${ param }` );
+    return  res.data;
+};
+
+export const getProductDetail = async ( param: string ): Promise<ProductFormInput> => {
+    const res = await api.get( `/product/slug/${ param }` );
     return  res.data;
 };
 

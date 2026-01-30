@@ -54,7 +54,7 @@ const ProductSchema = new Schema( {
 }, { timestamps: true } );
 
 
-type Product = InferSchemaType<typeof ProductSchema>;
+export type Product = InferSchemaType<typeof ProductSchema>;
 
 ProductSchema.pre( 'save', function ()
 {

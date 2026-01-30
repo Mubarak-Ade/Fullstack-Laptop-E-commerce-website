@@ -1,5 +1,5 @@
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createProduct, getProducts, getSingleProduct, updateProduct } from "./api";
+import { createProduct, getProductDetail, getProducts, getSingleProduct, updateProduct } from "./api";
 import { Data } from "@/data";
 import type { Product, ProductFormInput } from "@/schema/product.schema";
 
@@ -11,6 +11,14 @@ export const useProducts = () => {
 }
 
 export const useProduct = (param: string) => {
+    return queryOptions<ProductFormInput>({
+        queryKey: ["product", param],
+        queryFn: () => getProductDetail(param),
+        enabled: !!param
+    })
+}
+
+export const useProductId = (param: string) => {
     return queryOptions<ProductFormInput>({
         queryKey: ["product", param],
         queryFn: () => getSingleProduct(param),

@@ -4,6 +4,7 @@ import { Icon } from '@/components/shared/Icon';
 import { Button } from '@/components/ui/button';
 import { useProducts } from '@/features/product/hooks';
 import { type Product } from '@/schema/product.schema';
+import { priceFormat } from '@/utils/format';
 import { useQuery } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Eye, PenBox, Plus, Trash2 } from 'lucide-react';
@@ -26,7 +27,7 @@ export const ProductManagement = () => {
 		},
 		{
 			header: "Price",
-			accessorFn: ( row ) => row.price
+			accessorFn: ( row ) => priceFormat(row.price)
 		},
 		{
 			header: "Stocks",

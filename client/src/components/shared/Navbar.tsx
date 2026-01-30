@@ -1,78 +1,261 @@
-import {motion} from 'motion/react'
-import {NavLink, useNavigate} from 'react-router'
-import {Icon} from './Icon'
-import {Heart,Moon,Search,ShoppingCart,Star,User} from 'lucide-react'
-import {useEffect,useState} from 'react'
-import {useThemeStore} from '@/store/ThemeStore'
-import {useProductStore} from '@/store/ProductStore'
+import { useCart } from '@/features/cart/hooks';
+import { useThemeStore } from '@/store/ThemeStore';
+import { useQuery } from '@tanstack/react-query';
+import { Heart, Moon, Search, ShoppingCart, Star, UserCircle2 } from 'lucide-react';
+import { AnimatePresence, motion, useScroll, useTransform, type Variants } from 'motion/react';
+import { useEffect, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router';
+import { Icon } from './Icon';
 
-const links=[
-    {name: "Home",link: "/"},
-    {name: "Laptops",link: "products"},
-    {name: "Accessories",link: "access"},
-]
+const links = [
+    { name: 'Home', link: '/' },
+    { name: 'Laptops', link: 'products' },
+    { name: 'Accessories', link: 'access' },
+];
 
-const Link=motion.create(NavLink)
+const Link = motion.create(NavLink);
 
-export const Navbar=() => {
+const IconVariant: Variants = {
+    initial: {
+        opacity: 0,
+        x: -30,
+    },
+    animate: {
+        opacity: 1,
+        x: 0,
+    },
+};
 
-    const navigate = useNavigate()
-    const [isFixed,setIsFixed]=useState<boolean>(false)
-    const cart = useProductStore(s => s.cart)
+export const Navbar = () => {
+    const { scrollY } = useScroll();
 
-    const {theme,toggleTheme}=useThemeStore()
+    const navAnimation = useTransform(scrollY, [0, 100], [50.9, 1]);
+
+    const { data: cart, isLoading } = useQuery(useCart());
+
+    const navigate = useNavigate();
+    const [isFixed, setIsFixed] = useState<boolean>(false);
+
+    const [showMenu, setShowMenu] = useState(false);
+
+    const { theme, toggleTheme } = useThemeStore();
 
     useEffect(() => {
-        const handleScroll=() => {
-            if(window.scrollY>=10) {
-                setIsFixed(true)
+        const handleScroll = () => {
+            if (window.scrollY >= 10) {
+                setIsFixed(true);
             } else {
-                setIsFixed(false)
+                setIsFixed(false);
             }
-        }
-        window.addEventListener("scroll",handleScroll)
+        };
+        window.addEventListener('scroll', handleScroll);
+    }, [isFixed]);
 
-    },[isFixed])
+    const ToggleIcon = motion.create(Icon);
 
+    const count = cart?.items.length ?? 0
 
     return (
-        <header className={`flex ${isFixed? "fixed top-0 shadow-2xl":"static"} z-50 w-full bg-light-bg/3 backdrop-blur-md border-b dark:border-dark-border border-light-border justify-between items-center px-8 py-4`}>
-            <div className="">
-                <h1 className='text-4xl font dark:text-light-bg font-semibold'>SHINA<span className='text-primary'>STORE</span></h1>
-            </div>
-            <ul className='lg:flex hidden gap-5'>
-                {links.map(link => (
+        <motion.header
+            layout
+            initial={{
+                y: -100,
+            }}
+            animate={{
+                y: 0,
+            }}
+            transition={{
+                duration: 1,
+                ease: 'easeOut',
+            }}
+            style={{
+                opacity: navAnimation,
+            }}
+            className={`flex ${isFixed ? 'fixed top-0 shadow-2xl' : 'relative'} z-50 w-full bg-light-bg/3 backdrop-blur-md border-b dark:border-dark-border border-light-border justify-between items-center px-8 py-4 `}
+        >
+            <motion.div
+                initial={{
+                    scale: 0.8,
+                    opacity: 0,
+                }}
+                animate={{
+                    opacity: 1,
+                    scale: 1,
+                }}
+                transition={{
+                    duration: 0.8,
+                    delay: 0.2,
+                }}
+                className=""
+            >
+                <h1 className="text-4xl font dark:text-light-bg font-semibold">
+                    SHINA<span className="text-primary">STORE</span>
+                </h1>
+            </motion.div>
+            <ul className="lg:flex hidden gap-10">
+                {links.map((link, index) => (
                     <Link
-                        whileHover={{
-                            color: "var(--color-primary)",
+                        whileHover="hover"
+                        animate={{
+                            opacity: 1,
+                            y: 0,
                         }}
-                        className="text-base px-2 text-secondary flex flex-col " key={link.name} to={link.link}>
+                        initial={{
+                            opacity: 0,
+                            y: -40,
+                        }}
+                        transition={{
+                            duration: 0.6,
+                            delay: 0.3 + index * 0.1,
+                        }}
+                        className="text-base text-secondary flex flex-col relative"
+                        key={index}
+                        to={link.link}
+                    >
                         {link.name}
+                        <motion.span
+                            initial={{
+                                scaleX: 0,
+                            }}
+                            variants={{
+                                hover: { scaleX: 1 },
+                            }}
+                            transition={{
+                                duration: 0.3,
+                            }}
+                            className="bg-primary right-0 h-0.5 absolute -bottom-0.5 left-0 origin-left"
+                        />
                     </Link>
                 ))}
             </ul>
-            <div className="lg:flex hidden items-center gap-4 bg-light-fg dark:bg-dark-accent dark:text-secondary pl-4 overflow-hidden rounded-full max-w-xs w-full">
+            <motion.div
+                initial={{
+                    opacity: 0,
+                    y: 20,
+                }}
+                animate={{
+                    opacity: 1,
+                    y: 0,
+                }}
+                transition={{
+                    duration: 0.8,
+                    delay: 0.6,
+                }}
+                whileFocus={{ scale: 2 }}
+                className="lg:flex hidden items-center gap-4 bg-light-fg dark:bg-dark-accent dark:text-secondary pl-4 overflow-hidden rounded-full max-w-xs w-full"
+            >
                 <Icon icon={Search} />
 
-                <input type="text" placeholder='Search for laptops and accessories' className='text-sm outline-0 py-3 w-full h-full' />
+                <motion.input
+                    type="text"
+                    placeholder="Search for laptops and accessories"
+                    className="text-sm outline-0 py-3 w-full h-full"
+                />
+            </motion.div>
+            <div className="flex gap-4 w-15 h-8 relative bg-light-fg dark:bg-dark-fg shadow-2xl px-2 py-1 overflow-hidden rounded-full border dark:border-light-border border-dark-border items-center">
+                <motion.button
+                    onClick={toggleTheme}
+                    layout
+                    transition={{
+                        duration: 0.5,
+                    }}
+                    className={`p-2 ${theme === 'light' ? 'left-0' : 'right-0'} absolute className='fill-coral-black' bg-dark-fg text-light-bg dark:text-dark-bg dark:bg-light-fg rounded-full text-light-soft`}
+                >
+                    {theme === 'light' ? (
+                        <ToggleIcon size={15} icon={Moon} />
+                    ) : (
+                        <ToggleIcon icon={Star} size={15} />
+                    )}
+                </motion.button>
             </div>
-            <div className="flex gap-4 w-20 h-10 relative bg-light-fg dark:bg-dark-fg shadow-2xl px-2 py-1 overflow-hidden rounded-full border dark:border-light-border border-dark-border items-center">
-                <button onClick={toggleTheme} className={`p-2 ${theme==="light"? "left-0":"right-0"} absolute className='fill-coral-black' bg-dark-fg text-light-bg dark:text-dark-bg dark:bg-light-fg rounded-full text-light-soft`}>
-                    {theme==="light"? <Icon icon={Moon} />:<Icon icon={Star} />}
-                </button>
+            <div className="flex  dark:text-dark-text-primary gap-2">
+                <motion.button
+                    animate="animate"
+                    initial="initial"
+                    variants={IconVariant}
+                    transition={{
+                        duration: 0.8,
+                        delay: 0.6,
+                    }}
+                    onClick={() => navigate('/carts')}
+                    className="relative bg-light-fg dark:bg-dark-surface p-2 rounded-sm"
+                >
+                    <span className="absolute text-white -right-2 -top-2 bg-primary size-5 font-bold block rounded-full text-sm">
+                        {count}
+                    </span>
+                    <Icon
+                        size={22}
+                        icon={ShoppingCart}
+                        className="fill-coral-bg dark:fill-none dark:text-light-bg"
+                    />
+                </motion.button>
+                <motion.button
+                    animate="animate"
+                    initial="initial"
+                    variants={IconVariant}
+                    transition={{
+                        duration: 0.8,
+                        delay: 0.7,
+                    }}
+                    className="bg-light-fg dark:bg-dark-surface p-2 rounded-sm"
+                >
+                    <Icon
+                        size={22}
+                        icon={Heart}
+                        className="fill-coral-bg dark:fill-none dark:text-light-bg"
+                    />
+                </motion.button>
+                <motion.button
+                    animate="animate"
+                    initial="initial"
+                    variants={IconVariant}
+                    transition={{
+                        duration: 0.8,
+                        delay: 0.8,
+                    }}
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="bg-light-fg dark:bg-dark-surface p-2 rounded-sm"
+                >
+                    <Icon
+                        size={22}
+                        icon={UserCircle2}
+                        className="fill-coral-bg dark:fill-none dark:text-light-bg"
+                    />
+                </motion.button>
             </div>
-            <div className="flex  dark:text-dark-text-primary gap-6">
-                <button onClick={() => navigate("/carts")} className='relative'>
-                    <span className='absolute text-white -right-2 -top-2 bg-primary size-5 font-bold block rounded-full text-sm'>{cart.length}</span>
-                    <Icon icon={ShoppingCart} className='fill-coral-black dark:fill-none dark:text-light-bg' />
-                </button>
-                <button>
-                    <Icon icon={Heart} className='fill-coral-black dark:fill-none dark:text-light-bg' />
-                </button>
-                <button>
-                    <Icon icon={User} className='fill-coral-black dark:fill-none dark:text-light-bg' />
-                </button>
-            </div>
-        </header>
-    )
-}
+            <AnimatePresence>
+                {showMenu && (
+                    <motion.ul
+                        onMouseLeave={() => setShowMenu(false)}
+                        initial={{
+                            x: 200,
+                        }}
+                        animate={{
+                            x: 0,
+                            zIndex: -999,
+                        }}
+                        transition={{
+                            duration: 1,
+                        }}
+                        exit={{
+                            x: 200,
+                        }}
+                        className="dark:bg-dark-fg top-18 rounded-bl-2xl shadow-[0_0_15px] shadow-dark-fg right-0 bg-light-fg fixed size-70"
+                    >
+                        <li className=" border-b border-light-border dark:border-dark-border px-6 py-4">
+                            <Link
+                                to="/dashboard"
+                                whileHover={{
+                                    color: 'var(--color-primary)',
+                                }}
+                                className="text-black dark:text-white "
+                            >
+                                Dashboard
+                            </Link>
+                        </li>
+                    </motion.ul>
+                )}
+            </AnimatePresence>
+        </motion.header>
+    );
+};
