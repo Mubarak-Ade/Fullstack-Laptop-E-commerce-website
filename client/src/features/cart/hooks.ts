@@ -1,12 +1,16 @@
 import { mutationOptions, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 import { addItemToCart, deleteCartItem, getUserCart, modifyCartQuantity } from './api';
 import type { Cart } from '@/schema/cart.schema';
+import { useAuthStore } from '@/store/AuthStore';
 
-export const useCart = () =>
-    queryOptions<Cart>({
-        queryKey: ['cart'],
+export const useCart = () => {
+    const identity = useAuthStore(s => s.identity);
+    return queryOptions<Cart>({
+        queryKey: ['cart', identity.type],
         queryFn: getUserCart,
+        enabled: !!identity,
     });
+};
 
 export const useAddToCart = () => {
     const queryClient = useQueryClient();
@@ -36,4 +40,4 @@ export const useDeleteCartItem = () => {
             queryClient.invalidateQueries({ queryKey: useCart().queryKey });
         },
     });
-}
+};

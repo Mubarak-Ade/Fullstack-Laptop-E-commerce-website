@@ -1,7 +1,19 @@
 import { useCart } from '@/features/cart/hooks';
 import { useThemeStore } from '@/store/ThemeStore';
 import { useQuery } from '@tanstack/react-query';
-import { Heart, LogOut, Moon, Search, ShoppingCart, Star, UserCircle2 } from 'lucide-react';
+import {
+    Clipboard,
+    Heart,
+    LayoutDashboard,
+    LogOut,
+    Moon,
+    Search,
+    Settings,
+    ShoppingCart,
+    Star,
+    User,
+    UserCircle2,
+} from 'lucide-react';
 import { AnimatePresence, motion, useScroll, useTransform, type Variants } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
@@ -27,12 +39,19 @@ const IconVariant: Variants = {
     },
 };
 
+const navlist = [
+    { label: 'Profile', icon: User, path: '/dashboard' },
+    { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+    { label: 'Order History', icon: Clipboard, path: '/dashboard' },
+    { label: 'Setting', icon: Settings, path: '/dashboard' },
+];
+
 export const Navbar = () => {
     const { scrollY } = useScroll();
 
     const navAnimation = useTransform(scrollY, [0, 100], [50.9, 1]);
 
-    const identity = useAuthStore(s => s.identity);
+    const { identity, logout } = useAuthStore();
 
     const { data: cart, isLoading } = useQuery(useCart());
 
@@ -42,8 +61,8 @@ export const Navbar = () => {
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleOutsideClick = (e) => {
-            if (menuRef.current && !menuRef.current.contains(e.target)) {
+        const handleOutsideClick = (e: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
                 setShowMenu(false);
             }
         };
@@ -258,27 +277,45 @@ export const Navbar = () => {
                         exit={{
                             x: 200,
                         }}
-                        className="dark:bg-dark-fg top-18 rounded-bl-2xl shadow-[0_0_15px] shadow-dark-fg right-0 bg-light-fg fixed size-70"
+                        className="dark:bg-dark-fg top-20 w-70 text-sm rounded-2xl shadow-[0_0_15px] shadow-dark-fg right-10 bg-light-fg fixed overflow-hidden"
                     >
-                        <div className="px-5 text-secondary text-lg border-b border-light-border py-5 dark:border-dark-border">
-                            {identity.type === "user" ? identity.user?.email : "Guest"}
+                        <div className="px-5 text-secondary text-lg border-b border-light-border py-5 dark:border-dark-border flex items-center gap-2">
+                            <Icon icon={UserCircle2} size={30} />
+                            <span>{identity.type === 'user' ? identity.user?.email : 'Guest'}</span>
                         </div>
-                        <ul className="w-full px-6 py-4">
-                            <li className=" border-light-border dark:border-dark-border">
-                                <Link
-                                    to="/dashboard"
+                        <ul className="w-full py-2 h-full px-2">
+                            {navlist.map(list => (
+                                <motion.li
                                     whileHover={{
-                                        color: 'var(--color-primary)',
+                                        backgroundColor: 'var(--color-primary)',
                                     }}
-                                    className="text-black dark:text-white "
+                                className=" border-light-border dark:border-dark-border px-2 py-3 rounded-md mb-2 cursor-pointer text-black dark:text-white "
                                 >
-                                    Dashboard
-                                </Link>
-                            </li>
+                                    <Link to="/dashboard" className="text-black dark:text-white ">
+                                        <Icon
+                                            icon={list.icon}
+                                            size={20}
+                                            className="inline-block ml-2"
+                                        />{' '}
+                                        {list.label}
+                                    </Link>
+                                </motion.li>
+                            ))}
                         </ul>
-                        <button className="flex gap-2 items-center w-full py-4 px-5 text-black dark:text-white">
-                            Logout <Icon icon={LogOut} />{' '}
-                        </button>
+                        <div className="border-t border-light-border dark:border-dark-border">
+                            <motion.button
+                                whileHover={{
+                                    color: 'var(--color-primary)',
+                                }}
+                                whileTap={{
+                                    scale: 0.9,
+                                }}
+                                onClick={logout}
+                                className="flex gap-2 items-center w-full py-4 px-5 text-black dark:text-white cursor-pointer"
+                            >
+                                Logout <Icon icon={LogOut} />{' '}
+                            </motion.button>
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>

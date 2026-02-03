@@ -10,7 +10,7 @@ interface AuthState {
     identity: UserType;
     setUser: (user: User) => void;
     setGuestId: () => void;
-    clearGuestId: () => void;
+    logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -26,7 +26,7 @@ export const useAuthStore = create<AuthState>()(
                 const id = crypto.randomUUID();
                 set({ guestId: id });
             },
-            clearGuestId: () => {
+            logout: () => {
                 set({ identity: { type: 'guest', guestId: generateGuestId() } });
             },
         }),
