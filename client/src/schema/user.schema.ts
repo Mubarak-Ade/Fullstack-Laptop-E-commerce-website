@@ -1,0 +1,15 @@
+import z from "zod";
+
+const UserSchema = z.object({
+    id: z.string(),
+    email: z.string().email(),
+    token: z.string(),
+});
+
+export const LoginSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+});
+
+export type User = z.infer<typeof UserSchema>;
+export type LoginInput = z.infer<typeof LoginSchema>;

@@ -1,0 +1,29 @@
+import { NextFunction, Request, RequestHandler, Response } from 'express';
+import createHttpError from 'http-errors';
+import jwt from 'jsonwebtoken';
+import env from '../env.js';
+
+interface JWTDecode {
+    id: string,
+    role: "user" | "admin"
+}
+export const attachUser = (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader?.startsWith('Bearer')) {
+        return next()
+    }
+
+    const token = authHeader.split(' ')[1]
+
+    if (!token) {
+        throw createHttpError(401, "No token, unauthorize user")
+    }
+
+    try {
+        const decode = jwt.verify(token, env.JWT_SECRET!) as JWTDecode;
+        req.user = decode;
+    } catch (error) {
+    }
+    next();
+};

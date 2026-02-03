@@ -1,20 +1,37 @@
+import type { User } from '@/schema/user.schema';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-interface AuthState {
-    guestId: string;
 
+type UserType = { type: 'user'; user: User } | { type: 'guest'; guestId: string };
+
+const generateGuestId = () => `guest_${crypto.randomUUID()}`;
+
+interface AuthState {
+    identity: UserType;
+    setUser: (user: User) => void;
+    setGuestId: () => void;
+    clearGuestId: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
     persist(
-        () => ({
-            guestId: "guest_" + Date.now() + Math.floor(Math.random() * 1000)
+        (set, get) => ({
+            identity: {
+                type: 'guest',
+                guestId: generateGuestId(),
+            },
+            setUser: user => set({ identity: { type: 'user', user } }),
+            setGuestId: () => {
+                if (get().guestId) return;
+                const id = crypto.randomUUID();
+                set({ guestId: id });
+            },
+            clearGuestId: () => {
+                set({ identity: { type: 'guest', guestId: generateGuestId() } });
+            },
         }),
         {
-            name: "user",
-            partialize: (state): AuthState => ({
-                guestId: state.guestId
-            })
+            name: 'auth-storage',
         }
     )
 );

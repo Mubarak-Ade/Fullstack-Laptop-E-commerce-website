@@ -3,7 +3,6 @@ import { SummaryCard } from '@/components/Cart/SummaryCard';
 import { RelatedProduct } from '@/components/layout/RelatedProduct';
 import { Icon } from '@/components/shared/Icon';
 import { useCart } from '@/features/cart/hooks';
-import { useProductStore } from '@/store/ProductStore';
 import { useQuery } from '@tanstack/react-query';
 import { Frown } from 'lucide-react';
 
@@ -24,8 +23,8 @@ export const CartPage = () => {
                 </h1>
                 <div className="mt-5 flex gap-5 items-center justify-between">
                     <ul className="space-y-4 scrollbar-thumb scrollbar-webkit scrollbar-thin max-w-xl w-full overflow-y-auto flex flex-col bg-light-fg dark:bg-dark-fg h-100 rounded-xl">
-                        {cart ? (
-                            cart.items.map(product => <CartCard {...product} />)
+                        {cart && cart.items?.length !== 0 ? (
+                            cart.items?.map(product => <CartCard {...product} />)
                         ) : (
                             <div className="flex items-center h-full text-coral-black dark:text-white gap-2 w-full justify-center">
                                 <p className="text-xl font-technical text-center ">Cart is Empty</p>
@@ -33,7 +32,10 @@ export const CartPage = () => {
                             </div>
                         )}
                     </ul>
-                    <SummaryCard totalItems={cart?.totalItems ?? 0} totalPrice={cart?.totalPrice ?? 0}  />
+                    <SummaryCard
+                        totalItems={cart?.totalItems ?? 0}
+                        totalPrice={cart?.totalPrice ?? 0}
+                    />
                 </div>
                 <RelatedProduct />
             </div>

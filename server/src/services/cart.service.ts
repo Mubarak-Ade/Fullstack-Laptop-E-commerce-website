@@ -1,17 +1,20 @@
 import createHttpError from 'http-errors';
 import { CartItem } from '../schema/cart.schema.js';
 import Cart, { PopulatedCart, Cart as CartDocument } from '../models/Cart.js';
-import Product from '../models/Product.js';
+import Product, { Product as ProductType } from '../models/Product.js';
+import { PopulateOption } from 'mongoose';
 
-export class CartService {
+type UserType = { type: 'user'; userId: string } | { type: 'guest'; guestId: string };
+class CartService {
     /* ---------------- GET CART ---------------- */
-    static async getUserCart(guestId: string): Promise<PopulatedCart> {
-        const cart = (await Cart.findOne({ guestId })
-            .populate({
+    static async getUserCart(identity: UserType) {
+        const cart = (await this.findCartByIdentity(identity)
+            ?.populate({
                 path: 'items.product',
                 select: 'name images storage ram cpu price',
             })
-            .lean()) as PopulatedCart | null;
+            .lean()
+            .exec()) as PopulatedCart | null;
 
         if (!cart) {
             throw createHttpError(404, 'Cart not found');
@@ -29,26 +32,20 @@ export class CartService {
     }
 
     /* ---------------- ADD TO CART ---------------- */
-    static async addToCart(data: CartItem, userId?: string) {
-        const { productId, quantity = 1, guestId } = data;
+    static async addToCart(data: CartItem, identity: UserType) {
+        const { productId, quantity = 1 } = data;
 
         if (!productId) {
             throw createHttpError(400, 'Product ID is required');
         }
 
-        let cart;
+        let cart = await this.findCartByIdentity(identity);
 
-        if (userId) {
-            cart = await Cart.findOne({ user: userId });
-        } else {
-            if (!guestId) {
-                throw createHttpError(400, 'Guest ID is required for guest users');
-            }
-            cart = await Cart.findOne({ guestId });
-        }
-
+        
         if (!cart) {
-            cart = new Cart({ guestId, items: [] });
+            cart = identity.type === "user"
+            ? cart = new Cart({ user: identity.userId, items: [] }) 
+            : cart = new Cart({ guestId: identity.guestId, items: [] })
         }
 
         const product = await Product.findById(productId);
@@ -56,11 +53,9 @@ export class CartService {
             throw createHttpError(404, 'Product not found');
         }
 
-        const currentPrice = product.discountPrice
-            ? product.price - product.discountPrice
-            : product.price;
+        const price = this.getProductPrice(product);
 
-        const existingIndex = cart.items.findIndex(item => item.product.toString() === productId);
+        const existingIndex = this.getItemIndex(cart, productId);
 
         if (existingIndex > -1) {
             cart.items[existingIndex].quantity += quantity;
@@ -68,7 +63,7 @@ export class CartService {
             cart.items.push({
                 product: productId,
                 quantity,
-                price: currentPrice,
+                price,
             });
         }
 
@@ -80,18 +75,18 @@ export class CartService {
 
     /* ---------------- UPDATE CART ITEM ---------------- */
     static async updateItem({
-        guestId,
+        identity,
         productId,
         quantity,
     }: {
-        guestId: string;
+        identity: UserType;
         productId: string;
         quantity: number;
     }) {
-        const cart = await Cart.findOne({ guestId });
+        const cart = await this.findCartByIdentity(identity);
         if (!cart) throw createHttpError(404, 'Cart not found');
 
-        const index = cart.items.findIndex(item => item.product.toString() === productId);
+        const index = this.getItemIndex(cart, productId);
 
         if (index === -1) {
             throw createHttpError(404, 'Item not found');
@@ -106,11 +101,11 @@ export class CartService {
     }
 
     /* ---------------- DELETE CART ITEM ---------------- */
-    static async deleteItem(guestId: string, productId: string) {
-        const cart = await Cart.findOne({ guestId });
+    static async deleteItem(identity: UserType, productId: string) {
+        const cart = await this.findCartByIdentity(identity);
         if (!cart) throw createHttpError(404, 'Cart not found');
 
-        const index = cart.items.findIndex(item => item.product.toString() === productId);
+        const index = this.getItemIndex(cart, productId);
 
         if (index === -1) {
             throw createHttpError(404, 'Item not found');
@@ -124,10 +119,72 @@ export class CartService {
         return cart;
     }
 
+    static async mergeCart(guestId: string, userId: string) {
+        const guestCart = await Cart.findOne({ guestId });
+        if (!guestCart || guestCart.items.length === 0) return null;
+
+        let userCart = await Cart.findOne({ user: userId });
+
+        if (!userCart) {
+            userCart = new Cart({ user: userId, items: [] });
+        }
+
+        for (const guestItem of guestCart.items) {
+            const productId = guestItem.product.toString();
+
+            const product = await Product.findById(productId);
+
+            if (!product) continue;
+
+            const price = this.getProductPrice(product);
+
+            const existingIndex = this.getItemIndex(userCart, productId);
+
+            if (existingIndex >= 0) {
+                userCart.items[existingIndex].quantity += guestItem.quantity;
+            } else {
+                userCart.items.push({
+                    product: productId,
+                    quantity: guestItem.quantity,
+                    price,
+                });
+            }
+        }
+        this.recalculateCart(userCart);
+
+        await userCart.save();
+        await Cart.deleteOne({ guestId });
+
+        return userCart;
+    }
+
     /* ---------------- SHARED LOGIC ---------------- */
+
+    private static findCartByIdentity(identity: UserType) {
+        if (identity.type === 'user') {
+            return Cart.findOne({ user: identity.userId });
+        } else {
+            return Cart.findOne({ guestId: identity.guestId });
+        }
+    }
+
     private static recalculateCart(cart: CartDocument) {
         cart.totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
 
         cart.totalPrice = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     }
+
+    private static getProductPrice(product: ProductType) {
+        const currentPrice = product.discountPrice
+            ? product.price - product.discountPrice
+            : product.price;
+        return currentPrice;
+    }
+
+    private static getItemIndex(cart: CartDocument, productId: string) {
+        const index = cart.items.findIndex(item => item.product.toString() === productId);
+        return index;
+    }
 }
+
+export default CartService;

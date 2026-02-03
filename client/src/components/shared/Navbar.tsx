@@ -1,11 +1,12 @@
 import { useCart } from '@/features/cart/hooks';
 import { useThemeStore } from '@/store/ThemeStore';
 import { useQuery } from '@tanstack/react-query';
-import { Heart, Moon, Search, ShoppingCart, Star, UserCircle2 } from 'lucide-react';
+import { Heart, LogOut, Moon, Search, ShoppingCart, Star, UserCircle2 } from 'lucide-react';
 import { AnimatePresence, motion, useScroll, useTransform, type Variants } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { Icon } from './Icon';
+import { useAuthStore } from '@/store/AuthStore';
 
 const links = [
     { name: 'Home', link: '/' },
@@ -31,10 +32,28 @@ export const Navbar = () => {
 
     const navAnimation = useTransform(scrollY, [0, 100], [50.9, 1]);
 
+    const identity = useAuthStore(s => s.identity);
+
     const { data: cart, isLoading } = useQuery(useCart());
 
     const navigate = useNavigate();
     const [isFixed, setIsFixed] = useState<boolean>(false);
+
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
 
     const [showMenu, setShowMenu] = useState(false);
 
@@ -53,11 +72,10 @@ export const Navbar = () => {
 
     const ToggleIcon = motion.create(Icon);
 
-    const count = cart?.items.length ?? 0
+    const count = cart?.items.length ?? 0;
 
     return (
         <motion.header
-            layout
             initial={{
                 y: -100,
             }}
@@ -225,8 +243,8 @@ export const Navbar = () => {
             </div>
             <AnimatePresence>
                 {showMenu && (
-                    <motion.ul
-                        onMouseLeave={() => setShowMenu(false)}
+                    <motion.div
+                        ref={menuRef}
                         initial={{
                             x: 200,
                         }}
@@ -242,18 +260,26 @@ export const Navbar = () => {
                         }}
                         className="dark:bg-dark-fg top-18 rounded-bl-2xl shadow-[0_0_15px] shadow-dark-fg right-0 bg-light-fg fixed size-70"
                     >
-                        <li className=" border-b border-light-border dark:border-dark-border px-6 py-4">
-                            <Link
-                                to="/dashboard"
-                                whileHover={{
-                                    color: 'var(--color-primary)',
-                                }}
-                                className="text-black dark:text-white "
-                            >
-                                Dashboard
-                            </Link>
-                        </li>
-                    </motion.ul>
+                        <div className="px-5 text-secondary text-lg border-b border-light-border py-5 dark:border-dark-border">
+                            {identity.type === "user" ? identity.user?.email : "Guest"}
+                        </div>
+                        <ul className="w-full px-6 py-4">
+                            <li className=" border-light-border dark:border-dark-border">
+                                <Link
+                                    to="/dashboard"
+                                    whileHover={{
+                                        color: 'var(--color-primary)',
+                                    }}
+                                    className="text-black dark:text-white "
+                                >
+                                    Dashboard
+                                </Link>
+                            </li>
+                        </ul>
+                        <button className="flex gap-2 items-center w-full py-4 px-5 text-black dark:text-white">
+                            Logout <Icon icon={LogOut} />{' '}
+                        </button>
+                    </motion.div>
                 )}
             </AnimatePresence>
         </motion.header>

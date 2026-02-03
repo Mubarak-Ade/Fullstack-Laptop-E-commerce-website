@@ -7,13 +7,7 @@ import {
     ProductSlugSchema,
     UpdateProductSchema,
 } from '../schema/product.schema.js';
-import {
-    createProductService,
-    deleteProductService,
-    getProductDetailService,
-    getSingleProductService,
-    updateProductService,
-} from '../services/Product.js';
+import ProductService from '../services/product.service.js';
 
 export const getProducts: RequestHandler = async (req, res, next): Promise<void> => {
     try {
@@ -27,7 +21,7 @@ export const getProducts: RequestHandler = async (req, res, next): Promise<void>
 export const getProductDetail: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const { slug } = ProductSlugSchema.parse(req.params);
-        const product = await getProductDetailService(slug);
+        const product = await ProductService.getProductDetail(slug);
         res.status(200).json(product);
     } catch (error) {
         next(error);
@@ -37,7 +31,7 @@ export const getProductDetail: RequestHandler = async (req, res, next): Promise<
 export const getSingleProduct: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const { id } = ProductIdSchema.parse(req.params);
-        const product = await getSingleProductService(id);
+        const product = await ProductService.getSingleProduct(id);
         res.status(200).json(product);
     } catch (error) {
         next(error);
@@ -54,7 +48,10 @@ export const createProduct: RequestHandler = async (req, res, next): Promise<voi
             console.error('Validation errors:', parse.error.flatten());
             throw createHttpError(400, parse.error.flatten());
         }
-        const product = await createProductService(parse.data, req.files as Express.Multer.File[]);
+        const product = await ProductService.createProduct(
+            parse.data,
+            req.files as Express.Multer.File[]
+        );
         res.status(201).json({ message: 'Product created successfully', product });
     } catch (error) {
         next(error);
@@ -69,7 +66,7 @@ export const updateProductController: RequestHandler = async (req, res, next): P
         throw createHttpError(400, parse.error.flatten());
     }
     try {
-        const product = await updateProductService({
+        const product = await ProductService.updateProduct({
             data: parse.data,
             files: req.files as Express.Multer.File[],
             productId: req.params.id,
@@ -83,7 +80,7 @@ export const updateProductController: RequestHandler = async (req, res, next): P
 export const deleteProductController: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const { id } = ProductIdSchema.parse(req.params);
-        await deleteProductService(id);
+        await ProductService.deleteProduct(id);
         res.status(200).json({ success: true });
     } catch (error) {
         next(error);

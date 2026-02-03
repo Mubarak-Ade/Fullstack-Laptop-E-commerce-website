@@ -4,13 +4,17 @@ import cors from "cors";
 import { uptime } from "process";
 import { isHttpError } from "http-errors";
 import morgan from "morgan";
-import productRoutes from "./routes/productRoutes.js"
-import cartRoutes from "./routes/cartRoutes.js"
+import productRoutes from "./routes/product.routes.js"
+import cartRoutes from "./routes/cart.routes.js"
+import userRoutes from "./routes/user.route.js"
 import path from "path";
+import { attachUser } from "./middlewares/authorization.js";
 
 const app = express();
 
 app.use(morgan("dev"))
+
+app.use(attachUser)
 
 app.use( cors() );
 app.use( express.json() );
@@ -18,6 +22,7 @@ app.use( express.json() );
 const __dirname = path.resolve()
 app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
+app.use('/api/user', userRoutes)
 app.use("/api/product", productRoutes)
 app.use("/api/cart", cartRoutes)
 
