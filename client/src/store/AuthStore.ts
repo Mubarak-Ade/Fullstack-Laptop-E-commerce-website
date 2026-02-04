@@ -22,9 +22,8 @@ export const useAuthStore = create<AuthState>()(
             },
             setUser: user => set({ identity: { type: 'user', user } }),
             setGuestId: () => {
-                if (get().guestId) return;
-                const id = crypto.randomUUID();
-                set({ guestId: id });
+                const guest = get().identity
+                set({identity: guest})
             },
             logout: () => {
                 set({ identity: { type: 'guest', guestId: generateGuestId() } });

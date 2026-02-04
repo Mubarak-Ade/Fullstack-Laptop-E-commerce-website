@@ -3,10 +3,12 @@ import { addItemToCart, deleteCartItem, getUserCart, modifyCartQuantity } from '
 import type { Cart } from '@/schema/cart.schema';
 import { useAuthStore } from '@/store/AuthStore';
 
+const cartQueryKey = (identityType: string) => ['cart', identityType] as const
+
 export const useCart = () => {
     const identity = useAuthStore(s => s.identity);
     return queryOptions<Cart>({
-        queryKey: ['cart', identity.type],
+        queryKey: cartQueryKey(identity.type),
         queryFn: getUserCart,
         enabled: !!identity,
     });
@@ -14,30 +16,33 @@ export const useCart = () => {
 
 export const useAddToCart = () => {
     const queryClient = useQueryClient();
+    const identity = useAuthStore(s => s.identity);
     return mutationOptions({
         mutationFn: addItemToCart,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: useCart().queryKey });
+            queryClient.invalidateQueries({ queryKey: cartQueryKey(identity.type) });
         },
-    });
+    })
 };
 
 export const useCartQuantity = () => {
     const queryClient = useQueryClient();
+    const identity = useAuthStore(s => s.identity);
     return mutationOptions({
         mutationFn: modifyCartQuantity,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: useCart().queryKey });
+            queryClient.invalidateQueries({ queryKey: cartQueryKey(identity.type) });
         },
     });
 };
 
 export const useDeleteCartItem = () => {
     const queryClient = useQueryClient();
+    const identity = useAuthStore(s => s.identity);
     return mutationOptions({
         mutationFn: deleteCartItem,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: useCart().queryKey });
+            queryClient.invalidateQueries({ queryKey: cartQueryKey(identity.type) });
         },
     });
 };

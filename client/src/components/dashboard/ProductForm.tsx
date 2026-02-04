@@ -15,6 +15,7 @@ import { Field, FieldError, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { ProductFormSkeleton } from '../layout/skeleton/ui/ProductFormSkeleton';
 export const ProductForm = () => {
     const location = useLocation();
 
@@ -76,7 +77,7 @@ export const ProductForm = () => {
     const storageOptions = ['128GB', '256GB', '512GB', '1TB', '2TB'];
 
     if (isFetching) {
-        return <p>Loading...</p>;
+        return <ProductFormSkeleton />;
     }
     console.log(product);
 

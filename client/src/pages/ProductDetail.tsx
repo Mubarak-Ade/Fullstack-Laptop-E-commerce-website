@@ -1,4 +1,5 @@
 import { RelatedProduct } from "@/components/layout/RelatedProduct";
+import { ProductDetailSkeleton } from "@/components/layout/skeleton/ProductDetailSkeleton";
 import { Preview } from "@/components/product-detail/Preview";
 import BreadCrumbs from "@/components/shared/BreadCrumbs";
 import { useProduct } from "@/features/product/hooks";
@@ -13,7 +14,7 @@ export const ProductDetail = () => {
     const { data: product, isFetching } = useQuery( useProduct( slug as string ) );
 
     if (isFetching) {
-        return <p>Loading...</p>
+        return <ProductDetailSkeleton />
     }
 
     console.log(product);

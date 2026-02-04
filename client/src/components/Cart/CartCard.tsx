@@ -29,8 +29,8 @@ export const CartCard = (cart: CartItem) => {
     };
     
     return (
-        <div className="relative rounded-xl gap-5 p-5 bg-light-bg dark:bg-dark-surface flex ">
-            <div className="bg-light-fg dark:bg-dark-fg aspect-square rounded-xl size-40 p-5">
+        <div className="relative rounded-xl gap-5 p-5 bg-light-fg dark:bg-dark-surface flex ">
+            <div className="bg-light-bg dark:bg-dark-fg aspect-square rounded-xl size-40 p-5">
                 <img
                     src={formatImage(product.images && product?.images[0])}
                     alt=""

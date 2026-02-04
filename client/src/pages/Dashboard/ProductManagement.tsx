@@ -2,6 +2,7 @@ import { DashboardHeader } from '@/components/product-management/DashboardHeader
 import { ReusableTable } from '@/components/shared/dashboard/ReusableTable';
 import { Icon } from '@/components/shared/Icon';
 import { Button } from '@/components/ui/button';
+import { ProductManagementSkeleton } from '@/components/layout/skeleton/ProductManagementSkeleton';
 import { useProducts } from '@/features/product/hooks';
 import { type Product } from '@/schema/product.schema';
 import { priceFormat } from '@/utils/format';
@@ -76,7 +77,7 @@ export const ProductManagement = () => {
 	];
 
 	if ( isFetching || !products ) {
-		return <p>Loading ...</p>;
+		return <ProductManagementSkeleton />;
 	}
 
 	return (

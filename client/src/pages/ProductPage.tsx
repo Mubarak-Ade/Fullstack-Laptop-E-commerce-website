@@ -1,4 +1,5 @@
 import { SideBar } from '@/components/layout/SideBar';
+import { ProductPageSkeleton } from '@/components/layout/skeleton/ProductPageSkeleton';
 import { ProductCard } from '@/components/ProductCard';
 import BreadCrumbs from '@/components/shared/BreadCrumbs';
 import { useProducts } from '@/features/product/hooks';
@@ -8,7 +9,7 @@ export const ProductPage = () => {
     const { data: products, isFetching } = useQuery(useProducts());
 
     if ( isFetching ) {
-        return <p>Loading...</p>;
+        return <ProductPageSkeleton />;
     }
 
     console.log(products);

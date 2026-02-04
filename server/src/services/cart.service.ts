@@ -10,8 +10,8 @@ class CartService {
     static async getUserCart(identity: UserType) {
         const cart = (await this.findCartByIdentity(identity)
             ?.populate({
-                path: 'items.product',
-                select: 'name images storage ram cpu price',
+                path: 'items.product user',
+                select: 'name images storage ram cpu price email',
             })
             .lean()
             .exec()) as PopulatedCart | null;
@@ -19,6 +19,7 @@ class CartService {
         if (!cart) {
             throw createHttpError(404, 'Cart not found');
         }
+
 
         // Keep only the first image per product
         cart.items.forEach(item => {
@@ -120,42 +121,48 @@ class CartService {
     }
 
     static async mergeCart(guestId: string, userId: string) {
-        const guestCart = await Cart.findOne({ guestId });
-        if (!guestCart || guestCart.items.length === 0) return null;
-
-        let userCart = await Cart.findOne({ user: userId });
-
-        if (!userCart) {
-            userCart = new Cart({ user: userId, items: [] });
-        }
-
-        for (const guestItem of guestCart.items) {
-            const productId = guestItem.product.toString();
-
-            const product = await Product.findById(productId);
-
-            if (!product) continue;
-
-            const price = this.getProductPrice(product);
-
-            const existingIndex = this.getItemIndex(userCart, productId);
-
-            if (existingIndex >= 0) {
-                userCart.items[existingIndex].quantity += guestItem.quantity;
-            } else {
-                userCart.items.push({
-                    product: productId,
-                    quantity: guestItem.quantity,
-                    price,
-                });
+        try {
+          
+            const guestCart = await Cart.findOne({ guest: guestId });
+            if (!guestCart || guestCart.items.length === 0) return null;
+    
+            let userCart = await Cart.findOne({ user: userId });
+    
+            if (!userCart) {
+                userCart = new Cart({ user: userId, items: [] });
             }
+    
+            for (const guestItem of guestCart.items) {
+                const productId = guestItem.product.toString();
+    
+                const product = await Product.findById(productId);
+    
+                const price = product && this.getProductPrice(product);
+    
+                const existingIndex = this.getItemIndex(userCart, productId);
+    
+                if (existingIndex >= 0) {
+                    userCart.items[existingIndex].quantity += guestItem.quantity;
+                } else {
+                    userCart.items.push({
+                        product: productId,
+                        quantity: guestItem.quantity,
+                        price,
+                    });
+                }
+            }
+            this.recalculateCart(userCart);
+    
+            await userCart.save();
+            await Cart.deleteOne({ guest: guestId });
+
+            console.log(userCart);
+            
+    
+            return userCart;
+        } catch (error) {
+          console.error(error);
         }
-        this.recalculateCart(userCart);
-
-        await userCart.save();
-        await Cart.deleteOne({ guestId });
-
-        return userCart;
     }
 
     /* ---------------- SHARED LOGIC ---------------- */

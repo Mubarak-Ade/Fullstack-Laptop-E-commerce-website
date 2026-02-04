@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/store/AuthStore';
 import { useStore } from '@/store/store';
 import { AnimatePresence } from 'motion/react';
 import { Outlet } from 'react-router';
@@ -11,7 +12,8 @@ export const MainLayout = () => {
         <>
             <Navbar />
             <main className="relative">
-                <AnimatePresence>{visible && <LoginModal />}</AnimatePresence>
+               {/* <CartSkeleton /> */}
+                <AnimatePresence>{ visible && <LoginModal />}</AnimatePresence>
                 <Outlet />
             </main>
             <Footer />

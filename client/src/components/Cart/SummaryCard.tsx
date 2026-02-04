@@ -3,6 +3,8 @@ import { priceFormat } from '@/utils/format';
 import { ChevronRight, CreditCard } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Icon } from '../shared/Icon';
+import { useNavigate } from 'react-router';
+import { useAuthStore } from '@/store/AuthStore';
 
 interface Props {
     totalItems: number;
@@ -10,10 +12,20 @@ interface Props {
 }
 
 export const SummaryCard = ({ totalItems, totalPrice }: Props) => {
+    const navigate = useNavigate();
     const showModal = useStore(s => s.showModal);
+    const identity = useAuthStore(s => s.identity);
+
+    const goToCheckout = () => {
+        if (identity.type === 'guest') {
+            showModal();
+        } else {
+            navigate('/checkout');
+        }
+    };
 
     return (
-        <div className="max-w-md p-5 rounded-xl w-full bg-light-bg dark:bg-dark-surface">
+        <div className=" p-5 rounded-xl w-full bg-light-bg dark:bg-dark-surface">
             <h2 className="text-xl dark:text-white text-coral-black font-bold">Order Summary</h2>
             <ul className="mt-5 border-b dark:border-dark-border border-light-border p-4">
                 <li className="flex justify-between p-2">
@@ -38,7 +50,7 @@ export const SummaryCard = ({ totalItems, totalPrice }: Props) => {
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={showModal}
+                onClick={goToCheckout}
                 className="w-full py-3 text-white mt-5 justify-center font-semibold rounded-xl text-base flex items-center gap-5 bg-primary cursor-pointer"
             >
                 Proceed To Checkout
@@ -48,7 +60,7 @@ export const SummaryCard = ({ totalItems, totalPrice }: Props) => {
             <motion.button
                 whileHover={{ scale: 1.05, backgroundColor: '#0b66fe20' }}
                 whileTap={{ scale: 0.9 }}
-                onClick={showModal}
+                onClick={goToCheckout}
                 className="w-full py-3 text-primary mt-2 justify-center font-semibold rounded-xl text-base flex items-center gap-5 border border-primary cursor-pointer"
             >
                 Pay With Paypal

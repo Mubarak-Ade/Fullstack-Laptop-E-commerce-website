@@ -5,13 +5,14 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { ProductCard } from '../ProductCard';
 import { CTASection } from './CTASection';
+import { ProductListSkeleton } from './skeleton/ProductListSkeleton';
 
 export const ProductList = () => {
     const { data, isLoading } = useQuery(useProducts());
     const [active, setActive] = useState('all');
 
     if (isLoading) {
-        <p>Loading...</p>;
+        return <ProductListSkeleton />;
     }
 
     const brands = [...new Set(Data.map(prod => prod.brand))];

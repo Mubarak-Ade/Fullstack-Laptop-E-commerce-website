@@ -1,6 +1,7 @@
 import { CartCard } from '@/components/Cart/CartCard';
 import { SummaryCard } from '@/components/Cart/SummaryCard';
 import { RelatedProduct } from '@/components/layout/RelatedProduct';
+import { CartSkeleton } from '@/components/layout/skeleton/CartSkeleton';
 import { Icon } from '@/components/shared/Icon';
 import { useCart } from '@/features/cart/hooks';
 import { useQuery } from '@tanstack/react-query';
@@ -10,7 +11,7 @@ export const CartPage = () => {
     const { data: cart, isLoading } = useQuery(useCart());
 
     if (isLoading) {
-        return <p>Loading... </p>;
+        return <CartSkeleton />;
     }
 
     console.log(cart);
@@ -21,8 +22,8 @@ export const CartPage = () => {
                 <h1 className="text-5xl text-coral-black dark:text-white font-display font-bold">
                     Shopping Cart
                 </h1>
-                <div className="mt-5 flex gap-5 items-center justify-between">
-                    <ul className="space-y-4 scrollbar-thumb scrollbar-webkit scrollbar-thin max-w-xl w-full overflow-y-auto flex flex-col bg-light-fg dark:bg-dark-fg h-100 rounded-xl">
+                <div className="mt-5 flex lg:flex-row w-full flex-col gap-5 items-center justify-between">
+                    <ul className="space-y-4 p-5 scrollbar-thumb scrollbar-webkit scrollbar-thin max-w-xl w-full overflow-y-auto flex flex-col bg-light-bg dark:bg-dark-fg h-100 rounded-xl border border-light-border shadow-2xl shadow-light-fg dark:shadow-dark-bg dark:border-dark-border">
                         {cart && cart.items?.length !== 0 ? (
                             cart.items?.map(product => <CartCard {...product} />)
                         ) : (

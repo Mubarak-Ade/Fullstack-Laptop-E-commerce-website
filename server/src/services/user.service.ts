@@ -1,6 +1,7 @@
 import createHttpError from 'http-errors';
 import User from '../models/User.js';
 import { UserDTO } from '../schema/user.schema.js';
+import CartService from './cart.service.js';
 
 class UserServices {
     static async regiserUser(data: UserDTO) {
@@ -43,12 +44,14 @@ class UserServices {
 
         const isMatch = user.comparePassword(password);
 
+        
+        
         if (!isMatch) {
             throw createHttpError(400, 'Password does not match');
         }
-
+        
         const token = user.getJWTToken();
-
+        
         return {
             id: user._id,
             email: user.email,
