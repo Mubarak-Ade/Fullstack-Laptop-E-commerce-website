@@ -21,7 +21,7 @@ export const OrderPage = () => {
                 </h4>
             </div>
 
-            <div className="max-w-6xl w-full m-auto flex mt-10 gap-10">
+            <div className="max-w-6xl w-full m-auto flex lg:flex-row flex-col mt-10 gap-10">
                 <div className="max-w-2xl w-full h-full space-y-5">
                     <TrackOrder />
                     <OrderSummary />

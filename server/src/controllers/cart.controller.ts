@@ -53,3 +53,13 @@ export const inputQuantity: RequestHandler = async (req, res, next): Promise<voi
         next(error);
     }
 };
+
+export const CheckoutController : RequestHandler = async (req, res, next): Promise<void> => {
+  try {
+    const identity = resolveIdentity(req);
+    const checkout = await CartService.Checkout(identity)
+    res.status(200).json(checkout);
+  } catch (error) {
+    next(error);
+  }
+};

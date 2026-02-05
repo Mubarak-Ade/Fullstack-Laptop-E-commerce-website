@@ -4,6 +4,7 @@ import { Icon } from '@/components/shared/Icon';
 import { ChevronRight } from 'lucide-react';
 
 export const CheckoutPage = () => {
+
     return (
         <div className="dark:bg-dark-bg bg-light-fg">
             <div className="p-10 max-w-6xl w-full m-auto">
@@ -29,7 +30,7 @@ export const CheckoutPage = () => {
                     ))}
                 </div>
 
-                <div className=" flex gap-10 mt-10">
+                <div className=" flex gap-10 mt-10 lg:flex-row flex-col">
                     <CheckoutForm />
                     <CheckoutSummary />
                 </div>

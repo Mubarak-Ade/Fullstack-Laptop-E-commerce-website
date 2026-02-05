@@ -28,3 +28,8 @@ export const deleteCartItem = async (productId: string) => {
     return res.data;
 };
 
+export const checkout = async () => {
+    const res = await api.get('/cart/checkout')
+    return res.data
+}
+
