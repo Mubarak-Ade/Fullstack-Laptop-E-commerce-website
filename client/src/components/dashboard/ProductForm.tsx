@@ -72,7 +72,7 @@ export const ProductForm = () => {
     }, [product, reset]);
 
     const images = useWatch({ control, name: 'images' });
-    const brands = ['Hp', 'Dell', 'Acer', 'Apples', 'Asus'];
+    const brands = ['Hp', 'Dell', 'Acer', 'Apples', 'Asus', 'Lenovo'];
     const ramOptions = ['4GB', '8GB', '16GB', '32GB', '64GB'];
     const storageOptions = ['128GB', '256GB', '512GB', '1TB', '2TB'];
 
@@ -101,11 +101,17 @@ export const ProductForm = () => {
         if (data.images) {
             Array.from(data.images).forEach(file => fd.append('images', file));
         }
-        console.log(fd);
+        console.log(data);
 
-        product ? updateProduct.mutate(fd) : createProduct.mutate(fd);
-
-        navigate(-1);
+        product ? updateProduct.mutate(fd, {
+            onSuccess: () => {
+                navigate(-1);
+            }
+        }) : createProduct.mutate(fd, {
+            onSuccess: () => {
+                navigate(-1);
+            }
+        });
     };
 
     return (

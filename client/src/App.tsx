@@ -17,6 +17,7 @@ import { useAuthStore } from './store/AuthStore';
 import { useThemeStore } from './store/ThemeStore';
 import { CartSkeleton } from './components/layout/skeleton/CartSkeleton';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { OrderPage } from './pages/OrderPage';
 
 function App() {
     const theme = useThemeStore(s => s.theme);
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/products" Component={ProductPage} />
                     <Route path="/carts" loader={CartSkeleton} HydrateFallback={CartSkeleton}  Component={CartPage} />
                     <Route path="/checkout" loader={CartSkeleton} HydrateFallback={CartSkeleton}  Component={CheckoutPage} />
+                    <Route path="/order" Component={OrderPage} />
                 </Route>
                 <Route path="/login" Component={Login} HydrateFallback={RouteSkeleton} />
                 <Route path="/signup" Component={SignUp} HydrateFallback={RouteSkeleton} />
