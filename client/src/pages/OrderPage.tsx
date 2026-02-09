@@ -1,10 +1,21 @@
-import { CheckoutSummary } from '@/components/Checkout/CheckoutSummary';
 import { OrderSummary } from '@/components/Order/OrderSummary';
 import { TrackOrder } from '@/components/Order/TrackOrder';
 import { Icon } from '@/components/shared/Icon';
+import { useOrder } from '@/features/order/hooks';
+import { useQuery } from '@tanstack/react-query';
 import { CheckCircle2Icon, CreditCard, MailQuestionMarkIcon, MapPin, MessageCircleQuestionMark } from 'lucide-react';
+import { useParams } from 'react-router';
 
 export const OrderPage = () => {
+
+    const {id} = useParams()
+
+    const {data: order, isLoading} = useQuery(useOrder(id as string))
+
+    if (isLoading) {
+        return <p></p>
+    }    
+
 
     return (
         <div className="dark:bg-dark-bg bg-light-fg p-10">
@@ -23,8 +34,8 @@ export const OrderPage = () => {
 
             <div className="max-w-6xl w-full m-auto flex lg:flex-row flex-col mt-10 gap-10">
                 <div className="max-w-2xl w-full h-full space-y-5">
-                    <TrackOrder />
-                    <OrderSummary />
+                    <TrackOrder status={order.status} date={order.updatedAt} />
+                    <OrderSummary products={order.products} shippingFee={order.shippingFee} subTotal={order.subTotal} tax={order.tax} total={order.total} />
                 </div>
                 <div className="">
                     <div className="bg-light-bg dark:bg-dark-surface p-5 rounded-xl shadow-lg shadow-light-fg dark:shadow-dark-bg w-full">

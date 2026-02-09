@@ -79,7 +79,6 @@ export const ProductForm = () => {
     if (isFetching) {
         return <ProductFormSkeleton />;
     }
-    console.log(product);
 
     const onSubmit = (data: ProductFormInput) => {
         const fd = new FormData();
@@ -101,7 +100,6 @@ export const ProductForm = () => {
         if (data.images) {
             Array.from(data.images).forEach(file => fd.append('images', file));
         }
-        console.log(data);
 
         product ? updateProduct.mutate(fd, {
             onSuccess: () => {

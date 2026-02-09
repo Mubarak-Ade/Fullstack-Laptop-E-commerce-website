@@ -20,10 +20,6 @@ export const CheckoutSummary = () => {
         return <div>Loading...</div>;
     }
 
-    const handleNavigate = () => {
-        navigate('/order');
-    };
-
     return (
         <motion.div
             layout
@@ -74,7 +70,8 @@ export const CheckoutSummary = () => {
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={handleNavigate}
+                type='submit'
+                form='checkout'
                 className="w-full py-3 text-white mt-5 justify-center font-semibold rounded-xl text-base flex items-center gap-5 bg-primary cursor-pointer"
             >
                 Place Order

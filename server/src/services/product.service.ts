@@ -27,8 +27,6 @@ class ProductService {
         const imagePaths = files.map(file => file.path);
         const { name, brand, price, discountPrice, stocks } = data;
 
-        console.log(files);
-
         if (discountPrice && discountPrice >= price) {
             throw createHttpError(400, 'Discount price must be less than original price');
         }

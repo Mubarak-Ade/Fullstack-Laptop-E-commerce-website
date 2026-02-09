@@ -1,3 +1,4 @@
+import { showGlobalToast } from "@/context/ToastContext";
 import { useAuthStore } from "@/store/AuthStore";
 import axios, { type AxiosInstance } from "axios";
 
@@ -14,21 +15,28 @@ api.interceptors.request.use((config) => {
     
     if (identity.type === "guest") {
         config.headers['x-guest-id'] = identity.guestId
-    }
-
-    console.log(config);
-    
+    }    
 
     return config
 
 })
 
+
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        const message = error.response?.data?.error || error.error || "An unexpected error occured"
+        const logout = useAuthStore.getState().logout
+        const message =
+            error.response?.data?.error ||
+            error.response?.data?.message ||
+            error.message ||
+            "An unexpected error occurred"
+        if (error.response?.status === 401) {
+            showGlobalToast("error", message)
+            logout()
+        }
         console.error("API Error", message)
-        throw new Error(message)
+        return Promise.reject(new Error(message))
     }
 )
 

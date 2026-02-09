@@ -5,22 +5,29 @@ import { motion } from 'motion/react';
 import { Icon } from '../shared/Icon';
 import { useNavigate } from 'react-router';
 import { useAuthStore } from '@/store/AuthStore';
+import { useToast } from '@/context/ToastContext';
 
 interface Props {
+    isEmpty: boolean
     totalItems: number;
     totalPrice: number;
 }
 
-export const SummaryCard = ({ totalItems, totalPrice }: Props) => {
+export const SummaryCard = ({ totalItems, totalPrice, isEmpty }: Props) => {
     const navigate = useNavigate();
     const showModal = useStore(s => s.showModal);
+    const showToast = useToast().showToast
     const identity = useAuthStore(s => s.identity);
 
     const goToCheckout = () => {
         if (identity.type === 'guest') {
             showModal();
         } else {
-            navigate('/checkout');
+            if (!isEmpty) {
+                navigate('/checkout');
+            } else {
+                showToast("error", "Cart is Empty, Nothing to Checkout")
+            }
         }
     };
 

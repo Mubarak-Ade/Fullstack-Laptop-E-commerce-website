@@ -27,3 +27,11 @@ export const attachUser = (req: Request, res: Response, next: NextFunction) => {
     }
     next();
 };
+export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user?.id
+
+    if (!user) {
+        throw createHttpError(401, 'Unauthorize user')
+    }
+    next()
+}

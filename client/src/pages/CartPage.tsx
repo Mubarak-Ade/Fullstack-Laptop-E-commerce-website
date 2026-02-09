@@ -14,8 +14,6 @@ export const CartPage = () => {
         return <CartSkeleton />;
     }
 
-    console.log(cart);
-
     return (
         <div className="bg-light-fg dark:bg-dark-bg">
             <div className="max-w-6xl p-5 w-full m-auto min-h-screen">
@@ -34,6 +32,7 @@ export const CartPage = () => {
                         )}
                     </ul>
                     <SummaryCard
+                        isEmpty={cart?.items.length === 0}
                         totalItems={cart?.totalItems ?? 0}
                         totalPrice={cart?.totalPrice ?? 0}
                     />

@@ -3,26 +3,39 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { Icon } from './shared/Icon';
 // import type {Cart, Product} from "@/features/cart/types"
-import { useAddToCart } from '@/features/cart/hooks';
+import { useAddToCart, useCart } from '@/features/cart/hooks';
 import { type Product } from '@/schema/product.schema';
 import { formatImage } from '@/utils/imageFormat';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useToast } from '@/context/ToastContext';
+import { useMemo } from 'react';
 
 export const ProductCard = (product: Product) => {
     const addToCart = useMutation(useAddToCart());
+    const { data: cart } = useQuery(useCart());
+    const { showToast } = useToast();
     const { images, name, price, cpu, gpu, storage, slug } = product ?? {};
 
     const spec = `${cpu} . ${gpu} . ${storage}`;
     const navigate = useNavigate();
-
 
     const handleNavigate = () => {
         navigate(`/products/${slug}`);
     };
 
     const addItemToCart = () => {
-        addToCart.mutate(product._id);
-    }
+        addToCart.mutate(product._id, {
+            onSuccess: () => {
+                showToast('success', `${name} added to cart successfully`);
+            },
+            onError: error => {
+                showToast('error', error.message);
+            },
+        });
+    };
+
+    const prod = useMemo(() => cart?.items.find(item => item.product._id === product._id), [cart])
+
 
     return (
         <AnimatePresence>
@@ -35,15 +48,15 @@ export const ProductCard = (product: Product) => {
                 whileTap="tap"
                 initial={{
                     opacity: 0,
-                    y: 30
+                    y: 30,
                 }}
                 whileInView={{
                     opacity: 1,
-                    y: 0
+                    y: 0,
                 }}
                 transition={{
                     duration: 1,
-                    delay: 0.3 + Number(product._id) * 0.3
+                    delay: 0.3 + Number(product._id) * 0.3,
                 }}
                 key={product._id}
                 className="max-w-2xs rounded-2xl overflow-hidden cursor-pointer dark:bg-dark-surface dark:border-dark-border border border-light-border shadow-2xl flex-col w-full"
@@ -99,8 +112,13 @@ export const ProductCard = (product: Product) => {
                                 scale: 0.8,
                             }}
                             onClick={addItemToCart}
-                            className="p-3 bg-primary text-white rounded-full"
+                            className="p-3 bg-primary relative text-white rounded-full"
                         >
+                            {prod && (
+                                <span className="absolute -top-3 shadow-2xl bg- text-primary size-5 rounded-full font-technical font-medium -right-1 flex items-center justify-center">
+                                    {prod.quantity}
+                                </span>
+                            )}
                             <Icon icon={ShoppingCart} />
                         </motion.button>
                     </div>

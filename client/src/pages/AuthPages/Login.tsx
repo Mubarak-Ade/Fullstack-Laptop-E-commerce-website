@@ -12,8 +12,10 @@ import LaptopImage from '../../assets/Images/artiom-vallat-g7boywXsC6M-unsplash.
 import { useLogin } from '@/features/auth/hooks';
 import { useMutation } from '@tanstack/react-query';
 import { FieldError } from '@/components/ui/field';
+import { useToast } from '@/context/ToastContext';
 export const Login = () => {
 
+    const {showToast} = useToast()
     const login = useMutation(useLogin())
     const navigate = useNavigate()
 
@@ -26,7 +28,11 @@ export const Login = () => {
     const onSubmit = (data: LoginInput) => {
         login.mutate(data, {
             onSuccess: () => {
+                showToast("success", "login successfully")
                 navigate("/")
+            },
+            onError: (error) => {
+                showToast("error", error.message)
             }
         })
     };
@@ -125,7 +131,6 @@ export const Login = () => {
                                     </span>
                                 )}
                             </motion.button>
-                            {login.error && <FieldError>{login.error.message}</FieldError>}
                         </form>
                     </div>
                     <div className="flex items-center gap-4 text-secondary text-xs justify-center">

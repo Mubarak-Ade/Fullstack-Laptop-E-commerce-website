@@ -1,9 +1,31 @@
-import { Truck, Mailbox, Wallet, CreditCard } from 'lucide-react';
-import { Icon } from '../shared/Icon';
-import { InputField } from '../Form/InputField';
+import { useToast } from '@/context/ToastContext';
+import { useCreateOrder } from '@/features/order/hooks';
+import { OrderSchema, type OrderInput } from '@/schema/order.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { CreditCard, Mailbox, Truck, Wallet } from 'lucide-react';
 import { motion, type Variants } from 'motion/react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+import { InputField } from '../Form/InputField';
+import { Icon } from '../shared/Icon';
+import { useConfirmFakePayment, useInitFakePayment } from '@/features/payment/hooks';
 
 export const CheckoutForm = () => {
+    const order = useMutation(useCreateOrder());
+    const initializePayment = useMutation(useInitFakePayment());
+    const confirmPayment = useMutation(useConfirmFakePayment());
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<OrderInput>({ resolver: zodResolver(OrderSchema) });
+
+    const navigate = useNavigate();
+
+    const showToast = useToast().showToast;
+
     const CheckoutVariants: Variants = {
         hidden: {
             opacity: 0,
@@ -18,9 +40,32 @@ export const CheckoutForm = () => {
         },
     };
 
+    const onSubmit = (data: OrderInput) => {
+        order.mutate(data, {
+            onSuccess: order => {
+                initializePayment.mutate(order._id, {
+                    onSuccess: payment => {
+                        confirmPayment.mutate(payment.reference, {
+                            onSuccess: () => navigate(`/order/${order._id as string}`),
+                            onError: error => {
+                                showToast('error', error.message);
+                            },
+                        });
+                    },
+                    onError: error => {
+                        showToast('error', error.message);
+                    },
+                });
+            },
+            onError: error => {
+                showToast('error', error.message);
+            },
+        });
+    };
+
     return (
         <div className="max-w-3xl">
-            <form>
+            <form id="checkout" onSubmit={handleSubmit(onSubmit)}>
                 {/* Shipping Form Fields */}
                 <motion.div
                     variants={CheckoutVariants}
@@ -34,17 +79,63 @@ export const CheckoutForm = () => {
                         <Icon icon={Truck} size={30} className="text-primary" /> Shipping Address
                     </h4>
                     <div className="flex gap-4 w-full">
-                        <InputField label="First Name" placeholder="John" />
-                        <InputField label="Last Name" placeholder="Doe" />
+                        <InputField
+                            {...register('firstname')}
+                            label="First Name"
+                            placeholder="John"
+                            errors={errors.firstname}
+                        />
+                        <InputField
+                            {...register('lastname')}
+                            label="Last Name"
+                            placeholder="Doe"
+                            errors={errors.lastname}
+                        />
                     </div>
-                    <InputField label="Email Adress" placeholder="user@gmail.com" />
-                    <InputField label="Street Adress" placeholder="Apt, Suite, etc. (optional)" />
+                    <InputField
+                        {...register('email')}
+                        label="Email Adress"
+                        placeholder="user@gmail.com"
+                        errors={errors.email}
+                    />
+                    <InputField
+                        {...register('country')}
+                        label="Country"
+                        placeholder="Nigeria"
+                        errors={errors.country}
+                    />
+                    <InputField
+                        {...register('address')}
+                        label="Street Adress"
+                        placeholder="Apt, Suite, etc. (optional)"
+                        errors={errors.address}
+                    />
                     <div className="flex gap-4 w-full">
-                        <InputField label="City" placeholder="New York" />
-                        <InputField label="State/Province" placeholder="NY" />
-                        <InputField label="Zip Codde" placeholder="11100" />
+                        <InputField
+                            {...register('city')}
+                            label="City"
+                            placeholder="New York"
+                            errors={errors.city}
+                        />
+                        <InputField
+                            {...register('state')}
+                            label="State/Province"
+                            placeholder="NY"
+                            errors={errors.state}
+                        />
+                        <InputField
+                            {...register('postalCode')}
+                            label="Zip Code"
+                            placeholder="11100"
+                            errors={errors.postalCode}
+                        />
                     </div>
-                    <InputField label="Phone Number" placeholder="+234-0000-0000" />
+                    <InputField
+                        {...register('phone')}
+                        label="Phone Number"
+                        placeholder="+234-0000-0000"
+                        errors={errors.phone}
+                    />
                 </motion.div>
 
                 <motion.div
@@ -66,8 +157,8 @@ export const CheckoutForm = () => {
                         >
                             <input
                                 type="radio"
-                                name="shipping"
                                 id="standard"
+                                {...register('shippingMethod')}
                                 className=" accent-primary size-5 "
                             />
                             <div className="">
@@ -85,8 +176,8 @@ export const CheckoutForm = () => {
                         >
                             <input
                                 type="radio"
-                                name="shipping"
                                 id="express"
+                                {...register('shippingMethod')}
                                 className="rounded-xl checked:accent-primary size-5"
                             />
                             <div className="">
@@ -99,6 +190,9 @@ export const CheckoutForm = () => {
                             </div>
                         </label>
                     </div>
+                    {errors.shippingMethod && (
+                        <p className="text-red-500">{errors.shippingMethod.message}</p>
+                    )}
                 </motion.div>
                 <motion.div
                     variants={CheckoutVariants}

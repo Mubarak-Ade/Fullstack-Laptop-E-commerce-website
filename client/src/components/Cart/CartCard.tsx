@@ -6,6 +6,7 @@ import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Icon } from '../shared/Icon';
 import { priceFormat } from '@/utils/format';
+import { useToast } from '@/context/ToastContext';
 
 export const CartCard = (cart: CartItem) => {
     const { product, price, quantity } = cart;
@@ -14,6 +15,8 @@ export const CartCard = (cart: CartItem) => {
 
     const handleQuantity = useMutation(useCartQuantity());
     const deleteCartItem = useMutation(useDeleteCartItem())
+
+    const {showToast} = useToast()
 
     const handleIncrease = () => {
         const newQuantity = quantityCount + 1;
@@ -64,7 +67,7 @@ export const CartCard = (cart: CartItem) => {
                 </div>
             </div>
             <button
-                onClick={() => deleteCartItem.mutate(product._id as string)}
+                onClick={() => deleteCartItem.mutate(product._id as string, {onSuccess: () => showToast("success", `${product.name} removed from the cart successfully`)})}
                 className="absolute top-0 right-0 m-4 text-secondary"
             >
                 <Icon icon={Trash2} />

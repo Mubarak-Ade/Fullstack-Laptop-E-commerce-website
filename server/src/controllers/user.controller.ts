@@ -15,7 +15,7 @@ export const login: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const user = await UserServices.loginUser(req.body);
         const guest = req.headers['x-guest-id'] as string
-        const cart = await CartService.mergeCart(guest, user.id);
+        const cart = await CartService.mergeCart(guest, user.id as string);
         res.status(200).json(user);
     } catch (error) {
         next(error);

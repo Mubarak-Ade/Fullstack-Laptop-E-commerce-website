@@ -16,8 +16,6 @@ export const ProductDetail = () => {
     if (isFetching) {
         return <ProductDetailSkeleton />
     }
-
-    console.log(product);
     
     const { name, images, brand, price, cpu, storage, ram, gpu, os, screenSize, battery } = product as ProductFormInput;
 

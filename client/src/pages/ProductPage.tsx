@@ -10,10 +10,7 @@ export const ProductPage = () => {
 
     if ( isFetching ) {
         return <ProductPageSkeleton />;
-    }
-
-    console.log(products);
-    
+    }    
 
     return (
         <div>

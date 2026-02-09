@@ -6,9 +6,11 @@ import { isHttpError } from "http-errors";
 import morgan from "morgan";
 import productRoutes from "./routes/product.routes.js"
 import cartRoutes from "./routes/cart.routes.js"
+import orderRoutes from "./routes/order.routes.js"
 import userRoutes from "./routes/user.route.js"
+import paymentRoutes from "./routes/payment.route.js"
 import path from "path";
-import { attachUser } from "./middlewares/authorization.js";
+import { attachUser, requireAuth } from "./middlewares/authorization.js";
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 app.use('/api/user', userRoutes)
 app.use("/api/product", productRoutes)
 app.use("/api/cart", cartRoutes)
+app.use("/api/order", requireAuth, orderRoutes)
+app.use("/api/payment", requireAuth, paymentRoutes)
 
 app.get( "/", ( req, res ) => {
     res.send( {

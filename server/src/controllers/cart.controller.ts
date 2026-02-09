@@ -57,7 +57,7 @@ export const inputQuantity: RequestHandler = async (req, res, next): Promise<voi
 export const CheckoutController : RequestHandler = async (req, res, next): Promise<void> => {
   try {
     const identity = resolveIdentity(req);
-    const checkout = await CartService.Checkout(identity)
+    const checkout = await CartService.CheckoutSnapShot(identity)
     res.status(200).json(checkout);
   } catch (error) {
     next(error);

@@ -39,8 +39,7 @@ export const getSingleProduct: RequestHandler = async (req, res, next): Promise<
 };
 
 export const createProduct: RequestHandler = async (req, res, next): Promise<void> => {
-    console.log('request body', req.body);
-    console.log('request files', req.files);
+
     try {
         const parse = ProductSchema.safeParse(req.body);
 

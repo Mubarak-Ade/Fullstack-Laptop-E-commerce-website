@@ -12,7 +12,6 @@ const resolveIdentity = (req: any) => {
             guestId: String(req.headers['x-guest-id']),
         } as const;
     }
-    console.log(req.user);
     
     throw createHttpError(401, 'Identity not found');
 };

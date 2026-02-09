@@ -162,22 +162,20 @@ class CartService {
             await userCart.save();
             await Cart.deleteOne({ guest: guestId });
 
-            console.log(userCart);
-
             return userCart;
         } catch (error) {
             console.error(error);
         }
     }
 
-    static async Checkout(identity: UserType) {
+    static async CheckoutSnapShot(identity: UserType) {
         const cart = await this.findCartByIdentity(identity);
 
         if (!cart) throw createHttpError(404, 'Cart Not Found');
 
         let checkoutItems = [];
 
-        const productIds = cart.items.map(item => item.product.toString());
+        const productIds = cart.items?.map(item => item.product.toString());
 
         const products = await Product.find({ _id: { $in: productIds } });
 
@@ -226,7 +224,7 @@ class CartService {
         }
     }
 
-    private static findCartByIdentity(identity: UserType) {
+    static findCartByIdentity(identity: UserType) {
         if (identity.type === 'user') {
             return Cart.findOne({ user: identity.userId });
         } else {
@@ -250,6 +248,22 @@ class CartService {
     private static getItemIndex(cart: CartDocument, productId: string) {
         const index = cart.items.findIndex(item => item.product.toString() === productId);
         return index;
+    }
+
+    static async clearCart(userId: string) {
+        const cart = await Cart.findOne({user: userId})
+
+        if(!cart) {
+            throw createHttpError(404, "Cart Not Found")
+        }
+
+        cart.items.length = 0
+        cart.totalPrice = 0
+        cart.totalItems = 0
+
+        await cart.save()
+
+        return cart
     }
 }
 
