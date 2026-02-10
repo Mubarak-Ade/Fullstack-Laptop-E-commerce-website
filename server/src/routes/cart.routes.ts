@@ -7,6 +7,7 @@ import {
     getCartItems,
     inputQuantity
 } from '../controllers/cart.controller.js';
+import { requireAuth } from '../middlewares/authorization.js';
 
 const router = Router();
 
@@ -17,6 +18,6 @@ router.post('/items', addItemsToCart);
 // router.post('/cart/inc', decreaseQuantity)
 router.post('/item/quantity', inputQuantity);
 router.delete('/item/remove', deleteCartItem);
-router.get('/checkout', CheckoutController);
+router.get('/checkout', requireAuth, CheckoutController);
 
 export default router;

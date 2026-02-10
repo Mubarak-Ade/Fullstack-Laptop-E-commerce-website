@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import Order from '../models/Order.js';
+import Order, { OrderType } from '../models/Order.js';
 import { OrderDTO } from '../schema/order.schema.js';
 import CartService from './cart.service.js';
 
@@ -43,7 +43,10 @@ class OrderService {
     }
 
     static async getUserOrder (user: string) {
-        const order = await Order.find({userId: user})
+        if(!user) {
+            throw createHttpError(403, "Unauthorize User")
+        }
+        const order = await Order.find({userId: user}).lean()
         return order
     }
 

@@ -1,9 +1,12 @@
 import { Router } from 'express';
-import { login, register } from '../controllers/user.controller.js';
+import { getUser, login, register, updateUser } from '../controllers/user.controller.js';
+import { requireAuth } from '../middlewares/authorization.js';
+import { upload } from '../middlewares/multer.js';
 
 const router = Router();
 
 router.route('/register').post(register);
 router.route('/login').post(login);
-
+router.use(requireAuth)
+router.route('/me').get(getUser).patch(requireAuth, upload("avatars").single("image"), updateUser)
 export default router;

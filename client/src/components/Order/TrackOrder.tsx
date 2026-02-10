@@ -44,6 +44,13 @@ export const TrackOrder = ({ status, date }: Props) => {
             status: 'DELIVERED',
         },
     ];
+
+    const getCurrentStatus = progress.findIndex(prog => prog.status === status)
+        
+    
+    
+
+
     return (
         <div className="bg-light-bg p-5 max-w-2xl w-full dark:bg-dark-surface rounded-xl shadow-lg shadow-light-fg dark:shadow-dark-bg">
             <div className="flex justify-between items-center">
@@ -57,23 +64,23 @@ export const TrackOrder = ({ status, date }: Props) => {
                     <div className="flex w-full items-center relative">
                         <div key={index} className="flex-1 flex flex-col items-center z-40">
                             <span
-                                className={`size-12 ${step.status === status ? 'bg-primary' : 'bg-light-fg dark:bg-dark-fg'} flex items-center justify-center rounded-full`}
+                                className={`size-12 ${index <= getCurrentStatus  ? 'bg-primary' : 'bg-light-fg dark:bg-dark-fg'} flex items-center justify-center rounded-full`}
                             >
                                 <Icon
                                     icon={step.icon}
                                     size={24}
                                     className={
-                                        step.status === status ? 'text-white' : 'text-gray-400'
+                                        index <= getCurrentStatus ? 'text-white' : 'text-gray-400'
                                     }
                                 />
                             </span>
                             <div className="flex items-center mt-2 flex-col">
                                 <h6
-                                    className={`text-sm font-bold ${step.status === status ? 'text-primary' : 'text-gray-400'}`}
+                                    className={`text-sm font-bold ${index <= getCurrentStatus ? 'text-primary' : 'text-gray-400'}`}
                                 >
                                     {step.label}
                                 </h6>
-                                {step.status === status ? (
+                                {index <= getCurrentStatus ? (
                                     <p className="text-xs text-gray-500 dark:text-gray-400">
                                         {format(date, 'PP')}
                                     </p>
@@ -83,7 +90,7 @@ export const TrackOrder = ({ status, date }: Props) => {
                             </div>
                         </div>
                         <div
-                            className={` h-1 ${index < progress.length - 1 ? 'bg-gray-200 w-full' : ''} ${step.status === status ? 'bg-primary' : ''} absolute top-6 inset-1/2 z-0`}
+                            className={` h-1 ${index < progress.length - 1 ? 'bg-gray-200 w-full' : ''} ${index <= getCurrentStatus ? 'bg-primary' : ''} absolute top-6 inset-1/2 z-0`}
                         />
                     </div>
                 ))}

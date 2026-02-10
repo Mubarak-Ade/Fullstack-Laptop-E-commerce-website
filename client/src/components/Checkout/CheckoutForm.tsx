@@ -1,6 +1,6 @@
 import { useToast } from '@/context/ToastContext';
 import { useCreateOrder } from '@/features/order/hooks';
-import { OrderSchema, type OrderInput } from '@/schema/order.schema';
+import { ShippingSchema, type ShippingInput } from '@/schema/order.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { CreditCard, Mailbox, Truck, Wallet } from 'lucide-react';
@@ -20,7 +20,7 @@ export const CheckoutForm = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<OrderInput>({ resolver: zodResolver(OrderSchema) });
+    } = useForm<ShippingInput>({ resolver: zodResolver(ShippingSchema) });
 
     const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export const CheckoutForm = () => {
         },
     };
 
-    const onSubmit = (data: OrderInput) => {
+    const onSubmit = (data: ShippingInput) => {
         order.mutate(data, {
             onSuccess: order => {
                 initializePayment.mutate(order._id, {
@@ -158,6 +158,7 @@ export const CheckoutForm = () => {
                             <input
                                 type="radio"
                                 id="standard"
+                                value={'standard'}
                                 {...register('shippingMethod')}
                                 className=" accent-primary size-5 "
                             />
@@ -176,6 +177,7 @@ export const CheckoutForm = () => {
                         >
                             <input
                                 type="radio"
+                                value={'express'}
                                 id="express"
                                 {...register('shippingMethod')}
                                 className="rounded-xl checked:accent-primary size-5"

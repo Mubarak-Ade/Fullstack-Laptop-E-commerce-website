@@ -32,8 +32,10 @@ api.interceptors.response.use(
             error.message ||
             "An unexpected error occurred"
         if (error.response?.status === 401) {
-            showGlobalToast("error", message)
             logout()
+        }
+        if (message) {
+            showGlobalToast("error", message)
         }
         console.error("API Error", message)
         return Promise.reject(new Error(message))

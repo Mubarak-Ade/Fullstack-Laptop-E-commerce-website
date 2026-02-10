@@ -1,5 +1,5 @@
 import Toast from "@/components/Toast";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 interface Toast {
 	id: number;
@@ -45,6 +45,8 @@ export const showGlobalToast = (
 };
 
 let toastId = 0;
+const toastDedupeWindowMs = 5000;
+const lastToastAt = new Map<string, number>();
 
 interface ToastProviderProps {
 	children: ReactNode;
@@ -55,14 +57,26 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
 }) => {
 	const [toasts, setToasts] = useState<Toast[]>([]);
 
-	const showToast = (type: ToastKind, message: string) => {
+	const showToast = useCallback((type: ToastKind, message: string) => {
+		const key = `${type}:${message}`;
+		const now = Date.now();
+		const lastShown = lastToastAt.get(key);
+		if (lastShown && now - lastShown < toastDedupeWindowMs) {
+			return;
+		}
+		lastToastAt.set(key, now);
 		const id = toastId++;
 		const newToast: Toast = { id, type, message };
-		setToasts((prev) => [...prev, newToast]);
+		setToasts((prev) => {
+			if (prev.some((toast) => toast.type === type && toast.message === message)) {
+				return prev;
+			}
+			return [...prev, newToast];
+		});
 		setTimeout(() => {
 			removeToast(id);
 		}, 10000);
-	};
+	}, []);
 
 	const removeToast = (id: number) => {
 		setToasts((prev) => prev.filter((toast) => toast.id !== id));

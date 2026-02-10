@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const SideBar=() => {
     const brands=["Apple","HP","Dell","Acer","Toshiba"]
     return (

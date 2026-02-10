@@ -250,8 +250,12 @@ class CartService {
         return index;
     }
 
-    static async clearCart(userId: string) {
-        const cart = await Cart.findOne({user: userId})
+    static async clearCart(userId: string, session?: import('mongoose').ClientSession) {
+        const cartQuery = Cart.findOne({ user: userId });
+        if (session) {
+            cartQuery.session(session);
+        }
+        const cart = await cartQuery;
 
         if(!cart) {
             throw createHttpError(404, "Cart Not Found")
@@ -261,7 +265,7 @@ class CartService {
         cart.totalPrice = 0
         cart.totalItems = 0
 
-        await cart.save()
+        await cart.save({ session })
 
         return cart
     }

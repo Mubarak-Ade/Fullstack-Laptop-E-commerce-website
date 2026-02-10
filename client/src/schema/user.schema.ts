@@ -3,7 +3,10 @@ import z from "zod";
 const UserSchema = z.object({
     id: z.string(),
     email: z.string().email(),
+    fullname: z.string(),
     token: z.string(),
+    role: z.string(),
+    avatar: z.string().optional()
 });
 
 export const LoginSchema = z.object({

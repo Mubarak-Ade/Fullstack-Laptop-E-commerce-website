@@ -4,6 +4,11 @@ import mongoose, { HydratedDocument, InferSchemaType, Model, model, Schema } fro
 import env from "../env.js";
 
 const UserSchema = new Schema({
+    firstName: String,
+    lastName: String,
+    phone: String,
+    bio: String,
+    avatar: String,
     email: {
         type: String,
         unique: true,

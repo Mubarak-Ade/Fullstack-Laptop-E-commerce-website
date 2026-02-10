@@ -15,7 +15,7 @@ export const initializeFakePayment: RequestHandler = async (req, res, next): Pro
 
 export const confirmeFakePayment : RequestHandler = async (req, res, next): Promise<void> => {
   try {
-    const confirm = await PaymentService.confirmFakePayment(req.body.reference)
+    const confirm = await PaymentService.confirmFakePayment(req.body.reference, req.user?.id as string)
     res.status(200).json(confirm);
   } catch (error) {
     next(error);

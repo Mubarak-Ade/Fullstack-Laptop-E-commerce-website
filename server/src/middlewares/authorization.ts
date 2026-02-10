@@ -35,3 +35,15 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction) => 
     }
     next()
 }
+
+export const authorizeRole = async (req: Request, res: Response, next: NextFunction) => {
+
+    const user = req.user
+
+    if ( !user || user.role !== "admin") {
+        throw createHttpError(403, "Forbidden, Admin only")
+    }
+    console.log(user)
+    next()
+}
+  

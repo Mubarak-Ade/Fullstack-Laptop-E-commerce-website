@@ -12,10 +12,11 @@ export const OrderPage = () => {
 
     const {data: order, isLoading} = useQuery(useOrder(id as string))
 
-    if (isLoading) {
+    if (isLoading || !order) {
         return <p></p>
     }    
 
+    const shippingAddress = order.shippingAddress
 
     return (
         <div className="dark:bg-dark-bg bg-light-fg p-10">
@@ -27,7 +28,7 @@ export const OrderPage = () => {
                     Thank You For Your Order
                 </h1>
                 <h4 className="mt-2 text-secondary ">
-                    Order #SHN-992834 . We've Sent a confirmation email to your registered email
+                    Order {order._id} . We've Sent a confirmation email to your registered email
                     address.
                 </h4>
             </div>
@@ -41,11 +42,11 @@ export const OrderPage = () => {
                     <div className="bg-light-bg dark:bg-dark-surface p-5 rounded-xl shadow-lg shadow-light-fg dark:shadow-dark-bg w-full">
                         <h4 className='flex gap-2 font-bold items-center text-black dark:text-white'> <Icon icon={MapPin} className='text-primary' /> Shipping Address</h4>
                         <div className="text-secondary mt-5 space-y-1">
-                            <h4 className='font-bold text-black dark:text-white'>Jane Doe</h4>
-                            <p>123 Tech Avaneu Street</p>
-                            <p>Sans Fransisco C1355</p>
-                            <p>United States</p>
-                            <p>+1 (555) 123-4567</p>
+                            <h4 className='font-bold text-black dark:text-white'>{shippingAddress.fullName}</h4>
+                            <p>{shippingAddress?.address}</p>
+                            <p>{shippingAddress.state} {shippingAddress.city}</p>
+                            <p>{shippingAddress.country}</p>
+                            <p>{shippingAddress.phone}</p>
                         </div>
                     </div>
                     <div className="bg-light-bg mt-5 dark:bg-dark-surface p-5 rounded-xl shadow-lg shadow-light-fg dark:shadow-dark-bg w-full">

@@ -1,3 +1,4 @@
+import { SiIos } from "react-icons/si"; 
 import { RequestHandler } from 'express';
 import OrderService from '../services/order.service.js';
 import resolveIdentity from '../helper/resolveIdentity.js';
@@ -22,13 +23,14 @@ export const createOrder: RequestHandler = async (req, res, next): Promise<void>
 
 export const getOrders: RequestHandler = async (req, res, next): Promise<void> => {
     try {
+        console.log(req.user?.id);
         const order = await OrderService.getUserOrder(req.user?.id as string);
+        
         res.status(200).json(order);
     } catch (error) {
         next(error);
     }
 };
-
 export const getSingleOrder: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const order = await OrderService.getSingleOrder(

@@ -19,7 +19,6 @@ interface Props {
 
 export const OrderSummary = ({products, shippingFee, subTotal, tax, total}: Props) => {
 
-    console.log(products);
     
 
     return (

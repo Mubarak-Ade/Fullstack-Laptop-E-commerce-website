@@ -10,7 +10,7 @@ import orderRoutes from "./routes/order.routes.js"
 import userRoutes from "./routes/user.route.js"
 import paymentRoutes from "./routes/payment.route.js"
 import path from "path";
-import { attachUser, requireAuth } from "./middlewares/authorization.js";
+import { attachUser, authorizeRole, requireAuth } from "./middlewares/authorization.js";
 
 const app = express();
 

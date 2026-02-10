@@ -8,9 +8,10 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import type {Links} from "@/features/dashboard/types";
+import { useAuthStore } from "@/store/AuthStore";
 import {LogOut} from "lucide-react";
 import {motion} from "motion/react";
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 
 const SideBarBtn = ({
 	label,
@@ -35,7 +36,7 @@ const SideBarBtn = ({
 			<SidebarMenuItem className="px-4 bg-transparent py-2">
 				<SidebarMenuButton>
 					<Link
-                        to="#"
+                        to={link}
 						className="flex gap-2 text-sm bg-transparent font-poppins items-center"
 					>
 						{icon} {label}
@@ -47,17 +48,19 @@ const SideBarBtn = ({
 };
 
 export const SideBar = ({ links }: { links: Links[] }) => {
+
+	const logout = useAuthStore(s => s.logout)
+	const navigate = useNavigate()
+
+	const logOut = () => {
+		logout
+		navigate("/login")
+	}
+
 	return (
 		<>
 			<Sidebar className="border-l border-light-border dark:border-dark-border">
 				<SidebarHeader className="flex flex-row gap-3 p-5 bg-light-bg dark:bg-dark-surface items-center border-b dark:border-dark-border border-light-border">
-					{/* <div className="size-14 rounded-full flex items-center justify-center shadow-lg ring-2 ring-custom">
-						<img
-							// src={Logo}
-							alt="Shina Store"
-							className=""
-						/>
-					</div> */}
 					<Link
 						to="/"
 						className="flex flex-col"
@@ -90,6 +93,7 @@ export const SideBar = ({ links }: { links: Links[] }) => {
 						whileTap={{
 							scale: 0.8,
 						}}
+						onClick={logOut}
 						className="flex items-center gap-4 px-5 py-2.5 rounded-md text-white font-medium cursor-pointer"
 					>
 						<LogOut />

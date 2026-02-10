@@ -12,8 +12,8 @@ export const MainLayout = () => {
         <>
             <Navbar />
             <main className="relative">
-               {/* <CartSkeleton /> */}
-                <AnimatePresence>{ visible && <LoginModal />}</AnimatePresence>
+                {/* <CartSkeleton /> */}
+                <AnimatePresence>{visible && <LoginModal />}</AnimatePresence>
                 <Outlet />
             </main>
             <Footer />

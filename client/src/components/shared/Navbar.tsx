@@ -19,6 +19,8 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 import { Icon } from './Icon';
 import { useAuthStore } from '@/store/AuthStore';
+import { formatImage } from '@/utils/imageFormat';
+import { IconVariant } from '@/animation/Variants';
 
 const links = [
     { name: 'Home', link: '/' },
@@ -28,16 +30,6 @@ const links = [
 
 const Link = motion.create(NavLink);
 
-const IconVariant: Variants = {
-    initial: {
-        opacity: 0,
-        x: -30,
-    },
-    animate: {
-        opacity: 1,
-        x: 0,
-    },
-};
 
 const navlist = [
     { label: 'Profile', icon: User, path: '/dashboard' },
@@ -161,14 +153,16 @@ const ThemeToggle = ({
     </div>
 );
 
-const NavbarActions = ({
+export const NavbarActions = ({
     count,
     onCartClick,
     onMenuToggle,
+    avatar,
 }: {
     count: number;
     onCartClick: () => void;
     onMenuToggle: () => void;
+    avatar?: string;
 }) => (
     <div className="flex  dark:text-dark-text-primary gap-2">
         <motion.button
@@ -216,13 +210,17 @@ const NavbarActions = ({
                 delay: 0.8,
             }}
             onClick={onMenuToggle}
-            className="bg-light-fg dark:bg-dark-surface p-2 rounded-sm"
+            className="bg-light-fg dark:bg-dark-surface flex items-center justify-center size-10 rounded-sm overflow-hidden"
         >
-            <Icon
-                size={22}
-                icon={UserCircle2}
-                className="fill-coral-bg dark:fill-none dark:text-light-bg"
-            />
+            {avatar ? (
+                <img src={formatImage(avatar)} className='h-full w-full' alt={avatar} />
+            ) : (
+                <Icon
+                    size={22}
+                    icon={UserCircle2}
+                    className="fill-coral-bg dark:fill-none dark:text-light-bg"
+                />
+            )}
         </motion.button>
     </div>
 );
@@ -265,10 +263,7 @@ const UserMenu = ({
                             </div>
                         ) : (
                             <p>
-                                <Link to="/login" className="text-primary">
-                                    Login
-                                </Link>{' '}
-                                To Save Cart
+                                Guest
                             </p>
                         )}
                     </div>
@@ -298,7 +293,11 @@ const UserMenu = ({
                         onClick={logout}
                         className="flex gap-2 items-center w-full py-4 px-5 text-black dark:text-white cursor-pointer"
                     >
-                        Logout <Icon icon={LogOut} />{' '}
+                       {identity.type === "user" ? (
+                           <p> Logout <Icon icon={LogOut} /></p>
+                    ) : (
+                        <Link to="/login" className="bg-primary px-4 py-2 w-full rounded">Login</Link>
+                    )} 
                     </motion.button>
                 </div>
             </motion.div>
@@ -374,6 +373,7 @@ export const Navbar = () => {
             <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
             <NavbarActions
                 count={count}
+                avatar={identity.type === 'user' ? identity.user.avatar : ''}
                 onCartClick={() => navigate('/carts')}
                 onMenuToggle={() => setShowMenu(!showMenu)}
             />

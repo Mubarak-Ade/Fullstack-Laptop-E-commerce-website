@@ -1,15 +1,16 @@
 import { mutationOptions, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { createOrder, getOrder, getOrders } from "./api";
+import type { Order } from "@/schema/order.schema";
 
 export const useOrders = () => {
-    return queryOptions({
+    return queryOptions<Order[]>({
         queryKey: ['orders'],
         queryFn: getOrders
     })
 }
 
 export const useOrder = (id: string) => {
-    return queryOptions({
+    return queryOptions<Order>({
         queryKey: ['orders', id],
         queryFn: () => getOrder(id)
     })
