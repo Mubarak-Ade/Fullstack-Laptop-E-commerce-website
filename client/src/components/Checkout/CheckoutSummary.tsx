@@ -1,16 +1,12 @@
-import { useProducts } from '@/features/product/hooks';
 import { formatImage } from '@/utils/imageFormat';
 import { useQuery } from '@tanstack/react-query';
 import { LockKeyhole } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useNavigate } from 'react-router';
 import { Icon } from '../shared/Icon';
 import { priceFormat } from '@/utils/format';
 import { useCheckout } from '@/features/cart/hooks';
 export const CheckoutSummary = () => {
     const { data: checkout, isFetching } = useQuery(useCheckout());
-
-    const navigate = useNavigate();
 
     if(!checkout) {
         return <div>No checkout data available</div>;

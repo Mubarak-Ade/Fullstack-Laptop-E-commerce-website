@@ -1,4 +1,4 @@
-import { mutationOptions, queryOptions, useQuery, useQueryClient } from '@tanstack/react-query';
+import { mutationOptions, queryOptions, useQueryClient } from '@tanstack/react-query';
 import { addItemToCart, checkout, deleteCartItem, getUserCart, modifyCartQuantity } from './api';
 import type { Cart, Checkout } from '@/schema/cart.schema';
 import { useAuthStore } from '@/store/AuthStore';

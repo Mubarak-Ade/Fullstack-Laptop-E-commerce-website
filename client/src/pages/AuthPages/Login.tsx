@@ -2,7 +2,7 @@ import { ButtonLoader } from '@/animation/ButtonLoader';
 import { CheckboxField } from '@/components/Form/CheckboxField';
 import { InputField } from '@/components/Form/InputField';
 import { Icon } from '@/components/shared/Icon';
-import { LoginSchema, type LoginInput } from '@/schema/user.schema';
+import { AuthSchema, type AuthInput } from '@/schema/user.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -11,35 +11,31 @@ import { Link, useNavigate } from 'react-router';
 import LaptopImage from '../../assets/Images/artiom-vallat-g7boywXsC6M-unsplash.jpg';
 import { useLogin } from '@/features/auth/hooks';
 import { useMutation } from '@tanstack/react-query';
-import { FieldError } from '@/components/ui/field';
 import { useToast } from '@/context/ToastContext';
 export const Login = () => {
-
-    const {showToast} = useToast()
-    const login = useMutation(useLogin())
-    const navigate = useNavigate()
+    const { showToast } = useToast();
+    const login = useMutation(useLogin());
+    const navigate = useNavigate();
 
     const {
         handleSubmit,
         register,
         formState: { errors },
-    } = useForm<LoginInput>({ resolver: zodResolver(LoginSchema) });
+    } = useForm<AuthInput>({ resolver: zodResolver(AuthSchema) });
 
-    const onSubmit = (data: LoginInput) => {
+    const onSubmit = (data: AuthInput) => {
         login.mutate(data, {
             onSuccess: () => {
-                showToast("success", "login successfully")
-                navigate("/")
+                showToast('success', 'login successfully');
+                navigate('/');
             },
-            onError: (error) => {
-                showToast("error", error.message)
-            }
-        })
+            onError: error => {
+                showToast('error', error.message);
+            },
+        });
     };
 
-    
-
-  return (
+    return (
         <div className="h-screen w-full flex">
             <div
                 style={{ backgroundImage: `url(${LaptopImage})` }}
@@ -117,9 +113,11 @@ export const Login = () => {
                                 transition={{
                                     duration: 1,
                                 }}
-                                type='submit'
+                                type="submit"
                                 whileHover={
-                                    !login.isPending ? { scale: 1.05, transition: { duration: 0.2 } } : {}
+                                    !login.isPending
+                                        ? { scale: 1.05, transition: { duration: 0.2 } }
+                                        : {}
                                 }
                                 whileTap={!login.isPending ? { scale: 0.9 } : {}}
                                 className="bg-primary w-full py-3 rounded-xl text-white font-bold mb-5 cursor-pointer mt-5 flex gap-4 items-center justify-center"

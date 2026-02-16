@@ -3,7 +3,7 @@ import { ProductDetailSkeleton } from "@/components/layout/skeleton/ProductDetai
 import { Preview } from "@/components/product-detail/Preview";
 import BreadCrumbs from "@/components/shared/BreadCrumbs";
 import { useProduct } from "@/features/product/hooks";
-import type { Product, ProductFormInput } from "@/schema/product.schema";
+import type { Product } from "@/schema/product.schema";
 import { useQuery } from "@tanstack/react-query";
 // import type {Product} from "@/features/cart/types"
 import { useParams } from "react-router";
@@ -16,15 +16,18 @@ export const ProductDetail = () => {
     if (isFetching) {
         return <ProductDetailSkeleton />
     }
+    if (!product) {
+        return <div className="p-5">Product not found.</div>
+    }
     
-    const { name, images, brand, price, cpu, storage, ram, gpu, os, screenSize, battery } = product as ProductFormInput;
+    const { name, images, brand, price, cpu, storage, ram, gpu, os, screenSize, battery } = product as Product;
 
 
     return (
         <div className="p-5">
             <BreadCrumbs />
 
-            <Preview brand={ brand } name={ name } images={ images } memory={ ram } processor={ cpu } price={ price } />
+            <Preview brand={ brand } name={ name } images={ images ?? [] } memory={ ram } processor={ cpu } price={ price } />
 
             <hr className="dark:border-dark-border border-light-border mt-15 mb-5" />
 

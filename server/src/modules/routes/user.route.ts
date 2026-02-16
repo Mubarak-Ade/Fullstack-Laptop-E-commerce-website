@@ -1,0 +1,12 @@
+import { Router } from 'express';
+import { getUser, login, register, updateUser } from '../controllers/user.controller.js';
+import { requireAuth } from '../../middlewares/authorization.js';
+import { uploadAvatar } from '../../middlewares/upload.js';
+
+const router = Router();
+
+router.route('/register').post(register);
+router.route('/login').post(login);
+router.use(requireAuth);
+router.route('/me').get(getUser).patch(requireAuth, uploadAvatar.single('avatar'), updateUser);
+export default router;

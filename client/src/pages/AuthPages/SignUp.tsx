@@ -3,9 +3,36 @@ import { InputField } from '@/components/Form/InputField';
 import { Icon } from '@/components/shared/Icon';
 import { Check, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import LaptopImage from '../../assets/Images/artiom-vallat-g7boywXsC6M-unsplash.jpg';
+import { useToast } from '@/context/ToastContext';
+import { useMutation } from '@tanstack/react-query';
+import { useRegister } from '@/features/auth/hooks';
+import { useForm } from 'react-hook-form';
+import { AuthSchema, type AuthInput } from '@/schema/user.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 export const SignUp = () => {
+    const { showToast } = useToast();
+        const signup = useMutation(useRegister());
+        const navigate = useNavigate();
+    
+        const {
+            handleSubmit,
+            register,
+            formState: { errors },
+        } = useForm<AuthInput>({ resolver: zodResolver(AuthSchema) });
+    
+        const onSubmit = (data: AuthInput) => {
+            signup.mutate(data, {
+                onSuccess: () => {
+                    showToast('success', 'login successfully');
+                    navigate('/');
+                },
+                onError: error => {
+                    showToast('error', error.message);
+                },
+            });
+        };
     return (
         <div className="h-screen w-full flex">
             <div
@@ -20,7 +47,7 @@ export const SignUp = () => {
                         </h1>
                         <p className="text-white/80 mt-5">
                             Join our community of innovators and creators. Get access to exclusive
-                            drops personalize tech recomendations
+                            drops personalize tech recommendations
                         </p>
                     </div>
                     <div className="flex gap-10">
@@ -53,30 +80,36 @@ export const SignUp = () => {
                         </h6>
                     </div>
                     <div className="mt-2">
-                        <form action="">
-                            <InputField
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            {/* <InputField
                                 label="Full Name"
                                 icon={Mail}
                                 placeholder="JohnDoe"
                                 type="email"
-                            />
+                            /> */}
                             <InputField
                                 label="Email Address"
                                 icon={Mail}
+                                {...register("email")}
+                                errors={errors.email}
                                 placeholder="name@example.com"
                                 type="email"
                             />
                             <InputField
                                 label="Password"
                                 icon={Lock}
+                                {...register("password")}
+                                errors={errors.password}
                                 placeholder="Password"
-                                type="email"
+                                type="password"
                             />
                             <InputField
-                                label="Password"
+                                label="Confirm Password"
                                 icon={Lock}
-                                placeholder="Password"
-                                type="email"
+                                {...register("password")}
+                                errors={errors.password}
+                                placeholder="Confirm your Password"
+                                type="password"
                             />
                             <CheckboxField label="i agree to the Terms & Condition and Privacy Policy" />
                             <motion.button

@@ -17,10 +17,13 @@ import { useAuthStore } from './store/AuthStore';
 import { useThemeStore } from './store/ThemeStore';
 import { CartSkeleton } from './components/layout/skeleton/CartSkeleton';
 import { CheckoutPage } from './pages/CheckoutPage';
-import { OrderPage } from './pages/OrderPage';
+import { OrderTable } from './pages/OrderTable';
 import { Overview } from './pages/Dashboard/Overview';
 import { ProfilePage } from './pages/Dashboard/ProfilePage';
 import { UserDashboardLayout } from './components/layout/UserDashboardLayout';
+import { OrderPage } from './pages/Dashboard/OrderPage';
+import { AdminOverview } from './admin/pages/Overview';
+import { OrderManagement } from './admin/pages/OrderManagement';
 
 function App() {
     const theme = useThemeStore(s => s.theme);
@@ -42,7 +45,7 @@ function App() {
         );
     };
     const AdminRoute = ({ children }: { children: ReactNode }) => {
-        return identity.type === 'user' && identity.user.role === "admin" ? (
+        return identity.type === 'user' && identity.user.role === 'admin' ? (
             children
         ) : (
             <Navigate to="/" replace />
@@ -80,7 +83,7 @@ function App() {
                         path="/order/:id"
                         element={
                             <ProtectedRoute>
-                                <OrderPage />
+                                <OrderTable />
                             </ProtectedRoute>
                         }
                     />
@@ -89,20 +92,31 @@ function App() {
                 <Route path="/signup" Component={SignUp} HydrateFallback={RouteSkeleton} />
                 <Route
                     id="admin"
-                    path="admin/dashboard"
-                    element={<AdminRoute><AdminDashboardLayout /></AdminRoute>}
+                    path="admin"
+                    element={
+                        <AdminRoute>
+                            <AdminDashboardLayout />
+                        </AdminRoute>
+                    }
                     HydrateFallback={RouteSkeleton}
                 >
-                    <Route index Component={ProductManagement} />
-                    <Route path="add" Component={AddProductPage} />
+                    <Route index Component={AdminOverview} />
+                    <Route path='orders' Component={OrderManagement} />
+                    <Route path='products' Component={ProductManagement} />
+                    <Route path="products/add" Component={AddProductPage} />
                 </Route>
                 <Route
                     id="user"
                     path="dashboard"
-                    element={<ProtectedRoute><UserDashboardLayout /></ProtectedRoute>}
+                    element={
+                        <ProtectedRoute>
+                            <UserDashboardLayout />
+                        </ProtectedRoute>
+                    }
                     HydrateFallback={RouteSkeleton}
                 >
                     <Route index Component={Overview} />
+                    <Route path="order" Component={OrderPage} />
                     <Route path="me" Component={ProfilePage} />
                 </Route>
             </Routes>

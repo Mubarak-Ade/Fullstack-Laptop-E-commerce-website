@@ -1,18 +1,20 @@
-import { RelatedProduct } from '@/components/layout/RelatedProduct';
 import { Preview } from '@/components/product-detail/Preview';
 import BreadCrumbs from '@/components/shared/BreadCrumbs';
-import { useProduct } from '@/features/product/hooks';
-import type { Product, ProductFormInput } from '@/schema/product.schema';
-import { useAuthStore } from '@/store/AuthStore';
-import { useQuery } from '@tanstack/react-query';
-// import type {Product} from "@/features/cart/types"
-import { useParams } from 'react-router';
+import type { ProductFormInput } from '@/schema/product.schema';
+import { useLocation } from 'react-router';
 
 export const ProductDetail = () => {
-    const preview = useAuthStore(s => s.preview);
+    const location = useLocation();
+    const preview = location.state as ProductFormInput | undefined;
+
+    if (!preview) {
+        return <div className="p-5">No preview data available.</div>;
+    }
 
     const { name, images, brand, price, cpu, storage, ram, gpu, os, screenSize, battery } =
-        preview as ProductFormInput;
+        preview;
+
+    const imageUrls = images ? Array.from(images).map(file => URL.createObjectURL(file)) : [];
 
     return (
         <div className="p-5">
@@ -21,7 +23,7 @@ export const ProductDetail = () => {
             <Preview
                 brand={brand}
                 name={name}
-                image={URL.createObjectURL(images as any) as any}
+                images={imageUrls}
                 memory={ram}
                 processor={cpu}
                 price={price}

@@ -1,4 +1,3 @@
-import {Data} from "@/data"
 import {ProductCard} from "../ProductCard"
 import { useQuery } from "@tanstack/react-query";
 import { useProducts } from "@/features/product/hooks";

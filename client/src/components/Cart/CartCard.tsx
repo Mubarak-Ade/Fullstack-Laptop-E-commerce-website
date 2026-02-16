@@ -1,26 +1,36 @@
 import { useCartQuantity, useDeleteCartItem } from '@/features/cart/hooks';
 import type { CartItem } from '@/schema/cart.schema';
 import { formatImage } from '@/utils/imageFormat';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Icon } from '../shared/Icon';
 import { priceFormat } from '@/utils/format';
 import { useToast } from '@/context/ToastContext';
+import { useProducts } from '@/features/product/hooks';
 
 export const CartCard = (cart: CartItem) => {
     const { product, price, quantity } = cart;
 
+    const { data } = useQuery(useProducts());
+    const productData = data?.find(prod => prod._id === product._id);
+    const productStock = productData?.stocks;
+    const latestPrice = productData?.discountPrice ?? productData?.price;
+
     const [quantityCount, setQuantityCount] = useState(quantity);
 
     const handleQuantity = useMutation(useCartQuantity());
-    const deleteCartItem = useMutation(useDeleteCartItem())
+    const deleteCartItem = useMutation(useDeleteCartItem());
 
-    const {showToast} = useToast()
+    const { showToast } = useToast();
 
     const handleIncrease = () => {
         const newQuantity = quantityCount + 1;
         if (newQuantity < 1) return;
+        if (typeof productStock === 'number' && newQuantity > productStock) {
+            showToast('warning', `Only ${productStock} in stock`);
+            return;
+        }
         setQuantityCount(newQuantity);
         handleQuantity.mutate({ productId: product._id as string, quantity: newQuantity });
     };
@@ -30,7 +40,26 @@ export const CartCard = (cart: CartItem) => {
         setQuantityCount(newQuantity);
         handleQuantity.mutate({ productId: product._id as string, quantity: newQuantity });
     };
-    
+
+    const stockStatus =
+        typeof productStock !== 'number'
+            ? { label: 'Checking availability', className: 'text-secondary' }
+            : productStock <= 0
+            ? { label: 'Out of stock', className: 'text-red-500' }
+            : quantityCount > productStock
+            ? { label: `Only ${productStock} left`, className: 'text-yellow-600' }
+            : { label: 'In stock', className: 'text-green-600' };
+
+    const priceStatus =
+        typeof latestPrice !== 'number'
+            ? { label: 'Checking price', className: 'text-secondary' }
+            : latestPrice !== price
+            ? {
+                  label: `Price updated: ${priceFormat(latestPrice)}`,
+                  className: 'text-yellow-600',
+              }
+            : { label: 'Price verified', className: 'text-green-600' };
+
     return (
         <div className="relative rounded-xl gap-5 p-5 bg-light-fg dark:bg-dark-surface flex ">
             <div className="bg-light-bg dark:bg-dark-fg aspect-square rounded-xl size-40 p-5">
@@ -45,11 +74,12 @@ export const CartCard = (cart: CartItem) => {
                     {product.name}
                 </h2>
                 <h6 className="mt-2 font-bold text-primary text-lg">{priceFormat(price)}</h6>
+                <div className="mt-2 flex flex-col gap-1 text-sm">
+                    <span className={stockStatus.className}>{stockStatus.label}</span>
+                    <span className={priceStatus.className}>{priceStatus.label}</span>
+                </div>
                 {/* <p className="mt-2 text-sm text-secondary">{spec}</p> */}
                 <div className="flex justify-between w-full mt-4">
-                    <span className="bg-success/10 text-success px-2 py-2 rounded-sm font-stretch-200% tracking-wider font-technical text-sm font-bold">
-                        IN STOCK
-                    </span>
                     <div className="bg-light-fg flex px-4 gap-5 rounded-xl py-2 w-30">
                         <button onClick={handleDecrease}>
                             <Icon icon={Minus} size={15} />
@@ -67,7 +97,15 @@ export const CartCard = (cart: CartItem) => {
                 </div>
             </div>
             <button
-                onClick={() => deleteCartItem.mutate(product._id as string, {onSuccess: () => showToast("success", `${product.name} removed from the cart successfully`)})}
+                onClick={() =>
+                    deleteCartItem.mutate(product._id as string, {
+                        onSuccess: () =>
+                            showToast(
+                                'success',
+                                `${product.name} removed from the cart successfully`
+                            ),
+                    })
+                }
                 className="absolute top-0 right-0 m-4 text-secondary"
             >
                 <Icon icon={Trash2} />

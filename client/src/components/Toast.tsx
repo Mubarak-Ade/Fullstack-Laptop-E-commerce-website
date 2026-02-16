@@ -4,13 +4,12 @@ import { Icon } from './shared/Icon';
 import { memo } from 'react';
 
 interface ToastProps {
-    id: number;
     type: string;
     message: string;
     onClose: () => void;
 }
 
-const Toast = ({ id, type, message, onClose }: ToastProps) => {
+const Toast = ({ type, message, onClose }: ToastProps) => {
     const getIcon = () => {
         switch (type) {
             case 'success':

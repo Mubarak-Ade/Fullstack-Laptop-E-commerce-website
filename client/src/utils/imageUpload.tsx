@@ -1,5 +1,4 @@
 import { Input } from '@/components/ui/input';
-import React from 'react';
 import { Controller, type Control } from 'react-hook-form';
 
 interface Props {

@@ -1,5 +1,4 @@
 import { Skeleton } from '@/components/ui/skeleton';
-import React from 'react';
 import { NavbarSkeleton } from './ui/NavbarSkeleton';
 
 export const CartSkeleton = ({ cart = [1, 2, 3] }) => {
@@ -11,8 +10,8 @@ export const CartSkeleton = ({ cart = [1, 2, 3] }) => {
                     <Skeleton className="h-15 w-80 p-2 bg-light-fg dark:bg-dark-surface" />
                     <div className="mt-5 flex lg:flex-row flex-col gap-5 items-center justify-between">
                         <Skeleton className="space-y-4 p-5 scrollbar-thumb scrollbar-webkit scrollbar-thin max-w-xl w-full overflow-y-auto flex flex-col bg-light-fg dark:bg-dark-fg h-100 rounded-xl">
-                            {cart.map((_, i) => (
-                                <Skeleton className="h-40 w-full bg-light-fg dark:bg-dark-surface" />
+                            {cart.map((_, index) => (
+                                <Skeleton key={index} className="h-40 w-full bg-light-fg dark:bg-dark-surface" />
                             ))}
                         </Skeleton>
                         <Skeleton className="max-w-md bg-light-fg dark:bg-dark-surface w-full p-5">

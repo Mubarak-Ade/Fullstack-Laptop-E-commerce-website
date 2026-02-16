@@ -7,7 +7,7 @@ interface StoreState {
     closeModal: () => void;
 }
 
-export const useStore = create<StoreState>((set, get) => ({
+export const useStore = create<StoreState>((set) => ({
     visible: false,
     showModal: () => set({ visible: true }),
     closeModal: () => set({ visible: false }),

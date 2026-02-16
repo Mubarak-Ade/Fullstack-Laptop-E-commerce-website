@@ -98,7 +98,7 @@ export const Header = () => {
                         </h4>
                         <img
                             className="size-12 border rounded-full border-light-border dark:border-dark-border"
-                            src={formatImage(identity.user.avatar)}
+                            src={identity.user.avatar}
                             alt={identity.user.avatar}
                         />
                     </div>

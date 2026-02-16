@@ -3,17 +3,16 @@ import { motion } from 'motion/react';
 import type { FieldError as FE } from 'react-hook-form';
 import { Icon } from '../shared/Icon';
 import { Field, FieldError, FieldLabel } from '../ui/field';
-import { Input as Inputs } from '../ui/input';
+import { Input } from '../ui/input';
+import type { ComponentPropsWithoutRef } from 'react';
 
-interface Props {
+interface Props extends ComponentPropsWithoutRef<'input'> {
     label: string;
     type?: string;
     placeholder: string;
     errors?: FE;
     icon?: LucideIcon;
 }
-
-const Input = motion.create(Inputs);
 
 export const InputField = ({
     label,
@@ -44,7 +43,7 @@ export const InputField = ({
                         <Icon icon={icon} />
                     </div>
                     <Input
-                        whileFocus={{ border: '1px solid var(--color-primary)' }}
+                        // whileFocus={{ border: '1px solid var(--color-primary)' }}
                         type={type}
                         {...props}
                         placeholder={placeholder}

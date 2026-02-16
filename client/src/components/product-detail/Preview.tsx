@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {Icon} from '../shared/Icon'
 import {CheckCircle, ShieldCheck, ShoppingCart, Star, Truck} from 'lucide-react'
 import { formatImage } from '@/utils/imageFormat';
@@ -7,7 +7,7 @@ import { motion } from 'motion/react';
 interface Props {
     images: string[], 
     name: string,
-    price: string,
+    price: number | string,
     brand: string,
     processor?: string,
     memory?: string,
@@ -16,6 +16,7 @@ interface Props {
 export const Preview=({images, name, price, brand, memory, processor }: Props) => {
 
     const [currentIndex, setCurrentIndex] = useState(0)
+    const formattedPrice = typeof price === 'number' ? price.toFixed(2) : price
 
     return (
         <div className="flex mt-5 gap-10">
@@ -49,12 +50,12 @@ export const Preview=({images, name, price, brand, memory, processor }: Props) =
                 <h1 className="text-5xl dark:text-light-bg mt-5 font-bold">{name}</h1>
                 <div className="mt-5">
                     <span className="flex gap-2">
-                        {[...Array(5)].map((_) => (
-                            <Icon icon={Star} className="text-yellow-400 fill-yellow-400" />
+                        {[...Array(5)].map((_, index) => (
+                            <Icon key={index} icon={Star} className="text-yellow-400 fill-yellow-400" />
                         ))}
                     </span>
                 </div>
-                <h2 className="text-3xl font-bold tracking-wider mt-5 text-primary">{price}.00</h2>
+                <h2 className="text-3xl font-bold tracking-wider mt-5 text-primary">{formattedPrice}</h2>
                 <div className="mt-5">
                     <h6 className="dark:text-secondary">KEY HIGHLIGHTS</h6>
 

@@ -1,5 +1,4 @@
 import type { LucideIcon } from 'lucide-react';
-import React, { type ReactNode } from 'react';
 import { Icon } from '../shared/Icon';
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
     info: string;
 }
 
-export const DashboardCard = ({ title, value, icon, info }: Props) => {
+export const DashboardCard = ({ title, value, icon, info="N/A" }: Props) => {
     return (
         <div className="bg-light-bg flex justify-between max-w-xs p-5 w-full dark:bg-dark-bg rounded-xl shadow-[0_0_15px] shadow-light-fg dark:shadow-dark-bg border border-light-border dark:border-dark-border">
           <div className="">

@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import type { FieldError as FE, FieldValue, FieldValues, Path } from 'react-hook-form';
+import type { FieldError as FE, FieldValues, Path } from 'react-hook-form';
 import { Controller, type Control } from 'react-hook-form';
 import { Field, FieldError, FieldLabel } from '../ui/field';
 

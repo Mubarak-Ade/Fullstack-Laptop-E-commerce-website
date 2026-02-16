@@ -1,4 +1,4 @@
-import {Award,CircleQuestionMark,Clock,ShieldCheckIcon,Star} from "lucide-react"
+import {Award,CircleQuestionMark,Clock,ShieldCheckIcon} from "lucide-react"
 import {Icon} from "../shared/Icon"
 import {motion} from "motion/react"
 

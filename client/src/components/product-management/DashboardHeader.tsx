@@ -1,7 +1,5 @@
-import React from 'react'
 import BreadCrumbs from '../shared/BreadCrumbs'
 import { SidebarTrigger } from '../ui/sidebar';
-import { Icon } from '../shared/Icon';
 
 interface Props {
 	title: string,

@@ -1,4 +1,4 @@
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import {Icon} from "./Icon";
 
@@ -20,7 +20,7 @@ const BreadCrumbs = () => {
                     const to = `/${pathnames.slice(0, index + 1).join("/")}`;
                     const isLast = index === pathnames.length - 1;
                     return (
-                        <li>
+                        <li key={to}>
                             {isLast ? (
                                 <span className="text-custom">
                                     {decodeURIComponent(value.charAt(0).toUpperCase() + value.slice(1))}

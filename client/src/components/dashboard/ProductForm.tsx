@@ -4,7 +4,7 @@ import { formatImage } from '@/utils/imageFormat';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { UploadCloud } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
 import { InputField } from '../Form/InputField';
@@ -28,9 +28,7 @@ export const ProductForm = () => {
         register,
         handleSubmit,
         control,
-        setValue,
         reset,
-        watch,
         formState: { errors },
     } = useForm<ProductFormInput>({
         resolver: zodResolver(ProductSchema),
@@ -49,8 +47,6 @@ export const ProductForm = () => {
             battery: '',
         },
     });
-
-    const [removeImages, setRemoveImages] = useState([]);
 
     useEffect(() => {
         if (product) {
@@ -329,7 +325,7 @@ export const ProductForm = () => {
                             <button
                                 type="submit"
                                 form="save-product"
-                                className="flex gap-2 text-lg font-bold items-center justify-center text-white bg-primary p-3 rounded-md w-full"
+                                className="flex gap-2 text-lg font-bold cursor-pointer items-center justify-center text-white bg-primary p-3 rounded-md w-full"
                             >
                                 Publish Product
                             </button>

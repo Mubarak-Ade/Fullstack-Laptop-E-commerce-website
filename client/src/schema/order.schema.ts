@@ -1,5 +1,4 @@
 import z from 'zod';
-import { ProductApiSchema } from './product.schema';
 
 export const ShippingSchema = z.object({
     firstname: z.string().min(3, 'firstname is required'),
@@ -20,13 +19,15 @@ export const OrderSchema = z.object({
     shippingFee: z.number(),
     total: z.number(),
     tax: z.number(),
-    products: z.object({
-        productId: z.string(),
-        productName: z.string(),
-        quantity: z.number(),
-        image: z.string(),
-        unitPriceAtPurchase: z.number(),
-    }),
+    products: z.array(
+        z.object({
+            productId: z.string(),
+            productName: z.string(),
+            quantity: z.number(),
+            image: z.string(),
+            unitPriceAtPurchase: z.number(),
+        })
+    ),
     status: z.enum(['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED']),
     updatedAt: z.string(),
     shippingAddress: ShippingSchema.omit({ firstname: true, lastname: true }).extend({

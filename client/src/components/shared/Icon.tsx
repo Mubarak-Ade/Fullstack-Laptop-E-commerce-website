@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import type {LucideIcon} from 'lucide-react'
 import {motion} from 'motion/react'
-import React from 'react'
 
 interface Icon {
     icon: LucideIcon,

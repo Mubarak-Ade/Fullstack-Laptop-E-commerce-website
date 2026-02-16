@@ -139,7 +139,7 @@ export const Overview = () => {
         },
     ];
 
-    const lastItem = data.at(-1)?.updatedAt ?? '';
+    const lastItem = data?.at(-1)?.updatedAt;
     console.log(lastItem);
 
     return (
@@ -160,7 +160,7 @@ export const Overview = () => {
                         type: ShoppingBag,
                         className: 'bg-primary/10 rounded shadow p-2 text-primary',
                     }}
-                    info={formatDistance(lastItem, Date.now())}
+                    info={lastItem ? formatDistance(lastItem, Date.now()) : "N/A"}
                     value={data.length}
                 />
                 <DashboardCard
@@ -171,7 +171,7 @@ export const Overview = () => {
                             'bg-amber-500/10 rounded shadow p-2 fill-amber-600 text-amber-600',
                     }}
                     info="Since January 2025"
-                    value={20}
+                    value={data?.length}
                 />
             </div>
 
