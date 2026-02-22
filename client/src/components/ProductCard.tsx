@@ -50,7 +50,7 @@ export const ProductCard = (product: Product) => {
                     opacity: 0,
                     y: 30,
                 }}
-                whileInView={{
+                animate={{
                     opacity: 1,
                     y: 0,
                 }}
