@@ -39,7 +39,7 @@ export const Login = () => {
         <div className="h-screen w-full flex">
             <div
                 style={{ backgroundImage: `url(${LaptopImage})` }}
-                className="h-full w-full bg-cover bg-center"
+                className="h-full lg:block hidden w-full bg-cover bg-center"
             >
                 <div className="h-full w-full bg-slate-700/80  p-10">
                     <h1 className="text-4xl text-white font-bold">Shina Store</h1>

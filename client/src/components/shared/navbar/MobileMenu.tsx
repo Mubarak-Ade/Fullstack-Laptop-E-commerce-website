@@ -2,7 +2,7 @@ import { LogOut, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { NavLink } from 'react-router';
 import { Icon } from '../Icon';
-import { ACCOUNT_LINKS, PRIMARY_LINKS } from './constants';
+import { ACCOUNT_LINKS, PRIMARY_LINKS } from '../../../utils/constants';
 import type { MobileMenuProps } from './types';
 import { NavbarSearch } from './NavbarSearch';
 import { formatImage } from '@/utils/imageFormat';
@@ -42,11 +42,7 @@ export const MobileMenu = ({ showMenu, identity, onClose, logout }: MobileMenuPr
                         <NavbarSearch />
                         {identity.type === 'user' && (
                             <div className="flex items-center gap-4 mt-5 border px-5 py-2.5 border-primary bg-light-fg dark:bg-dark-fg rounded-xl">
-                                <img
-                                    src={identity.user.avatar}
-                                    alt="Profile"
-                                    className="size-12"
-                                />
+                                <img src={identity.user.avatar} alt="Profile" className="size-12" />
                                 <div className="">
                                     <h2 className="font-bold text-black dark:text-white">
                                         {identity.user.fullname}

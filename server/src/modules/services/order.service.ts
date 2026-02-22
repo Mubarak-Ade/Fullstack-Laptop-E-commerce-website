@@ -1,7 +1,9 @@
 import createHttpError from 'http-errors';
+import mongoose from 'mongoose';
 import Order, { OrderType } from '../../models/Order.js';
 import { OrderDTO } from '../schema/order.schema.js';
 import CartService from './cart.service.js';
+import { generateOrderNumber } from '../../helper/genRandomNum.js';
 
 type UserType = { type: 'user'; userId: string } | { type: 'guest'; guestId: string };
 
@@ -37,31 +39,37 @@ class OrderService {
             status: 'PENDING_PAYMENT',
         };
 
-        const order = identity.type === 'user' && await Order.create({ userId: identity.userId, ...orderCreate });
+        const order =
+            identity.type === 'user' &&
+            (await Order.create({
+                orderNumber: generateOrderNumber(),
+                userId: identity.userId,
+                ...orderCreate,
+            }));
 
         return order;
     }
 
-    static async getUserOrder (user: string) {
-        if(!user) {
-            throw createHttpError(403, "Unauthorize User")
+    static async getUserOrder(user: string) {
+        if (!user) {
+            throw createHttpError(403, 'Unauthorize User');
         }
-        const order = await Order.find({userId: user}).lean()
-        return order
+        const order = await Order.find({ userId: user }).lean();
+        return order;
     }
 
-    static async getSingleOrder (orderId: string, user: string) {
-        const order = await Order.findById(orderId)
+    static async getSingleOrder(orderId: string, user: string) {
+        const order = await Order.findById(orderId);
 
-        if(!order) {
-            throw createHttpError(404, "order does not exist")
+        if (!order) {
+            throw createHttpError(404, 'order does not exist');
         }
 
         if (order.userId?.toString() !== user) {
-            throw createHttpError(403, "Forbidden")
+            throw createHttpError(403, 'Forbidden');
         }
 
-        return order
+        return order;
     }
 }
 

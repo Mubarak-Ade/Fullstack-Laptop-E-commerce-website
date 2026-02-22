@@ -1,5 +1,4 @@
 import { mutationOptions, useQueryClient } from "@tanstack/react-query";
-import { useOrders } from "../order/hooks";
 import { confirmFakePayment, initializeFakePayment } from "./api";
 
 export const useInitFakePayment = () => {
@@ -7,7 +6,8 @@ export const useInitFakePayment = () => {
     return mutationOptions({
         mutationFn: initializeFakePayment,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: useOrders().queryKey})
+            queryClient.invalidateQueries({queryKey: ['orders']})
+            queryClient.invalidateQueries({queryKey: ['user-orders']})
         }
     })
 }
@@ -17,7 +17,8 @@ export const useConfirmFakePayment = () => {
     return mutationOptions({
         mutationFn: confirmFakePayment,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: useOrders().queryKey})
+            queryClient.invalidateQueries({queryKey: ['orders']})
+            queryClient.invalidateQueries({queryKey: ['user-orders']})
         }
     })
 }

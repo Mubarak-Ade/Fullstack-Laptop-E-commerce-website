@@ -13,4 +13,4 @@ export const ACCOUNT_LINKS = [
     { label: 'Settings', icon: Settings, path: '/dashboard' },
 ];
 
-
+export const status = ['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const

@@ -17,13 +17,14 @@ import { useAuthStore } from './store/AuthStore';
 import { useThemeStore } from './store/ThemeStore';
 import { CartSkeleton } from './components/layout/skeleton/CartSkeleton';
 import { CheckoutPage } from './pages/CheckoutPage';
-import { OrderTable } from './pages/OrderTable';
+import { OrderTrackPage } from './pages/OrderTable';
 import { Overview } from './pages/Dashboard/Overview';
 import { ProfilePage } from './pages/Dashboard/ProfilePage';
 import { UserDashboardLayout } from './components/layout/UserDashboardLayout';
 import { OrderPage } from './pages/Dashboard/OrderPage';
 import { AdminOverview } from './admin/pages/Overview';
 import { OrderManagement } from './admin/pages/OrderManagement';
+import { OrderDetailPage } from './admin/pages/OrderDetailPage';
 
 function App() {
     const theme = useThemeStore(s => s.theme);
@@ -83,7 +84,7 @@ function App() {
                         path="/order/:id"
                         element={
                             <ProtectedRoute>
-                                <OrderTable />
+                                <OrderTrackPage />
                             </ProtectedRoute>
                         }
                     />
@@ -101,8 +102,9 @@ function App() {
                     HydrateFallback={RouteSkeleton}
                 >
                     <Route index Component={AdminOverview} />
-                    <Route path='orders' Component={OrderManagement} />
-                    <Route path='products' Component={ProductManagement} />
+                    <Route path="orders" Component={OrderManagement} />
+                    <Route path="orders/:id" Component={OrderDetailPage} />
+                    <Route path="products" Component={ProductManagement} />
                     <Route path="products/add" Component={AddProductPage} />
                 </Route>
                 <Route

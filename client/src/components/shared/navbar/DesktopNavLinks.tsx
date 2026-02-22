@@ -1,4 +1,4 @@
-import { PRIMARY_LINKS } from './constants';
+import { PRIMARY_LINKS } from '../../../utils/constants';
 import { motion } from 'motion/react';
 import { NavLink } from 'react-router';
 import { NavbarSearch } from './NavbarSearch';

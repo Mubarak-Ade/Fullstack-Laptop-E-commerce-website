@@ -1,4 +1,5 @@
-import z from 'zod';
+import { status } from '@/utils/constants';
+import z, { number } from 'zod';
 
 export const ShippingSchema = z.object({
     firstname: z.string().min(3, 'firstname is required'),
@@ -14,6 +15,7 @@ export const ShippingSchema = z.object({
 });
 
 export const OrderSchema = z.object({
+    orderNumber: z.string(),
     _id: z.string(),
     subTotal: z.number(),
     shippingFee: z.number(),
@@ -28,13 +30,35 @@ export const OrderSchema = z.object({
             unitPriceAtPurchase: z.number(),
         })
     ),
-    status: z.enum(['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED']),
+    status: z.enum(status),
     updatedAt: z.string(),
+    createdAt: z.string(),
     shippingAddress: ShippingSchema.omit({ firstname: true, lastname: true }).extend({
         fullName: z.string(),
     }),
 });
 
+const filterSchema = z.object({
+    limit: z.number().optional(),
+    page: z.number().optional(),
+    status: z.enum(status).optional(),
+    from: z.string().optional(),
+    to: z.string().optional(),
+    search: z.string().optional(),
+    minTotal: z.string().optional(),
+    maxTotal: z.string().optional(),
+    paymentProvider: z.string().optional(),
+});
+
+const filteredOrderSchema = z.object({
+    order: z.array(OrderSchema),
+    total: number
+})
+
 export type Order = z.infer<typeof OrderSchema>;
+
+export type FilteredOrder = z.infer<typeof filteredOrderSchema>
+
+export type Filter = z.infer<typeof filterSchema>;
 
 export type ShippingInput = z.infer<typeof ShippingSchema>;

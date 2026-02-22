@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { getOrders } from '../controllers/order.controller.js';
+import { deleteManyOrders, deleteOrder, getOrder, getOrders, updateManyOrderStatus, updateOrderStatus } from '../controllers/order.controller.js';
 
 const router = Router();
 
-router.route('/').get(getOrders);
+router.route('/').get(getOrders).patch(updateManyOrderStatus).delete(deleteManyOrders);
+router.route('/:id').get(getOrder).patch(updateOrderStatus).delete(deleteOrder);
 
 export default router;

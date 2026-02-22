@@ -55,7 +55,7 @@ export const SideBar = ({ links }: { links: Links[] }) => {
     const navigate = useNavigate();
 
     const logOut = () => {
-        logout;
+        logout();
         navigate('/login');
     };
 
@@ -74,6 +74,7 @@ export const SideBar = ({ links }: { links: Links[] }) => {
                     <SidebarMenu className="space-y-2">
                         {links.map(link => (
                             <SideBarBtn
+                                key={link.link}
                                 title={link.title}
                                 label={link.label}
                                 icon={link.icon}

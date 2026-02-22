@@ -1,6 +1,6 @@
 import { ReusableTable } from '@/components/shared/dashboard/ReusableTable';
 import { Icon } from '@/components/shared/Icon';
-import { useOrders as useMyOrders } from '@/features/order/hooks';
+import { useMyOrders } from '@/features/order/hooks';
 import type { Order } from '@/schema/order.schema';
 import { useAuthStore } from '@/store/AuthStore';
 import { priceFormat, resolveStatus } from '@/utils/format';

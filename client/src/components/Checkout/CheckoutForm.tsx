@@ -12,20 +12,18 @@ import { Icon } from '../shared/Icon';
 import { useConfirmFakePayment, useInitFakePayment } from '@/features/payment/hooks';
 
 export const CheckoutForm = () => {
-    const order = useMutation(useCreateOrder());
-    const initializePayment = useMutation(useInitFakePayment());
-    const confirmPayment = useMutation(useConfirmFakePayment());
-
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<ShippingInput>({ resolver: zodResolver(ShippingSchema) });
+    const showToast = useToast().showToast;
 
     const navigate = useNavigate();
 
-    const showToast = useToast().showToast;
-
+    const order = useMutation(useCreateOrder());
+    const initializePayment = useMutation(useInitFakePayment());
+    const confirmPayment = useMutation(useConfirmFakePayment());
     const CheckoutVariants: Variants = {
         hidden: {
             opacity: 0,

@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 const OrderSchema = new Schema({
-    userId: { type: Schema.Types.ObjectId, ref: 'User', require: true },
+    orderNumber: { type: String, index: true, unique: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', require: true, sparse: true },
     products: [
         {
             productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true },

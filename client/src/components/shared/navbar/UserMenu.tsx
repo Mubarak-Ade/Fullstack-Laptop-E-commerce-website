@@ -2,7 +2,7 @@ import { LogOut, UserCircle2 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { NavLink } from 'react-router';
 import { Icon } from '../Icon';
-import { ACCOUNT_LINKS } from './constants';
+import { ACCOUNT_LINKS } from '../../../utils/constants';
 import type { UserMenuProps } from './types';
 
 export const UserMenu = ({ showMenu, menuRef, identity, logout, onClose }: UserMenuProps) => (

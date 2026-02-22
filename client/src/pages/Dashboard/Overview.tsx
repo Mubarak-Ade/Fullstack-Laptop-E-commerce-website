@@ -1,7 +1,7 @@
 import { DashboardCard } from '@/components/dashboard/DashboardCard';
 import { ReusableTable } from '@/components/shared/dashboard/ReusableTable';
 import { Icon } from '@/components/shared/Icon';
-import { useOrders } from '@/features/order/hooks';
+import { useMyOrders } from '@/features/order/hooks';
 import type { Order } from '@/schema/order.schema';
 import { useAuthStore } from '@/store/AuthStore';
 import { priceFormat } from '@/utils/format';
@@ -65,7 +65,7 @@ const ShippingStatusCard = () => (
 
 export const Overview = () => {
     const identity = useAuthStore(s => s.identity);
-    const { data, isLoading } = useQuery(useOrders());
+    const { data, isLoading } = useQuery(useMyOrders());
 
     const navigate = useNavigate();
 
@@ -112,7 +112,8 @@ export const Overview = () => {
             cell: ({ row }) => {
                 const status = resolveStatus(row.original.status);
                 return (
-                    <span className={`${status.className} rounded-xl py-1 px-6`}>
+                    <span className={`${status.className}import type { Order } from '@/schema/order.schema';
+ rounded-xl py-1 px-6`}>
                         {status.label}
                     </span>
                 );
