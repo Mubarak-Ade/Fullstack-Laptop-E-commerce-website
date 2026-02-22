@@ -5,7 +5,6 @@ import { Icon } from '../Icon';
 import { ACCOUNT_LINKS, PRIMARY_LINKS } from '../../../utils/constants';
 import type { MobileMenuProps } from './types';
 import { NavbarSearch } from './NavbarSearch';
-import { formatImage } from '@/utils/imageFormat';
 
 export const MobileMenu = ({ showMenu, identity, onClose, logout }: MobileMenuProps) => (
     <AnimatePresence>

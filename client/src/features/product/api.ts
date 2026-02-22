@@ -1,4 +1,4 @@
-import { ProductApiSchema, type Product, type ProductFormInput } from "@/schema/product.schema";
+import { ProductApiSchema, type Product } from "@/schema/product.schema";
 import api from "@/utils/axios";
 import z from "zod";
 // import type { CreateProduct, Product } from "./type";

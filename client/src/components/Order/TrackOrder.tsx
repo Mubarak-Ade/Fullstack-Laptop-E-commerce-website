@@ -12,7 +12,7 @@ import { motion } from 'motion/react';
 import { Icon } from '../shared/Icon';
 
 interface Props {
-    status: 'PENDING_PAYMENT' | 'PAID' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED';
+    status: 'PENDING_PAYMENT' | 'PAID' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
     date: string;
 }
 

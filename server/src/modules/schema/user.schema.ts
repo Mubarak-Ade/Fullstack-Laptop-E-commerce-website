@@ -1,5 +1,5 @@
 import z from "zod";
-import User from "../models/User.js";
+import User from "../../models/User.js";
 
 const UserSchema = z.object({
     _id: z.transform(String).optional(),

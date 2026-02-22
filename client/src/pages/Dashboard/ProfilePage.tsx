@@ -7,7 +7,6 @@ import { useToast } from '@/context/ToastContext';
 import { useEditUser, useUserProfile } from '@/features/auth/hooks';
 import { PrimaryBtnVariant, SecondaryBtnVariant } from '@/motion/button';
 import { ProfileSchema, type Profile } from '@/schema/user.schema';
-import { formatImage } from '@/utils/imageFormat';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CheckCircle2 } from 'lucide-react';

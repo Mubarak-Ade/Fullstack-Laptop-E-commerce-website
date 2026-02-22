@@ -8,7 +8,6 @@ import { useQuery } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { Eye, Trash2 } from 'lucide-react';
-import React from 'react';
 import { useNavigate } from 'react-router';
 
 export const OrderPage = () => {
@@ -22,8 +21,6 @@ export const OrderPage = () => {
     }
 
     if (identity.type !== 'user') return;
-
-    const user = identity.user;
 
     const columns: ColumnDef<Order>[] = [
         {

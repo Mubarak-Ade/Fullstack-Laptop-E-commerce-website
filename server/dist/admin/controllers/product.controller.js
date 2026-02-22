@@ -1,6 +1,7 @@
 import { ProductIdSchema, ProductSchema, UpdateProductSchema, } from '../../modules/schema/product.schema.js';
 import createHttpError from 'http-errors';
 import ProductService from '../../modules/services/product.service.js';
+import Product from '../../models/Product.js';
 export const getProducts = async (req, res, next) => {
     try {
         const product = await Product.find({}).lean();

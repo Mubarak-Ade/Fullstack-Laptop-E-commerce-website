@@ -6,6 +6,7 @@ import {
 } from '../../modules/schema/product.schema.js';
 import createHttpError from 'http-errors';
 import ProductService from '../../modules/services/product.service.js';
+import Product from '../../models/Product.js';
 
 export const getProducts: RequestHandler = async (req, res, next): Promise<void> => {
     try {

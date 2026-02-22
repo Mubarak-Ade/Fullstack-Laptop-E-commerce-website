@@ -7,7 +7,14 @@ const sevenDaysAgo = new Date();
 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
 sevenDaysAgo.setHours(0, 0, 0, 0);
 const revenueStatuses = ['PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED'];
-const validStatuses = ['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
+const validStatuses = [
+    'PENDING_PAYMENT',
+    'PAID',
+    'PROCESSING',
+    'SHIPPED',
+    'DELIVERED',
+    'CANCELLED',
+];
 const dashboardPipeline = [
     {
         $facet: {
@@ -168,6 +175,7 @@ class AdminOrderServices {
                 }
                 else {
                     filter.$or = [
+                        { orderNumber: { $regex: search, $options: 'i' } },
                         { paymentReference: { $regex: search, $options: 'i' } },
                         { 'shippingAddress.email': { $regex: search, $options: 'i' } },
                     ];
@@ -189,16 +197,30 @@ class AdminOrderServices {
         }
         const order = await Order.findById(orderId);
         if (!order) {
-            throw createHttpError(404, "Order Not Found");
+            throw createHttpError(404, 'Order Not Found');
         }
         order.status = status;
         await order.save();
         return order;
     }
+    static async updateOrdersStatus(orderIds, status) {
+        if (!validStatuses.includes(status)) {
+            throw new Error('Invalid order status');
+        }
+        const result = await Order.updateMany({ _id: { $in: orderIds } }, { $set: { status } });
+        return result.modifiedCount;
+    }
+    static async getOrderById(orderId) {
+        const order = await Order.findById(orderId);
+        if (!order) {
+            throw createHttpError(404, 'Order Not Found');
+        }
+        return order;
+    }
     static async deleteOrder(orderId) {
         const order = await Order.findByIdAndDelete(orderId);
         if (!order) {
-            throw createHttpError(404, "Order Not Found");
+            throw createHttpError(404, 'Order Not Found');
         }
         return order;
     }

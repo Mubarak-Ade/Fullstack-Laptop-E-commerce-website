@@ -1,7 +1,6 @@
 import { IconVariant } from '@/animation/Variants';
 import { useAuthStore } from '@/store/AuthStore';
 import { useThemeStore } from '@/store/ThemeStore';
-import { formatImage } from '@/utils/imageFormat';
 import { Bell, Moon, Search, ShoppingBag, Star } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Icon } from '../shared/Icon';

@@ -1,7 +1,5 @@
 import { Icon } from '@/components/shared/Icon';
-import { priceFormat } from '@/utils/format';
-import { Banknote, type LucideIcon } from 'lucide-react';
-import React from 'react'
+import type { LucideIcon } from 'lucide-react';
 
 interface Props {
     icon: {

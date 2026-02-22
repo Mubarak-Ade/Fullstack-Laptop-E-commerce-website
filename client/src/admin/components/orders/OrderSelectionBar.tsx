@@ -1,6 +1,4 @@
-import { useDeleteManyOrders } from '@/admin/features/orders/hooks';
 import { Icon } from '@/components/shared/Icon';
-import { useMutation } from '@tanstack/react-query';
 import { EditIcon, Trash2, X, XCircle } from 'lucide-react';
 import { motion, type Variants } from 'motion/react';
 

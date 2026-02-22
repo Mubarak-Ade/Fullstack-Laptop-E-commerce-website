@@ -1,4 +1,3 @@
-import { SiIos } from 'react-icons/si';
 import { RequestHandler } from 'express';
 import OrderService from '../services/order.service.js';
 import resolveIdentity from '../../helper/resolveIdentity.js';

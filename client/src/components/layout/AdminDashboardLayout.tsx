@@ -1,5 +1,5 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { Grid2X2, LayoutDashboard, Settings, Trophy, User } from 'lucide-react';
+import { LayoutDashboard, Settings, Trophy, User } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Outlet } from 'react-router';
 import type { Links } from '@/features/dashboard/types';

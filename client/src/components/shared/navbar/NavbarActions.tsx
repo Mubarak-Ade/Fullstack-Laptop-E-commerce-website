@@ -1,5 +1,4 @@
 import { IconVariant } from '@/animation/Variants';
-import { formatImage } from '@/utils/imageFormat';
 import { Heart, ShoppingCart, UserCircle2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Icon } from '../Icon';

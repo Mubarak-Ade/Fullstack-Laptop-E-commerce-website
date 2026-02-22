@@ -39,7 +39,17 @@ export const OrderManagement = () => {
     } = useFilterStore();
     const [searchInput, setSearchInput] = useState(search);
     const filter = useMemo(
-        () => ({ from, to, search, status, minTotal, maxTotal, paymentProvider, page, limit }),
+        () => ({
+            from,
+            to,
+            search,
+            status: status === 'ALL' ? undefined : status,
+            minTotal,
+            maxTotal,
+            paymentProvider: paymentProvider === 'ALL' ? undefined : paymentProvider,
+            page,
+            limit,
+        }),
         [from, to, search, status, minTotal, maxTotal, paymentProvider, page, limit]
     );
     const { data, isLoading } = useQuery(useOrders(filter));

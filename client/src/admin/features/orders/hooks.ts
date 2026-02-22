@@ -1,18 +1,8 @@
-import type { FilteredOrder, Order } from "@/schema/order.schema";
+import type { Filter, FilteredOrder, Order } from "@/schema/order.schema";
 import { mutationOptions, queryOptions, useQueryClient } from "@tanstack/react-query";
 import { deleteManyOrders, deleteOrder, getOrderById, getOrders, updateManyOrdersStatus, updateOrderStatus } from "./api";
 
-export type OrdersFilterInput = {
-    from?: string;
-    to?: string;
-    search?: string;
-    status?: string;
-    minTotal?: string;
-    maxTotal?: string;
-    paymentProvider?: string;
-    page?: number;
-    limit?: number;
-};
+export type OrdersFilterInput = Partial<Filter>;
 
 const getOrdersQueryKey = (filter: OrdersFilterInput = {}) => ['orders', filter] as const;
 

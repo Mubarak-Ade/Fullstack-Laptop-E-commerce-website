@@ -11,7 +11,6 @@ import { DesktopNavLinks } from './navbar/DesktopNavLinks';
 import { MobileMenu } from './navbar/MobileMenu';
 import { NavbarActions } from './navbar/NavbarActions';
 import { NavbarLogo } from './navbar/NavbarLogo';
-import { NavbarSearch } from './navbar/NavbarSearch';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { UserMenu } from './navbar/UserMenu';
 

@@ -91,14 +91,13 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
 		<ToastContext.Provider value={{ showToast }}>
 			{children}
 			<div className="fixed top-15 flex-col p-10 left-0 flex items-center justify-center w-full space-y-2 z-50">
-				{toasts.map((toast) => (
-					<Toast
-						key={toast.id}
-						id={toast.id}
-						type={toast.type}
-						message={toast.message}
-						onClose={() => removeToast(toast.id)}
-					/>
+                {toasts.map((toast) => (
+                    <Toast
+                        key={toast.id}
+                        type={toast.type}
+                        message={toast.message}
+                        onClose={() => removeToast(toast.id)}
+                    />
 				))}
 			</div>
 		</ToastContext.Provider>
