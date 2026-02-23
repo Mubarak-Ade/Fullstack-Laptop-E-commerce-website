@@ -12,7 +12,7 @@ import { Eye, PenBox, Plus, Trash2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
 export const ProductManagement = () => {
-    const { data: products, isFetching } = useQuery(useProducts());
+    const { data: products, isLoading } = useQuery(useProducts());
     const navigate = useNavigate();
     const columns: ColumnDef<Product>[] = [
         {
@@ -38,7 +38,7 @@ export const ProductManagement = () => {
                 const id = row.original._id;
 
                 const handleEdit = () => {
-                    navigate('/admin/dashboard/products/add', { state: id });
+                    navigate('/admin/products/add', { state: id });
                 };
 
                 return (
@@ -72,23 +72,22 @@ export const ProductManagement = () => {
         },
     ];
 
-    if (isFetching || !products) {
+    if (isLoading || !products) {
         return <ProductManagementSkeleton />;
     }
 
     return (
-        <div className="">
-            <div className="flex justify-between px-5 mt-2 gap-5">
+        <div>
+            <div className="relative z-60 flex justify-between px-5 mt-2 gap-5">
                 <BreadCrumbs />
-
                 <Link
-                    to="/admin/dashboard/products/add"
+                    to="/admin/products/add"
                     className="flex gap-2 text-white bg-primary items-center px-4 py-3 rounded-xl"
                 >
                     <Icon icon={Plus} /> Add New Product
                 </Link>
             </div>
-            <div className="max-w-4xl m-auto mt-10 w-full">
+            <div className="relative z-0 max-w-4xl m-auto mt-10 w-full">
                 <ReusableTable columns={columns} data={products} />
             </div>
         </div>

@@ -37,7 +37,7 @@ export const AdminDashboardLayout = () => {
     return (
         <SidebarProvider style={{ ['--sidebar-width']: '18rem' } as CSSProperties}>
             <SideBar links={links} />
-            <main className="bg-light-fg dark:bg-dark-bg overflow-hidden w-full">
+            <main className="bg-light-fg dark:bg-dark-bg relative w-full">
                 <AdminHeader  />
                 <Outlet />
             </main>

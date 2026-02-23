@@ -43,7 +43,6 @@ export const authorizeRole = async (req: Request, res: Response, next: NextFunct
     if ( !user || user.role !== "admin") {
         throw createHttpError(403, "Forbidden, Admin only")
     }
-    console.log(user)
     next()
 }
   

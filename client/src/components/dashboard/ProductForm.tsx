@@ -94,7 +94,7 @@ export const ProductForm = () => {
         fd.append('battery', data.battery ?? '');
 
         if (data.images) {
-            Array.from(data.images).forEach(file => fd.append('images', file));
+            Array.from(data.images).forEach(file => fd.append('product', file));
         }
 
         product ? updateProduct.mutate(fd, {
