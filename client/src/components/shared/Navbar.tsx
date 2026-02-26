@@ -68,7 +68,7 @@ export const Navbar = () => {
             >
                 <button
                     onClick={() => setShowMobileMenu(true)}
-                    className="block lg:hidden text-white"
+                    className="block lg:hidden text-black dark:text-white"
                 >
                     <Icon icon={Menu} />
                 </button>

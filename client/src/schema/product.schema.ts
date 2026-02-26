@@ -59,6 +59,7 @@ export const ProductApiSchema = z.object({
 });
 
 export const FilterSchema = z.object({
+    search: z.string().optional(),
     brands: z.array(z.string()).optional(),
     cpu: z.array(z.string()).optional(),
     ram: z.array(z.string()).optional(),

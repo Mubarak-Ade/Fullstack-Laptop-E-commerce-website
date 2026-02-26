@@ -1,8 +1,15 @@
 import { useFilterProductStore } from '@/store/FilterProductStore';
 import { priceFormat } from '@/utils/format';
 import React from 'react';
+import { Icon } from '../shared/Icon';
+import { X } from 'lucide-react';
 
-export const FilterSideBar = () => {
+
+interface Props {
+    show: boolean,
+    close: () => void
+}
+export const FilterSideBar = ({show, close}: Props) => {
     const MIN = 100000;
     const MAX = 5000000;
     const cpus = ['INTEL Ultra i9 185H', 'INTEL Ultra i7 155H', 'Apple Silicon', 'Snapdragon X Elite'];
@@ -25,7 +32,10 @@ export const FilterSideBar = () => {
     };
 
     return (
-        <form className="dark:bg-dark-surface bg-light-fg h-fit rounded-xl p-5 max-w-xs w-full">
+        <form className={`dark:bg-dark-surface ${show ? 'fixed inset-0 z-50' : 'lg:static lg:block hidden'} bg-light-fg h-screen overflow-auto rounded-xl p-5 max-w-xs w-full`}>
+            <button onClick={close} className="absolute top-5 lg:hidden block right-5 text-secondary dark:text-white">
+                <Icon icon={X} />
+            </button>
             <div className="">
                 <h2 className="text-xl dark:text-white font-bold">Brands</h2>
                 <ul className="space-y-2 mt-5 block text-secondary">

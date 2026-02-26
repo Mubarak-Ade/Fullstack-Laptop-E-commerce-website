@@ -4,16 +4,60 @@ import { ReusableTable } from '@/components/shared/dashboard/ReusableTable';
 import { Icon } from '@/components/shared/Icon';
 import { Button } from '@/components/ui/button';
 import { useProducts } from '@/features/product/hooks';
-import { type Product } from '@/schema/product.schema';
+import type { Product, ProductFilters } from '@/schema/product.schema';
 import { priceFormat } from '@/utils/format';
 import { useQuery } from '@tanstack/react-query';
-import type { ColumnDef } from '@tanstack/react-table';
+import type { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { Eye, PenBox, Plus, Trash2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 
 export const ProductManagement = () => {
-    const { data, isLoading } = useQuery(useProducts());
     const navigate = useNavigate();
+    const [search, setSearch] = useState('');
+    const [brand, setBrand] = useState('ALL');
+    const [sort, setSort] = useState<'newest' | 'discount' | 'price-low' | 'price-high'>(
+        'newest'
+    );
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+
+    const query = useMemo<ProductFilters>(() => {
+        return {
+            page,
+            limit,
+            brands: brand !== 'ALL' ? [brand] : undefined,
+            sort: sort === 'newest' ? undefined : sort,
+            min: minPrice ? Number(minPrice) : undefined,
+            max: maxPrice ? Number(maxPrice) : undefined,
+        };
+    }, [brand, limit, maxPrice, minPrice, page, sort]);
+
+    const { data, isLoading, isFetching } = useQuery(useProducts(query));
+
+    const filteredRows = useMemo(() => {
+        const keyword = search.trim().toLowerCase();
+
+        if (!keyword) {
+            return data?.product ?? [];
+        }
+
+        return (data?.product ?? []).filter(item => {
+            const name = item.name.toLowerCase();
+            const itemBrand = item.brand.toLowerCase();
+            return name.includes(keyword) || itemBrand.includes(keyword);
+        });
+    }, [data?.product, search]);
+
+    const pagination = useMemo<PaginationState>(() => {
+        return {
+            pageIndex: Math.max(0, page - 1),
+            pageSize: limit,
+        };
+    }, [limit, page]);
+
     const columns: ColumnDef<Product>[] = [
         {
             header: 'Laptop',
@@ -92,8 +136,137 @@ export const ProductManagement = () => {
                     <Icon icon={Plus} /> Add New Product
                 </Link>
             </div>
+            <div className="mt-8 rounded-xl border border-light-border dark:border-dark-border bg-card px-5 py-4 shadow-lg">
+                <div className="flex flex-wrap items-end gap-4">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-wide text-secondary">
+                            Search
+                        </label>
+                        <input
+                            value={search}
+                            onChange={event => setSearch(event.target.value)}
+                            placeholder="Product name or brand"
+                            className="h-10 rounded-xl border border-light-border dark:border-dark-border bg-light-fg dark:bg-dark-fg px-3 text-sm text-coral-black dark:text-white outline-none focus:border-primary"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-wide text-secondary">
+                            Brand
+                        </label>
+                        <select
+                            value={brand}
+                            onChange={event => {
+                                setBrand(event.target.value);
+                                setPage(1);
+                            }}
+                            className="h-10 rounded-xl border border-light-border dark:border-dark-border bg-light-fg dark:bg-dark-fg px-3 text-sm text-coral-black dark:text-white outline-none focus:border-primary"
+                        >
+                            <option value="ALL">All Brands</option>
+                            <option value="Apple">Apple</option>
+                            <option value="Acer">Acer</option>
+                            <option value="Asus">Asus</option>
+                            <option value="Dell">Dell</option>
+                            <option value="Hp">Hp</option>
+                            <option value="Lenovo">Lenovo</option>
+                            <option value="MSI">MSI</option>
+                            <option value="Toshiba">Toshiba</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-wide text-secondary">Sort</label>
+                        <select
+                            value={sort}
+                            onChange={event => {
+                                setSort(
+                                    event.target.value as
+                                        | 'newest'
+                                        | 'discount'
+                                        | 'price-low'
+                                        | 'price-high'
+                                );
+                                setPage(1);
+                            }}
+                            className="h-10 rounded-xl border border-light-border dark:border-dark-border bg-light-fg dark:bg-dark-fg px-3 text-sm text-coral-black dark:text-white outline-none focus:border-primary"
+                        >
+                            <option value="newest">Newest First</option>
+                            <option value="discount">Biggest Discount</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-wide text-secondary">
+                            Min Price
+                        </label>
+                        <input
+                            type="number"
+                            min={0}
+                            value={minPrice}
+                            onChange={event => {
+                                setMinPrice(event.target.value);
+                                setPage(1);
+                            }}
+                            className="h-10 rounded-xl border border-light-border dark:border-dark-border bg-light-fg dark:bg-dark-fg px-3 text-sm text-coral-black dark:text-white outline-none focus:border-primary"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-xs uppercase tracking-wide text-secondary">
+                            Max Price
+                        </label>
+                        <input
+                            type="number"
+                            min={0}
+                            value={maxPrice}
+                            onChange={event => {
+                                setMaxPrice(event.target.value);
+                                setPage(1);
+                            }}
+                            className="h-10 rounded-xl border border-light-border dark:border-dark-border bg-light-fg dark:bg-dark-fg px-3 text-sm text-coral-black dark:text-white outline-none focus:border-primary"
+                        />
+                    </div>
+                    <button
+                        onClick={() => {
+                            setSearch('');
+                            setBrand('ALL');
+                            setSort('newest');
+                            setMinPrice('');
+                            setMaxPrice('');
+                            setPage(1);
+                            setLimit(10);
+                        }}
+                        className="h-10 rounded-xl border border-light-border dark:border-dark-border px-4 text-sm font-semibold text-secondary transition-colors hover:border-primary hover:text-primary"
+                    >
+                        Clear Filters
+                    </button>
+                </div>
+            </div>
             <div className="relative z-0 max-w-4xl m-auto mt-10 w-full">
-                <ReusableTable columns={columns} data={data.product} pageCount={Math.ceil(((data?.total ?? 0) as number) / data.limit) ?? 1} />
+                <ReusableTable
+                    columns={columns}
+                    data={filteredRows}
+                    pageCount={Math.ceil(((data?.total ?? 0) as number) / limit) ?? 1}
+                    pagination={pagination}
+                    isLoading={isFetching}
+                    onPaginationChange={updater => {
+                        const next =
+                            typeof updater === 'function'
+                                ? updater({
+                                      pageIndex: pagination.pageIndex,
+                                      pageSize: pagination.pageSize,
+                                  })
+                                : updater;
+
+                        if (next.pageSize !== limit) {
+                            setLimit(next.pageSize);
+                            setPage(1);
+                            return;
+                        }
+
+                        if (next.pageIndex !== pagination.pageIndex) {
+                            setPage(next.pageIndex + 1);
+                        }
+                    }}
+                />
             </div>
         </div>
     );

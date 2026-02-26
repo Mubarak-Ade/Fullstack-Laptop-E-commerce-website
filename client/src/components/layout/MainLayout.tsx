@@ -7,6 +7,7 @@ import { LoginModal } from './LoginModal';
 import { Moon, Star } from 'lucide-react';
 import { Icon } from '../shared/Icon';
 import { useThemeStore } from '@/store/ThemeStore';
+import { SearchPanel } from '../SearchPanel';
 
 const ToggleIcon = motion.create(Icon);
 
@@ -17,7 +18,7 @@ export const MainLayout = () => {
         <>
             <Navbar />
             <main className="relative">
-                {/* <CartSkeleton /> */}
+                <SearchPanel />
                 <AnimatePresence>{visible && <LoginModal />}</AnimatePresence>
                 <div className="fixed bottom-30 z-50 right-10">
                     <button onClick={toggleTheme} className="p-5 cursor-pointer rounded-full bg-primary text-white">
