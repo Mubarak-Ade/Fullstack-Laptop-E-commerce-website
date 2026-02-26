@@ -34,7 +34,7 @@ export const ProductCard = (product: Product) => {
         });
     };
 
-    const prod = useMemo(() => cart?.items.find(item => item.product._id === product._id), [cart]);
+    const prod = useMemo(() => cart?.items.find(item => item.product?._id === product._id), [cart, product._id]);
 
     console.log(images[0]);
 
