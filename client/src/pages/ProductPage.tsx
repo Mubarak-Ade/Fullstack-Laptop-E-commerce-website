@@ -16,7 +16,7 @@ import type { ProductFilters } from '@/schema/product.schema';
 import { useFilterProductStore } from '@/store/FilterProductStore';
 import { useQuery } from '@tanstack/react-query';
 import { Filter } from 'lucide-react';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export const ProductPage = () => {
     type ProductSort = NonNullable<ProductFilters['sort']>;
