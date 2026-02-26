@@ -93,7 +93,7 @@ export const ProductManagement = () => {
                 </Link>
             </div>
             <div className="relative z-0 max-w-4xl m-auto mt-10 w-full">
-                <ReusableTable columns={columns} data={data.product} />
+                <ReusableTable columns={columns} data={data.product} pageCount={Math.ceil(((data?.total ?? 0) as number) / data.limit) ?? 1} />
             </div>
         </div>
     );
