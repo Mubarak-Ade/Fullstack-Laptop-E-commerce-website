@@ -9,10 +9,10 @@ import { useState } from 'react';
 import { Icon } from '../shared/Icon';
 
 export const CartCard = (cart: CartItem) => {
-    const { product, price, quantity } = cart;
+    const { product, price, quantity } = cart ?? {};
 
     const { data } = useQuery(useProducts());
-    const productData = data?.product.find(prod => prod._id === product._id);
+    const productData = data?.product.find(prod => prod._id === product?._id);
     const productStock = productData?.stocks;
     const latestPrice = productData?.discountPrice ?? productData?.price;
 
