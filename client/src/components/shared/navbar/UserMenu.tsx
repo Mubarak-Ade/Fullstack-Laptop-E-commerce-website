@@ -38,7 +38,7 @@ export const UserMenu = ({ showMenu, menuRef, identity, logout, onClose }: UserM
                                 to={
                                     identity.type === 'user' && identity.user.role === 'admin'
                                         ? `/admin${link.path}`
-                                        : link.path
+                                        : `/dashboard/${link.path}`
                                 }
                                 onClick={onClose}
                                 className="text-black dark:text-white"

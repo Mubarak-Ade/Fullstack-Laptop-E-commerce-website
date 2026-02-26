@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import {Icon} from '../shared/Icon'
 import {CheckCircle, ShieldCheck, ShoppingCart, Star, Truck} from 'lucide-react'
-import { formatImage } from '@/utils/imageFormat';
 import { motion } from 'motion/react';
 
 interface Props {
-    images: string[], 
+    images: {url: string, public_id: string}[], 
     name: string,
     price: number | string,
     brand: string,
@@ -22,7 +21,7 @@ export const Preview=({images, name, price, brand, memory, processor }: Props) =
         <div className="flex mt-5 gap-10">
             <div className="max-w-2xl w-full">
                 <div className="dark:bg-dark-fg bg-light-fg rounded-2xl h-140">
-                    <img src={formatImage(images![currentIndex])} alt="" className="size-full aspect-square object-cover" />
+                    <img src={images![currentIndex].url} alt="" className="size-full aspect-square object-cover" />
                 </div>
                 <div className="p-5 flex items-center gap-5 w-160 overflow-auto">
                     {Array.from(images).map((img, index) => (
@@ -40,7 +39,7 @@ export const Preview=({images, name, price, brand, memory, processor }: Props) =
                             whileHover={{
                                 scale: 1.1
                             }}
-                            src={formatImage(img)} alt="" className='size-full object-cover' />
+                            src={img.url} alt="" className='size-full object-cover' />
                         </motion.div>
                     ))}
                 </div>

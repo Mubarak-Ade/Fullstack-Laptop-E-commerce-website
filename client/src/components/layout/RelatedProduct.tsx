@@ -11,7 +11,7 @@ export const RelatedProduct = () => {
     return <RelatedProductSkeleton />
   }
 
-  const products = data?.slice(0, 4)
+  const products = data?.product.slice(0, 4)
 
   return (
     <div className="mt-10">

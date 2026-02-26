@@ -28,7 +28,10 @@ export const UpdateProductSchema = z.object({
   price: z.coerce.number().optional(),
   discountPrice: z.coerce.number().optional(),
   stocks: z.coerce.number().optional(),
-  removedImage: z.array(z.string()).optional(),
+  removedImage: z
+    .union([z.array(z.string()), z.string()])
+    .transform(value => (Array.isArray(value) ? value : [value]))
+    .optional(),
   slug: z.string().optional(),
   isActive: z.boolean().optional(),
   ratings: z.number().optional(),

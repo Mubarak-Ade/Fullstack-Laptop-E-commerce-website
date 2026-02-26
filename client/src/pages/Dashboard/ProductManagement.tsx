@@ -12,12 +12,17 @@ import { Eye, PenBox, Plus, Trash2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
 export const ProductManagement = () => {
-    const { data: products, isLoading } = useQuery(useProducts());
+    const { data, isLoading } = useQuery(useProducts());
     const navigate = useNavigate();
     const columns: ColumnDef<Product>[] = [
         {
-            header: 'Quiz Name',
-            accessorFn: row => row.name || 'N/A',
+            header: 'Laptop',
+            cell: ({row}) => (
+                <div className="flex items-center gap-4">
+                    <img src={row.original.images[0].url} alt={row.original.images[0].public_id} className='aspect-square size-12 object-cover border rounded' />
+                    <h1 className='font-bold'>{row.original.name}</h1>
+                </div>
+            ),
         },
         {
             header: 'Brand',
@@ -72,13 +77,13 @@ export const ProductManagement = () => {
         },
     ];
 
-    if (isLoading || !products) {
+    if (isLoading || !data) {
         return <ProductManagementSkeleton />;
     }
 
     return (
         <div>
-            <div className="relative z-60 flex justify-between px-5 mt-2 gap-5">
+            <div className="relative z-[60] flex justify-between px-5 mt-2 gap-5 pointer-events-auto">
                 <BreadCrumbs />
                 <Link
                     to="/admin/products/add"
@@ -88,7 +93,7 @@ export const ProductManagement = () => {
                 </Link>
             </div>
             <div className="relative z-0 max-w-4xl m-auto mt-10 w-full">
-                <ReusableTable columns={columns} data={products} />
+                <ReusableTable columns={columns} data={data.product} />
             </div>
         </div>
     );

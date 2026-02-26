@@ -101,7 +101,7 @@ function App() {
                     }
                     HydrateFallback={RouteSkeleton}
                 >
-                    <Route index Component={AdminOverview} />
+                    <Route index path='overview' Component={AdminOverview} />
                     <Route path="orders" Component={OrderManagement} />
                     <Route path="orders/:id" Component={OrderDetailPage} />
                     <Route path="products" Component={ProductManagement} />

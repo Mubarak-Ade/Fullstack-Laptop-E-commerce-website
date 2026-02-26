@@ -2,10 +2,10 @@ import { useCreateProduct, useProductId, useUpdateProduct } from '@/features/pro
 import { ProductSchema, type ProductFormInput } from '@/schema/product.schema';
 import { formatImage } from '@/utils/imageFormat';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
-import { UploadCloud } from 'lucide-react';
-import { useEffect } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Trash2, UploadCloud } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router';
 import { InputField } from '../Form/InputField';
 import { SelectField } from '../Form/SelectField';
@@ -16,13 +16,25 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ProductFormSkeleton } from '../layout/skeleton/ui/ProductFormSkeleton';
+import { useToast } from '@/context/ToastContext';
+
+type ExistingImage = {
+    src: string;
+    removeId?: string;
+};
+
+const definedStrings = (values: Array<string | undefined>) =>
+    values.filter((value): value is string => Boolean(value));
+
 export const ProductForm = () => {
     const location = useLocation();
 
-    const { data: product, isFetching } = useQuery(useProductId(location.state as string));
+    const productId = (location.state as string | undefined) ?? '';
+    const { data: product, isFetching } = useQuery(useProductId(productId));
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const createProduct = useCreateProduct();
-    const updateProduct = useUpdateProduct(product?._id as string);
+    const updateProduct = useMutation(useUpdateProduct(product?._id as string));
 
     const {
         register,
@@ -47,6 +59,10 @@ export const ProductForm = () => {
             battery: '',
         },
     });
+    const imagesRegister = register('images');
+    const [existingImages, setExistingImages] = useState<ExistingImage[]>([]);
+    const [removedImageIds, setRemovedImageIds] = useState<string[]>([]);
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
     useEffect(() => {
         if (product) {
@@ -67,10 +83,71 @@ export const ProductForm = () => {
         }
     }, [product, reset]);
 
-    const images = useWatch({ control, name: 'images' });
-    const brands = ['Hp', 'Dell', 'Acer', 'Apples', 'Asus', 'Lenovo'];
-    const ramOptions = ['4GB', '8GB', '16GB', '32GB', '64GB'];
-    const storageOptions = ['128GB', '256GB', '512GB', '1TB', '2TB'];
+    const brands = useMemo(
+        () => Array.from(new Set(definedStrings(['Hp', 'Dell', 'Acer', 'Apple', 'Asus', 'Lenovo', product?.brand]))),
+        [product?.brand]
+    );
+    const ramOptions = useMemo(
+        () => Array.from(new Set(definedStrings(['4GB', '8GB', '16GB', '32GB', '64GB', product?.ram]))),
+        [product?.ram]
+    );
+    const storageOptions = useMemo(
+        () => Array.from(new Set(definedStrings(['128GB', '256GB', '512GB', '1TB', '2TB', product?.storage]))),
+        [product?.storage]
+    );
+
+    const normalizedProductImages = useMemo(() => {
+        if (!product?.images) {
+            return [] as ExistingImage[];
+        }
+        return Array.from(
+            product.images as Array<string | { url?: string; public_id?: string }>
+        ).map(image => {
+            if (typeof image === 'string') {
+                return {
+                    src: formatImage(image),
+                    removeId: image,
+                };
+            }
+            const imageSrc = image.url
+                ? image.url.startsWith('http')
+                    ? image.url
+                    : formatImage(image.url)
+                : '';
+            return {
+                src: imageSrc,
+                removeId: image.public_id,
+            };
+        });
+    }, [product?.images]);
+
+    useEffect(() => {
+        if (product) {
+            setExistingImages(normalizedProductImages);
+            setRemovedImageIds([]);
+            return;
+        }
+        setExistingImages([]);
+        setRemovedImageIds([]);
+    }, [normalizedProductImages, product]);
+
+    const removeNewImage = (index: number) => {
+        setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const removeExistingImage = (index: number) => {
+        setExistingImages(prev => {
+            const image = prev[index];
+            if (image?.removeId) {
+                setRemovedImageIds(ids =>
+                    ids.includes(image.removeId as string)
+                        ? ids
+                        : [...ids, image.removeId as string]
+                );
+            }
+            return prev.filter((_, i) => i !== index);
+        });
+    };
 
     if (isFetching) {
         return <ProductFormSkeleton />;
@@ -93,19 +170,28 @@ export const ProductForm = () => {
         fd.append('os', data.os ?? '');
         fd.append('battery', data.battery ?? '');
 
-        if (data.images) {
-            Array.from(data.images).forEach(file => fd.append('product', file));
-        }
+        selectedFiles.forEach(file => fd.append('product', file));
+        removedImageIds.forEach(id => fd.append('removedImage', id));
 
-        product ? updateProduct.mutate(fd, {
-            onSuccess: () => {
-                navigate(-1);
-            }
-        }) : createProduct.mutate(fd, {
-            onSuccess: () => {
-                navigate(-1);
-            }
-        });
+        product
+            ? updateProduct.mutate(fd, {
+                      onSuccess: () => {
+                          showToast('success', 'Product updated successfully');
+                          navigate('/admin/products');
+                      },
+                      onError: error => {
+                          showToast('error', error.message);
+                      },
+                  })
+            : createProduct.mutate(fd, {
+                  onSuccess: () => {
+                      showToast('success', 'Product created successfully');
+                      navigate('/admin/products');
+                  },
+                  onError: error => {
+                      showToast('error', error.message);
+                  },
+              });
     };
 
     return (
@@ -267,33 +353,62 @@ export const ProductForm = () => {
                                         type="file"
                                         multiple
                                         accept="image/*"
-                                        {...register('images')}
+                                        {...imagesRegister}
+                                        onChange={event => {
+                                            imagesRegister.onChange(event);
+                                            const files = event.target.files;
+                                            if (!files || files.length === 0) {
+                                                return;
+                                            }
+                                            setSelectedFiles(prev => [
+                                                ...prev,
+                                                ...Array.from(files),
+                                            ]);
+                                            event.target.value = '';
+                                        }}
                                         className="opacity-0 h-full top-0 left-0 cursor-pointer"
                                     />
                                 </div>
                             </Field>
                             <div className="mt-5 flex items-center gap-4  overflow-hidden flex-wrap">
-                                {product
-                                    ? product.images &&
-                                      Array.from(product.images).map(image => (
-                                          <div className="aspect-square size-30 border border-secondary/50 shadow-2xl p-2 rounded-xl">
-                                              <img
-                                                  src={formatImage(image)}
-                                                  alt=""
-                                                  className="size-full object-contain aspect-square"
-                                              />
-                                          </div>
-                                      ))
-                                    : images &&
-                                      Array.from(images).map(file => (
-                                          <div className="aspect-square size-30 border border-secondary/50 shadow-2xl p-2 rounded-xl">
-                                              <img
-                                                  src={URL.createObjectURL(file)}
-                                                  alt=""
-                                                  className="size-full object-contain aspect-square"
-                                              />
-                                          </div>
-                                      ))}
+                                {existingImages.map((image, index) => (
+                                    <div
+                                        key={`${image.src}-${index}`}
+                                        className="aspect-square relative size-30 border border-secondary/50 shadow-2xl p-2 rounded-xl"
+                                    >
+                                        <img
+                                            src={image.src}
+                                            alt=""
+                                            className="size-full object-contain aspect-square"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeExistingImage(index)}
+                                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+                                        >
+                                            <Icon icon={Trash2} size={15} />
+                                        </button>
+                                    </div>
+                                ))}
+                                {selectedFiles.map((file, index) => (
+                                    <div
+                                        key={`${file.name}-${index}`}
+                                        className="aspect-square relative size-30 border border-secondary/50 shadow-2xl p-2 rounded-xl"
+                                    >
+                                        <img
+                                            src={URL.createObjectURL(file)}
+                                            alt=""
+                                            className="size-full object-contain aspect-square"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeNewImage(index)}
+                                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+                                        >
+                                            <Icon icon={Trash2} size={15} />
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
                             <div className=""></div>
                         </CardContent>

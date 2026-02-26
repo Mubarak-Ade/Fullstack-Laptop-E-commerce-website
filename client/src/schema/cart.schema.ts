@@ -1,8 +1,8 @@
 import z from 'zod';
-import { ProductSchema } from './product.schema';
+import { ProductApiSchema } from './product.schema';
 
 export const CartItemSchema = z.object({
-    product: ProductSchema.pick({_id: true, name: true, images: true}),
+    product: ProductApiSchema.pick({_id: true, name: true, images: true}),
     quantity: z.number(),
     price: z.number(),
 });

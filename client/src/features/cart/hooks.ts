@@ -11,6 +11,9 @@ export const useCart = () => {
         queryKey: cartQueryKey(identity.type),
         queryFn: getUserCart,
         enabled: !!identity,
+        retry: false,
+        staleTime: 60_000,
+        refetchOnWindowFocus: false,
     });
 };
 

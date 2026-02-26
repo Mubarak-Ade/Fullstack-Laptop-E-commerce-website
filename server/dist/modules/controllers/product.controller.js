@@ -1,9 +1,8 @@
-import Product from '../../models/Product.js';
-import { ProductIdSchema, ProductSlugSchema, } from '../schema/product.schema.js';
+import { ProductIdSchema, ProductSlugSchema, } from '../../admin/schema/product.schema.js';
 import ProductService from '../services/product.service.js';
 export const getProducts = async (req, res, next) => {
     try {
-        const product = await Product.find({}).lean();
+        const product = await ProductService.getProducts(req.query);
         res.status(200).json(product);
     }
     catch (error) {

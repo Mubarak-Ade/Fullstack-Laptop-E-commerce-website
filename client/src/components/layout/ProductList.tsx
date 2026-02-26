@@ -1,4 +1,3 @@
-import { Data } from '@/data';
 import { useProducts } from '@/features/product/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'motion/react';
@@ -15,10 +14,10 @@ export const ProductList = () => {
         return <ProductListSkeleton />;
     }
 
-    const brands = [...new Set(Data.map(prod => prod.brand))];
+    const brands = [...new Set(data?.product?.map(prod => prod.brand))];
 
     const filterProduct =
-        active === 'all' ? data : data?.filter(product => product.brand === active);
+        active === 'all' ? data?.product : data?.product?.filter(product => product.brand === active);
 
     return (
         <motion.div

@@ -37,7 +37,7 @@ export const ProductApiSchema = z.object({
     discountPrice: z.number().optional(),
     stocks: z.number().optional(),
 
-    images: z.array(z.string()),
+    images: z.array(z.object({ url: z.string(), public_id: z.string() })),
 
     slug: z.string().optional(),
     isActive: z.boolean(),
@@ -58,6 +58,29 @@ export const ProductApiSchema = z.object({
     __v: z.number().optional(),
 });
 
+export const FilterSchema = z.object({
+    brands: z.array(z.string()).optional(),
+    cpu: z.array(z.string()).optional(),
+    ram: z.array(z.string()).optional(),
+    storage: z.array(z.string()).optional(),
+    min: z.number().optional(),
+    max: z.number().optional(),
+    sort: z.enum(['newest', 'price-low', 'price-high', 'discount']).optional(),
+    page: z.number().optional(),
+    limit: z.number().optional(),
+});
+
+export const FilterProductSchema = z.object({
+    product: z.array(ProductApiSchema),
+    limit: z.number(),
+    page: z.number(),
+    pages: z.number(),
+    total: z.number(),
+});
+
 export type Product = z.infer<typeof ProductApiSchema>;
 
+export type ProductFilters = z.infer<typeof FilterSchema>;
+
+export type ProductWithFilter = z.infer<typeof FilterProductSchema>;
 export type ProductFormInput = z.infer<typeof ProductSchema>;

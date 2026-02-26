@@ -3,11 +3,11 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { Icon } from './shared/Icon';
 // import type {Cart, Product} from "@/features/cart/types"
+import { useToast } from '@/context/ToastContext';
 import { useAddToCart, useCart } from '@/features/cart/hooks';
 import { type Product } from '@/schema/product.schema';
-import { formatImage } from '@/utils/imageFormat';
+import { priceFormat } from '@/utils/format';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useToast } from '@/context/ToastContext';
 import { useMemo } from 'react';
 
 export const ProductCard = (product: Product) => {
@@ -34,8 +34,9 @@ export const ProductCard = (product: Product) => {
         });
     };
 
-    const prod = useMemo(() => cart?.items.find(item => item.product._id === product._id), [cart])
+    const prod = useMemo(() => cart?.items.find(item => item.product._id === product._id), [cart]);
 
+    console.log(images[0]);
 
     return (
         <AnimatePresence>
@@ -46,14 +47,14 @@ export const ProductCard = (product: Product) => {
                 // layoutId={product._id}
                 whileHover="hover"
                 whileTap="tap"
-                // initial={{
-                //     opacity: 0,
-                //     y: 30,
-                // }}
-                // animate={{
-                //     opacity: 1,
-                //     y: 0,
-                // }}
+                initial={{
+                    opacity: 0,
+                    y: 30,
+                }}
+                animate={{
+                    opacity: 1,
+                    y: 0,
+                }}
                 transition={{
                     duration: 1,
                     delay: 0.3 + Number(product._id) * 0.3,
@@ -66,7 +67,7 @@ export const ProductCard = (product: Product) => {
                         variants={{
                             hover: { scale: 1.1 },
                         }}
-                        src={formatImage(images[0])}
+                        src={images[0].url}
                         alt=""
                         className="h-full w-full"
                     />
@@ -90,7 +91,7 @@ export const ProductCard = (product: Product) => {
                     </h6>
                 </div>
                 <div className="flex px-4 py-2 dark:text-light-bg justify-between items-center">
-                    <h4 className="text-2xl font-bold">{price}</h4>
+                    <h4 className="text-xl font-semibold">{priceFormat(price)}</h4>
                     <div className="flex gap-2">
                         <motion.button
                             whileHover={{

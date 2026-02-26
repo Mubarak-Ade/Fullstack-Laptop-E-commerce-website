@@ -71,6 +71,7 @@ export type Cart = InferSchemaType<typeof CartSchema>;
 
 export type PopulatedCart = Omit<Cart, 'items'> & {
     items: Array<{
+        item: any;
         product: Product;
         quantity: number,
         price: number

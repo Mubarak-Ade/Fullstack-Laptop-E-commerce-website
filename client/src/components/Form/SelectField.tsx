@@ -23,7 +23,10 @@ export const SelectField = <T extends FieldValues>({control, placeholder, name, 
                 control={ control }
                 name={name}
                 render={ ( { field } ) => (
-                    <Select onValueChange={ field.onChange } value={field.value} defaultValue={field.value}>
+                    <Select
+                        onValueChange={ field.onChange }
+                        value={typeof field.value === 'string' ? field.value : undefined}
+                    >
                         <SelectTrigger className='border-none outline-none focus-visible:ring-primary focus-visible:ring-1 rounded-sm dark:text-white bg-light-fg dark:bg-dark-fg py-5'>
                             <SelectValue placeholder={placeholder} />
                         </SelectTrigger>

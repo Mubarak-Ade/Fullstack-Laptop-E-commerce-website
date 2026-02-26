@@ -1,19 +1,18 @@
+import { useToast } from '@/context/ToastContext';
 import { useCartQuantity, useDeleteCartItem } from '@/features/cart/hooks';
+import { useProducts } from '@/features/product/hooks';
 import type { CartItem } from '@/schema/cart.schema';
-import { formatImage } from '@/utils/imageFormat';
+import { priceFormat } from '@/utils/format';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Icon } from '../shared/Icon';
-import { priceFormat } from '@/utils/format';
-import { useToast } from '@/context/ToastContext';
-import { useProducts } from '@/features/product/hooks';
 
 export const CartCard = (cart: CartItem) => {
     const { product, price, quantity } = cart;
 
     const { data } = useQuery(useProducts());
-    const productData = data?.find(prod => prod._id === product._id);
+    const productData = data?.product.find(prod => prod._id === product._id);
     const productStock = productData?.stocks;
     const latestPrice = productData?.discountPrice ?? productData?.price;
 
@@ -64,7 +63,7 @@ export const CartCard = (cart: CartItem) => {
         <div className="relative rounded-xl gap-5 p-5 bg-light-fg dark:bg-dark-surface flex ">
             <div className="bg-light-bg dark:bg-dark-fg aspect-square rounded-xl size-40 p-5">
                 <img
-                    src={formatImage(product.images && product?.images[0])}
+                    src={product?.images[0].url}
                     alt=""
                     className="h-full object-cover w-full"
                 />

@@ -7,7 +7,7 @@ const avatarStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "avatars",
-    allowed_formats: ["jpg", "png", "jpeg"],
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
   } as any,
 });
 
@@ -15,7 +15,7 @@ const productStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "product",
-    allowed_formats: ["jpg", "png", "jpeg"],
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
   } as any,
 });
 

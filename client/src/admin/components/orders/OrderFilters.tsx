@@ -1,5 +1,5 @@
 import { Icon } from '@/components/shared/Icon';
-import type { FilterKey } from '@/store/FilterStore';
+import type { FilterKey } from '@/store/FilterOrderStore';
 import { X } from 'lucide-react';
 
 export type ActiveFilter = {

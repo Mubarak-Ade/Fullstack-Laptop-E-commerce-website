@@ -1,16 +1,12 @@
 import { RequestHandler } from 'express';
-import {
-    ProductIdSchema,
-    ProductSchema,
-    UpdateProductSchema,
-} from '../../modules/schema/product.schema.js';
+import { ProductIdSchema, ProductSchema, UpdateProductSchema } from '../schema/product.schema.js';
 import createHttpError from 'http-errors';
-import ProductService from '../../modules/services/product.service.js';
 import Product from '../../models/Product.js';
+import ProductService from '../services/product.service.js';
 
 export const getProducts: RequestHandler = async (req, res, next): Promise<void> => {
     try {
-        const product = await Product.find({}).lean();
+        const product = await ProductService.getProducts(req.query);
         res.status(200).json(product);
     } catch (error) {
         next(error);

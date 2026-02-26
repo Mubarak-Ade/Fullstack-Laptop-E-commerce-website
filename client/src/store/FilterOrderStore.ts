@@ -15,7 +15,7 @@ export type FilterKey =
     | 'maxTotal'
     | 'paymentProvider';
 
-interface FilterState {
+interface FilterOrderState {
     page: number;
     limit: number;
     status: StatusFilter;
@@ -29,7 +29,7 @@ interface FilterState {
     resetFilters: () => void;
 }
 
-export const useFilterStore = create<FilterState>(set => ({
+export const useFilterOrderStore = create<FilterOrderState>(set => ({
     from: '',
     to: '',
     limit: 10,

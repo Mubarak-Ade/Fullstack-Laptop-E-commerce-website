@@ -1,5 +1,5 @@
-import slugify from "@sindresorhus/slugify";
-import { model, Schema } from "mongoose";
+import slugify from '@sindresorhus/slugify';
+import { model, Schema } from 'mongoose';
 const ProductSchema = new Schema({
     name: {
         type: String,
@@ -14,7 +14,7 @@ const ProductSchema = new Schema({
         required: true,
     },
     discountPrice: {
-        type: Number
+        type: Number,
     },
     ram: String,
     storage: String,
@@ -23,33 +23,33 @@ const ProductSchema = new Schema({
     screenSize: String,
     battery: String,
     images: {
-        type: [String],
-        default: []
+        type: [{ url: String, public_id: String }],
+        default: [],
     },
     stocks: {
         type: Number,
         default: 0,
-        min: 0
+        min: 0,
     },
     ratings: {
         type: Number,
         default: 0,
         min: 0,
-        max: 5
+        max: 5,
     },
     numReviews: {
         type: Number,
-        default: 0
+        default: 0,
     },
     slug: {
         type: String,
         unique: true,
-        index: true
+        index: true,
     },
     isActive: {
         type: Boolean,
-        default: true
-    }
+        default: true,
+    },
 }, { timestamps: true });
 ProductSchema.pre('save', function () {
     // Generate slug for category name
@@ -59,5 +59,5 @@ ProductSchema.pre('save', function () {
         });
     }
 });
-const Product = model("Product", ProductSchema);
+const Product = model('Product', ProductSchema);
 export default Product;

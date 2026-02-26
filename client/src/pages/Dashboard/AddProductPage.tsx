@@ -4,9 +4,15 @@ import { useNavigate } from 'react-router';
 
 export const AddProductPage = () => {
     const navigate = useNavigate();
+
+    const handleSubmitFromHeader = () => {
+        const form = document.getElementById('save-product') as HTMLFormElement | null;
+        form?.requestSubmit();
+    };
+
     return (
         <>
-            <div className="py-2 px-4 flex justify-between items-center">
+            <div className="relative z-[60] py-2 px-4 flex justify-between items-center pointer-events-auto">
                 <BreadCrumbs />
                 <div className="flex gap-5">
                     <button
@@ -17,14 +23,17 @@ export const AddProductPage = () => {
                         Discard
                     </button>
                     <button
-                        form="save-product"
+                        type="button"
+                        onClick={handleSubmitFromHeader}
                         className="text-white font-bold bg-primary px-8 rounded-xl py-2"
                     >
                         Save Laptop
                     </button>
                 </div>
             </div>
-            <ProductForm />
+            <div className="relative z-0">
+                <ProductForm />
+            </div>
         </>
     );
 };

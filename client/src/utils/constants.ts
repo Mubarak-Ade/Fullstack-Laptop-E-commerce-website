@@ -7,10 +7,10 @@ export const PRIMARY_LINKS = [
 ];
 
 export const ACCOUNT_LINKS = [
-    { label: 'Profile', icon: User, path: '/dashboard' },
-    { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
-    { label: 'Order History', icon: Clipboard, path: '/dashboard' },
-    { label: 'Settings', icon: Settings, path: '/dashboard' },
+    { label: 'Profile', icon: User, path: '/me' },
+    { label: 'Dashboard', icon: LayoutDashboard, path: '/overview' },
+    { label: 'Order History', icon: Clipboard, path: '/order' },
+    { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
 export const status = ['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const

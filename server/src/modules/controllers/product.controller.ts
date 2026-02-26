@@ -6,12 +6,12 @@ import {
     ProductSchema,
     ProductSlugSchema,
     UpdateProductSchema,
-} from '../schema/product.schema.js';
+} from '../../admin/schema/product.schema.js';
 import ProductService from '../services/product.service.js';
 
 export const getProducts: RequestHandler = async (req, res, next): Promise<void> => {
     try {
-        const product = await Product.find({}).lean();
+        const product = await ProductService.getProducts(req.query);
         res.status(200).json(product);
     } catch (error) {
         next(error);
@@ -37,4 +37,3 @@ export const getSingleProduct: RequestHandler = async (req, res, next): Promise<
         next(error);
     }
 };
-

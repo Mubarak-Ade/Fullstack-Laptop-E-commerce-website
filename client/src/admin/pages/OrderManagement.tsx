@@ -11,7 +11,7 @@ import type { Variants } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useOrders } from '../features/orders/hooks';
-import { useFilterStore, type FilterKey } from '@/store/FilterStore';
+import { useFilterOrderStore, type FilterKey } from '@/store/FilterOrderStore';
 import {
     ActiveFilterChips,
     FilterPanel,
@@ -36,7 +36,7 @@ export const OrderManagement = () => {
         limit,
         setFilter,
         resetFilters,
-    } = useFilterStore();
+    } = useFilterOrderStore();
     const [searchInput, setSearchInput] = useState(search);
     const filter = useMemo(
         () => ({

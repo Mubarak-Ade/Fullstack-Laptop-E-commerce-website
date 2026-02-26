@@ -24,7 +24,7 @@ class CartService {
         cart.items.forEach(item => {
             const images = item.product?.images;
             if (images?.length) {
-                item.product.images = [images[0]];
+                item.product.images = [item.product?.images[0]] as ProductType['images'];
             }
         });
 

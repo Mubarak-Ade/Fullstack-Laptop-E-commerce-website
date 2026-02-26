@@ -31,10 +31,16 @@ api.interceptors.response.use(
             error.response?.data?.message ||
             error.message ||
             "An unexpected error occurred"
+        const requestUrl = String(error.config?.url ?? "")
+        const isCartNotFound =
+            error.response?.status === 404 &&
+            error.config?.method?.toLowerCase() === "get" &&
+            requestUrl.includes("cart/items")
+
         if (error.response?.status === 401) {
             logout()
         }
-        if (message) {
+        if (message && !isCartNotFound) {
             showGlobalToast("error", message)
         }
         console.error("API Error", message)
