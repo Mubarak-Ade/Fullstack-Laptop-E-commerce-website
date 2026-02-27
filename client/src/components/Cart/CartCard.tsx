@@ -70,7 +70,7 @@ export const CartCard = (cart: CartItem) => {
             </div>
             <div className="w-full">
                 <h2 className="text-2xl text-coral-black dark:text-white font-bold">
-                    {product.name}
+                    {product?.name}
                 </h2>
                 <h6 className="mt-2 font-bold text-primary text-lg">{priceFormat(price)}</h6>
                 <div className="mt-2 flex flex-col gap-1 text-sm">

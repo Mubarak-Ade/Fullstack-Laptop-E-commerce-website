@@ -10,7 +10,7 @@ export const AdminDashboardLayout = () => {
     const links: Links[] = [
         {
             label: 'Dashboard',
-            link: '',
+            link: 'overview',
             title: 'Dashboard Overview',
             icon: <LayoutDashboard />,
         },
@@ -37,9 +37,11 @@ export const AdminDashboardLayout = () => {
     return (
         <SidebarProvider style={{ ['--sidebar-width']: '18rem' } as CSSProperties}>
             <SideBar links={links} />
-            <main className="relative bg-light-fg dark:bg-dark-bg w-full">
+            <main className="relative bg-light-fg dark:bg-dark-bg w-full min-h-svh">
                 <AdminHeader />
-                <Outlet />
+                <section className="px-5 md:px-8 lg:px-10 py-5">
+                    <Outlet />
+                </section>
             </main>
         </SidebarProvider>
     );

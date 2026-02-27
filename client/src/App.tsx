@@ -103,11 +103,13 @@ function App() {
                     }
                     HydrateFallback={RouteSkeleton}
                 >
-                    <Route index path="overview" Component={AdminOverview} />
+                    <Route index element={<Navigate to="overview" replace />} />
+                    <Route path="overview" Component={AdminOverview} />
                     <Route path="orders" Component={OrderManagement} />
                     <Route path="orders/:id" Component={OrderDetailPage} />
                     <Route path="products" Component={ProductManagement} />
                     <Route path="products/add" Component={AddProductPage} />
+                    <Route path="me" Component={ProfilePage} />
                 </Route>
                 <Route
                     id="user"
@@ -119,7 +121,8 @@ function App() {
                     }
                     HydrateFallback={RouteSkeleton}
                 >
-                    <Route index path='overview' Component={Overview} />
+                    <Route index element={<Navigate to="overview" replace />} />
+                    <Route path='overview' Component={Overview} />
                     <Route path="order" Component={OrderHistory} />
                     <Route path="me" Component={ProfilePage} />
                 </Route>

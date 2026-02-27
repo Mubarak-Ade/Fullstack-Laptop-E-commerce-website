@@ -8,7 +8,7 @@ const BreadCrumbs = () => {
     const pathnames = location.pathname.split("/").filter((x) => x);
 
     return (
-        <nav className="flex flex-wrap dark:text-dark-text-primary items-center px-4 py-2 space-x text-sm">
+        <nav className="flex flex-wrap dark:text-dark-text-primary items-center text-sm">
             <ol className="flex text-sm items-center text-secondary font-alata gap-2">
                 <li className="flex justify-center gap-2 items-center">
                     <Link to="/">Home</Link>

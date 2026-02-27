@@ -127,7 +127,7 @@ export const ProductManagement = () => {
 
     return (
         <div>
-            <div className="relative z-60 flex md:flex-row flex-col justify-between px-5 mt-2 gap-5">
+            <div className="flex md:flex-row flex-col justify-between gap-5">
                 <BreadCrumbs />
                 <Link
                     to="/admin/products/add"
@@ -136,7 +136,7 @@ export const ProductManagement = () => {
                     <Icon icon={Plus} /> Add New Product
                 </Link>
             </div>
-            <div className="mt-8 rounded-xl border border-light-border dark:border-dark-border bg-card px-5 py-4 shadow-lg">
+            <div className="mt-6 mx-auto block rounded-xl w-full max-w-5xl border border-light-border dark:border-dark-border bg-card px-5 py-4 shadow-lg">
                 <div className="flex flex-wrap items-end gap-4">
                     <div className="flex flex-col gap-2">
                         <label className="text-xs uppercase tracking-wide text-secondary">
@@ -240,7 +240,7 @@ export const ProductManagement = () => {
                     </button>
                 </div>
             </div>
-            <div className="relative z-0 max-w-4xl m-auto mt-10 w-full">
+            <div className="max-w-5xl m-auto mt-10 w-full">
                 <ReusableTable
                     columns={columns}
                     data={filteredRows}

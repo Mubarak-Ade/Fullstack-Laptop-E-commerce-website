@@ -10,7 +10,7 @@ export const UserDashboardLayout = () => {
     const links: Links[] = [
         {
             label: 'Dashboard',
-            link: '',
+            link: 'overview',
             icon: <Grid2X2 />,
         },
         {

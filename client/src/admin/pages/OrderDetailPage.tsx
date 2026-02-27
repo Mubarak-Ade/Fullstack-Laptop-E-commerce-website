@@ -72,9 +72,11 @@ export const OrderDetailPage = () => {
 
     return (
         <div>
-            <BreadCrumbs />
+            <div className="relative z-10 pointer-events-auto">
+                <BreadCrumbs />
+            </div>
             <div className="p-10">
-                <h1 className="text-black flex dark:text-white text-3xl font-extrabold font-technical items-center gap-2">
+            <h1 className="text-black flex dark:text-white text-2xl lg:text-3xl font-extrabold font-technical items-center gap-2">
                     Order {order.orderNumber}
                     <span
                         className={`text-sm font-display font-bold rounded-full ${status.className} px-4 py-1`}
@@ -87,7 +89,7 @@ export const OrderDetailPage = () => {
                     Placed on {format(order.createdAt, 'PPpp')}
                 </p>
 
-                <div className="flex  gap-10 items-center">
+                <div className="flex lg:flex-row flex-col gap-10 items-center">
                     <div className="mt-5 max-w-xl w-full">
                         <OrderSummary
                             products={order.products}
@@ -98,7 +100,7 @@ export const OrderDetailPage = () => {
                         />
                     </div>
 
-                    <div className="w-1/3 space-y-4">
+                    <div className="lg:max-w-md w-full space-y-4">
                         <div className="bg-light-fg dark:bg-dark-fg p-5 border-2 border-light-border dark:border-dark-border rounded-xl shadow-lg shadow-light-fg dark:shadow-dark-bg w-full">
                             <h2 className="text-primary flex gap-2 items-center  font-bold">
                                 <Icon icon={Settings2} /> Update Status

@@ -36,11 +36,11 @@ const SideBarBtn = ({
             className="rounded-full dark:text-white"
         >
             <SidebarMenuItem className="px-4 bg-transparent py-2">
-                <SidebarMenuButton>
+                <SidebarMenuButton asChild>
                     <Link
                         to={link}
                         state={{ title }}
-                        className="flex gap-2 text-sm bg-transparent font-poppins items-center"
+                        className="flex w-full gap-2 text-sm bg-transparent font-poppins items-center"
                     >
                         {icon} {label}
                     </Link>
@@ -60,7 +60,7 @@ export const SideBar = ({ links }: { links: Links[] }) => {
     };
 
     return (
-        <div className=''>
+        <div className='relative z-50'>
             <Sidebar className="border-l  border-light-border dark:border-dark-border">
                 <SidebarHeader className="flex flex-row gap-3 p-5 bg-light-bg dark:bg-dark-surface items-center border-b dark:border-dark-border border-light-border">
                     <Link to="/" className="flex flex-col">

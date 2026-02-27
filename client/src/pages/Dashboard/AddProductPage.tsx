@@ -11,10 +11,10 @@ export const AddProductPage = () => {
     };
 
     return (
-        <div className='max-w-7xl w-full'>
-            <div className="relative z-60 py-2 px-5 lg:px-10 flex md:flex-row flex-col justify-between mt-5  md:items-center pointer-events-auto">
+        <div className='max-w-7xl w-full mx-auto'>
+            <div className="py-1 flex md:flex-row flex-col justify-between md:items-center gap-4">
                 <BreadCrumbs />
-                <div className="flex gap-5 max-w-md w-full px-5">
+                <div className="flex gap-5 max-w-md w-full">
                     <button
                         type="button"
                         onClick={() => navigate(-1)}
@@ -31,7 +31,7 @@ export const AddProductPage = () => {
                     </button>
                 </div>
             </div>
-            <div className="relative z-0">
+            <div>
                 <ProductForm />
             </div>
         </div>
