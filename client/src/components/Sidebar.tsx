@@ -60,8 +60,8 @@ export const SideBar = ({ links }: { links: Links[] }) => {
     };
 
     return (
-        <>
-            <Sidebar className="border-l border-light-border dark:border-dark-border">
+        <div className=''>
+            <Sidebar className="border-l  border-light-border dark:border-dark-border">
                 <SidebarHeader className="flex flex-row gap-3 p-5 bg-light-bg dark:bg-dark-surface items-center border-b dark:border-dark-border border-light-border">
                     <Link to="/" className="flex flex-col">
                         <h1 className="text-3xl dark:text-white font-bold tracking-tight">
@@ -100,6 +100,6 @@ export const SideBar = ({ links }: { links: Links[] }) => {
                     </motion.button>
                 </SidebarFooter>
             </Sidebar>
-        </>
+        </div>
     );
 };

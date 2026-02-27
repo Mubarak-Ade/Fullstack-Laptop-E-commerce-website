@@ -16,12 +16,12 @@ export const CartPage = () => {
 
     return (
         <div className="bg-light-fg dark:bg-dark-bg">
-            <div className="max-w-6xl p-5 w-full m-auto min-h-screen">
-                <h1 className="text-5xl text-coral-black dark:text-white font-display font-bold">
+            <div className="max-w-7xl p-5 md:p-10 w-full m-auto min-h-screen">
+                <h1 className="text-4xl text-coral-black dark:text-white font-display font-bold">
                     Shopping Cart
                 </h1>
-                <div className="mt-5 flex lg:flex-row w-full flex-col gap-5 items-center justify-between">
-                    <ul className="space-y-4 p-5 scrollbar-thumb scrollbar-webkit scrollbar-thin max-w-xl w-full overflow-y-auto flex flex-col bg-light-bg dark:bg-dark-fg h-100 rounded-xl border border-light-border shadow-2xl shadow-light-fg dark:shadow-dark-bg dark:border-dark-border">
+                <div className="mt-5 flex lg:flex-row w-full flex-col gap-10 items-center justify-between">
+                    <ul className="space-y-4 p-5 scrollbar-thumb scrollbar-webkit scrollbar-thin w-full overflow-y-auto flex flex-col bg-light-bg dark:bg-dark-fg h-100 rounded-xl border border-light-border shadow-2xl shadow-light-fg dark:shadow-dark-bg dark:border-dark-border">
                         {cart && cart.items?.length !== 0 ? (
                             cart.items?.map(product => <CartCard {...product} />)
                         ) : (

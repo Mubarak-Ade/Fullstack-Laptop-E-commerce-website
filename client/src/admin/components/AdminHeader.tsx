@@ -17,8 +17,10 @@ export const AdminHeader = () => {
             <button className='text-primary'>
                 <SidebarTrigger size="sm" />
             </button>
-            <h2 className='flex-1 text-2xl font-bold text-black dark:text-white'>{header ? header.title : "Dashboard Overview"}</h2>
-            <NavbarSearch />
+            <h2 className='flex-1 md:text-2xl text-xl font-bold text-black dark:text-white'>{header ? header.title : "Dashboard Overview"}</h2>
+            <div className="lg:block hidden">
+                <NavbarSearch />
+            </div>
             <button className='text-black dark:text-white'>
                 <Bell />
             </button>

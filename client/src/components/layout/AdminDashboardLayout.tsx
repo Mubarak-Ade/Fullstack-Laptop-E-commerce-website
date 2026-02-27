@@ -11,24 +11,24 @@ export const AdminDashboardLayout = () => {
         {
             label: 'Dashboard',
             link: '',
-            title: "Dashboard Overview",
+            title: 'Dashboard Overview',
             icon: <LayoutDashboard />,
         },
         {
             label: 'Products',
             link: 'products',
-            title: "Product Management",
+            title: 'Product Management',
             icon: <User />,
         },
         {
             label: 'Orders',
             link: 'orders',
-            title: "Order Management",
+            title: 'Order Management',
             icon: <Trophy />,
         },
         {
             label: 'Customers',
-            title: "User Management",
+            title: 'User Management',
             link: 'users',
             icon: <Settings />,
         },

@@ -10,7 +10,7 @@ export const CTASection=() => {
             <span>
                 <Icon icon={Award} className="text-blue-700" size={80} />
             </span>
-            <h1 className="text-4xl mt-5 font-semibold dark:text-light-bg">The Professional's Choice</h1>
+            <h1 className="md:text-4xl text-2xl mt-5 font-semibold dark:text-light-bg">The Professional's Choice</h1>
             <p className="max-w-2xl mt-5 leading-relaxed dark:text-secondary">We don't just sell electronics; we curate tools for innovation.
                 Every device in our store undergoes a rigorous performance test to ensure it meets the demands of elite workflows
             </p>

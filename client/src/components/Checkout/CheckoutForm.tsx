@@ -148,10 +148,10 @@ export const CheckoutForm = () => {
                         <Icon icon={Mailbox} size={30} className="text-primary" /> Shipping Method
                     </h4>
 
-                    <div className="flex gap-4">
+                    <div className="flex md:flex-row flex-col justify-between w-full gap-4">
                         <label
                             htmlFor="standard"
-                            className="flex gap-5 has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
+                            className="flex gap-5 w-full has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
                         >
                             <input
                                 type="radio"
@@ -171,7 +171,7 @@ export const CheckoutForm = () => {
                         </label>
                         <label
                             htmlFor="express"
-                            className="flex gap-5 has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
+                            className="flex gap-5 w-full has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
                         >
                             <input
                                 type="radio"
@@ -205,10 +205,10 @@ export const CheckoutForm = () => {
                         {' '}
                         <Icon icon={Wallet} size={30} className="text-primary" /> Payment Method
                     </h4>
-                    <div className="flex gap-4">
+                    <div className="flex md:flex-row flex-col justify-between w-full gap-4">
                         <label
                             htmlFor="card"
-                            className="flex gap-5 has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
+                            className="flex w-full gap-5 has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
                         >
                             <input
                                 type="radio"
@@ -228,7 +228,7 @@ export const CheckoutForm = () => {
                         </label>
                         <label
                             htmlFor="wallet"
-                            className="flex gap-5 has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
+                            className="flex w-full gap-5 has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
                         >
                             <input
                                 type="radio"

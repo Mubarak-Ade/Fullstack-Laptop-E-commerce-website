@@ -18,7 +18,10 @@ export const CartSchema = z.object({
 
 const CheckoutItemSchema = z.object({
     name: z.string(),
-    image: z.string(),
+    image: z.object({
+        url: z.string(),
+        public_id: z.string(),
+    }),
     productId: z.string(),
     quantity: z.number(),
     unitPriceAtCheckout: z.number()

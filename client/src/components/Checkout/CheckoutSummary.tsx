@@ -16,20 +16,22 @@ export const CheckoutSummary = () => {
         return <div>Loading...</div>;
     }
 
+    console.log(checkout.items)
+
     return (
         <motion.div
             layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className=" p-5 rounded-xl max-w-2xl md:max-w-md w-full bg-light-bg dark:bg-dark-surface h-full sticky top-20"
+            className=" p-5 rounded-xl lg:max-w-md w-full bg-light-bg dark:bg-dark-surface h-full sticky top-20"
         >
             <h2 className="text-xl dark:text-white text-coral-black font-bold">Order Summary</h2>
             <ul className="border-b border-light-border dark:border-dark-border p-2 h-50 overflow-auto">
                 {checkout.items.map(product => (
                     <li key={product.productId} className="flex gap-4 mt-5">
                         <img
-                            src={formatImage(product.image)}
+                            src={product.image.url}
                             alt={product.name}
                             className="w-16 h-16 object-cover aspect-square rounded border border-light-border dark:border-dark-border"
                         />

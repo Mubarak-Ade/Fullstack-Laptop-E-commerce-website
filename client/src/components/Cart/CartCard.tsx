@@ -60,8 +60,8 @@ export const CartCard = (cart: CartItem) => {
             : { label: 'Price verified', className: 'text-green-600' };
 
     return (
-        <div className="relative rounded-xl gap-5 p-5 bg-light-fg dark:bg-dark-surface flex ">
-            <div className="bg-light-bg dark:bg-dark-fg aspect-square rounded-xl size-40 p-5">
+        <div className="relative rounded-xl gap-5 p-5 bg-light-fg dark:bg-dark-surface flex md:flex-row flex-col items-center">
+            <div className="bg-light-bg dark:bg-dark-fg aspect-square rounded-xl h-60 w-full md:size-40 p-5">
                 <img
                     src={product?.images[0].url}
                     alt=""

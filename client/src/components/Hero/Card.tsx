@@ -44,7 +44,7 @@ export const Card = () => {
                 animate="animate"
                 initial="initial"
                 transition={{ duration: 1, delay: 0.5 }}
-                className="lg:text-7xl text-dark-bg text-5xl dark:text-light-bg leading-tight mt-4 font-bold flex flex-col"
+                className="lg:text-7xl text-dark-bg text-4xl dark:text-light-bg leading-tight mt-4 font-bold flex flex-col"
             >
                 Welcome to
                 <span className="text-primary">Shina Store</span>

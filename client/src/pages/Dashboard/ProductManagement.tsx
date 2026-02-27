@@ -127,7 +127,7 @@ export const ProductManagement = () => {
 
     return (
         <div>
-            <div className="relative z-[60] flex justify-between px-5 mt-2 gap-5 pointer-events-auto">
+            <div className="relative z-60 flex md:flex-row flex-col justify-between px-5 mt-2 gap-5">
                 <BreadCrumbs />
                 <Link
                     to="/admin/products/add"

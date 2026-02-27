@@ -154,7 +154,7 @@ export const Overview = () => {
                 </h4>
             </div>
 
-            <div className="p-5 flex gap-5">
+            <div className="p-5 flex md:flex-row flex-col gap-5">
                 <DashboardCard
                     title="Total Orders"
                     icon={{

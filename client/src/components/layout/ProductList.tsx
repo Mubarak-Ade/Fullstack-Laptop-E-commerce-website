@@ -6,7 +6,7 @@ import { ProductCard } from '../ProductCard';
 import { CTASection } from './CTASection';
 import { ProductListSkeleton } from './skeleton/ProductListSkeleton';
 
-export const ProductList = () => {
+export const ProductGrid = () => {
     const { data, isLoading } = useQuery(useProducts());
     const [active, setActive] = useState('all');
 
@@ -17,7 +17,9 @@ export const ProductList = () => {
     const brands = [...new Set(data?.product?.map(prod => prod.brand))];
 
     const filterProduct =
-        active === 'all' ? data?.product : data?.product?.filter(product => product.brand === active);
+        active === 'all'
+            ? data?.product
+            : data?.product?.filter(product => product.brand === active);
 
     return (
         <motion.div
@@ -33,7 +35,7 @@ export const ProductList = () => {
             transition={{
                 duration: 1,
             }}
-            className="p-15 bg-light-surface dark:bg-dark-bg overflow-hidden"
+            className="mt-10 bg-light-surface dark:bg-dark-bg overflow-hidden"
         >
             <div className="flex lg:flex-row flex-col gap-4 items-center p-5 justify-between">
                 <motion.div
@@ -50,7 +52,7 @@ export const ProductList = () => {
                     className=""
                 >
                     <h1 className="text-4xl dark:text-light-bg font-bold">Elite Selection</h1>
-                    <h6 className="text-sm font-medium max-w-100 w-full text-gray-500 mt-2">
+                    <h6 className="text-sm font-medium w-full text-gray-500 mt-2">
                         Our hand-picked professional laptops optimized for power, battery life, and
                         display precision
                     </h6>
@@ -91,7 +93,7 @@ export const ProductList = () => {
                     ))}
                 </motion.div>
             </div>
-            <div className="p-5">
+            <div className="">
                 <AnimatePresence>
                     <motion.div
                         layout
@@ -103,7 +105,9 @@ export const ProductList = () => {
                     </motion.div>
                 </AnimatePresence>
             </div>
-            <CTASection />
+            <div className="p-5">
+                <CTASection />
+            </div>
         </motion.div>
     );
 };

@@ -53,13 +53,13 @@ export const TrackOrder = ({ status, date }: Props) => {
 
     return (
         <div className="bg-light-bg p-5 max-w-2xl w-full dark:bg-dark-surface rounded-xl shadow-lg shadow-light-fg dark:shadow-dark-bg">
-            <div className="flex justify-between items-center">
+            <div className="flex md:flex-row flex-col gap-2 justify-between items-center">
                 <h2 className="text-xl font-bold text-black dark:text-white">Track Your Package</h2>
-                <h4 className="px-4 py-1 bg-primary/10 rounded-full text-primary">
+                <h4 className="px-4 py-1 md:text-base text-sm bg-primary/10 rounded-full text-primary">
                     Expected By Friday, June 25th
                 </h4>
             </div>
-            <div className="flex w-full items-center mt-10">
+            <div className="flex w-full max-w-xl overflow-auto items-center mt-10">
                 {progress.map((step, index) => (
                     <div className="flex w-full items-center relative">
                         <div key={index} className="flex-1 flex flex-col items-center z-40">
@@ -95,7 +95,7 @@ export const TrackOrder = ({ status, date }: Props) => {
                     </div>
                 ))}
             </div>
-            <div className="mt-10 flex items-center gap-4">
+            <div className="mt-10 flex md:flew-row flex-col items-center gap-4">
                 <motion.button
                     whileHover="hover"
                     whileTap="tap"

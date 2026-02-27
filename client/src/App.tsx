@@ -21,7 +21,7 @@ import { OrderTrackPage } from './pages/OrderTable';
 import { Overview } from './pages/Dashboard/Overview';
 import { ProfilePage } from './pages/Dashboard/ProfilePage';
 import { UserDashboardLayout } from './components/layout/UserDashboardLayout';
-import { OrderPage } from './pages/Dashboard/OrderPage';
+import { OrderHistory } from './pages/Dashboard/OrderPage';
 import { AdminOverview } from './admin/pages/Overview';
 import { OrderManagement } from './admin/pages/OrderManagement';
 import { OrderDetailPage } from './admin/pages/OrderDetailPage';
@@ -103,7 +103,7 @@ function App() {
                     }
                     HydrateFallback={RouteSkeleton}
                 >
-                    <Route index path='overview' Component={AdminOverview} />
+                    <Route index path="overview" Component={AdminOverview} />
                     <Route path="orders" Component={OrderManagement} />
                     <Route path="orders/:id" Component={OrderDetailPage} />
                     <Route path="products" Component={ProductManagement} />
@@ -119,8 +119,8 @@ function App() {
                     }
                     HydrateFallback={RouteSkeleton}
                 >
-                    <Route index Component={Overview} />
-                    <Route path="order" Component={OrderPage} />
+                    <Route index path='overview' Component={Overview} />
+                    <Route path="order" Component={OrderHistory} />
                     <Route path="me" Component={ProfilePage} />
                 </Route>
             </Routes>

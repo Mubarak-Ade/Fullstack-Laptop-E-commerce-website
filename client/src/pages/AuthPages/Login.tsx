@@ -71,7 +71,7 @@ export const Login = () => {
                     </div>
                 </div>
             </div>
-            <div className="h-full flex items-center justify-center p-20 w-full">
+            <div className="h-full flex items-center justify-center p-10 lg:p-20 w-full">
                 <div className="w-full max-w-md">
                     <div className="">
                         <h1 className="dark:text-white text-black text-3xl font-extrabold">

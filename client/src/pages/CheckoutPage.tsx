@@ -7,14 +7,14 @@ export const CheckoutPage = () => {
 
     return (
         <div className="dark:bg-dark-bg bg-light-fg">
-            <div className="p-10 max-w-6xl w-full m-auto">
-                <h1 className="text-5xl font-extrabold font-technical text-black dark:text-white">
+            <div className="p-4 max-w-6xl w-full m-auto">
+                <h1 className="text-4xl font-extrabold font-technical text-black dark:text-white">
                     Checkout
                 </h1>
 
-                <div className="flex items-center gap-5 mt-5">
+                <div className="flex items-center mt-5 max-w-xs w-full overflow-hidden">
                     {['Shipping', 'Payment', 'Review'].map((step, index) => (
-                        <div key={index} className="flex items-center gap-3">
+                        <div key={index} className="flex items-center gap-2">
                             <span
                                 className={`px-2 py-0.5 text-white text-sm rounded-full ${index === 0 ? 'bg-primary' : 'bg-secondary/20'}`}
                             >

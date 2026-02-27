@@ -201,7 +201,7 @@ export const ProductForm = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex justify-center lg:items-start items-center lg:flex-row flex-col gap-10"
             >
-                <div className="space-y-5 max-w-xl w-full">
+                <div className="space-y-5 w-full">
                     {/* Basic Information */}
                     <Card className="dark:bg-dark-surface p-5 rounded-md border-light-border bg-light-bg">
                         <CardHeader>
@@ -235,7 +235,7 @@ export const ProductForm = () => {
                                 Pricing & Inventory
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="grid grid-cols-3 gap-4">
+                        <CardContent className="grid md:grid-cols-3 grid-cols-1 gap-4">
                             <InputField
                                 label="Base Price"
                                 type="number"
@@ -270,7 +270,7 @@ export const ProductForm = () => {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                                 <InputField
                                     label="Process"
                                     placeholder="e.g., Interl Core i7"
@@ -288,7 +288,7 @@ export const ProductForm = () => {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                                 <InputField
                                     label="Screen Size"
                                     placeholder="e.g., 15.6 inches"
@@ -305,7 +305,7 @@ export const ProductForm = () => {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                                 <InputField
                                     label="GPU (Optional)"
                                     placeholder="e.g., NVIDIA GTX 1650"

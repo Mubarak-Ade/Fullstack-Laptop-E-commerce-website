@@ -32,9 +32,9 @@ export const SummaryCard = ({ totalItems, totalPrice, isEmpty }: Props) => {
     };
 
     return (
-        <div className=" p-5 rounded-xl w-full bg-light-bg dark:bg-dark-surface">
+        <div className=" p-5 lg:max-w-md rounded-xl w-full bg-light-bg dark:bg-dark-surface">
             <h2 className="text-xl dark:text-white text-coral-black font-bold">Order Summary</h2>
-            <ul className="mt-5 border-b dark:border-dark-border border-light-border p-4">
+            <ul className="mt-5 border-b dark:border-dark-border border-light-border">
                 <li className="flex justify-between p-2">
                     <span className="text-secondary">Total Items</span>
                     <p className="dark:text-white text-coral-block font-bold">{totalItems}</p>
@@ -50,7 +50,7 @@ export const SummaryCard = ({ totalItems, totalPrice, isEmpty }: Props) => {
             </ul>
             <div className="flex justify-between mt-5">
                 <h4 className="text-xl font-bold text-coral-black dark:text-white">Total</h4>
-                <h2 className="text-2xl font-bold text-primary font-technical">
+                <h2 className="md:text-2xl text-xl font-extrabold text-primary font-technical">
                     {priceFormat(totalPrice)}
                 </h2>
             </div>

@@ -11,21 +11,21 @@ export const AddProductPage = () => {
     };
 
     return (
-        <>
-            <div className="relative z-[60] py-2 px-4 flex justify-between items-center pointer-events-auto">
+        <div className='max-w-7xl w-full'>
+            <div className="relative z-60 py-2 px-5 lg:px-10 flex md:flex-row flex-col justify-between mt-5  md:items-center pointer-events-auto">
                 <BreadCrumbs />
-                <div className="flex gap-5">
+                <div className="flex gap-5 max-w-md w-full px-5">
                     <button
                         type="button"
                         onClick={() => navigate(-1)}
-                        className="dark:text-white font-bold border border-light-border px-8 rounded-xl py-2"
+                        className="dark:text-white font-bold border w-full border-light-border px-8 rounded-xl py-2"
                     >
                         Discard
                     </button>
                     <button
                         type="button"
                         onClick={handleSubmitFromHeader}
-                        className="text-white font-bold bg-primary px-8 rounded-xl py-2"
+                        className="text-white font-bold w-full bg-primary px-8 rounded-xl py-2"
                     >
                         Save Laptop
                     </button>
@@ -34,6 +34,6 @@ export const AddProductPage = () => {
             <div className="relative z-0">
                 <ProductForm />
             </div>
-        </>
+        </div>
     );
 };

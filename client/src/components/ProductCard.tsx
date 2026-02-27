@@ -60,7 +60,7 @@ export const ProductCard = (product: Product) => {
                     delay: 0.3 + Number(product._id) * 0.3,
                 }}
                 key={product._id}
-                className="max-w-2xs rounded-2xl overflow-hidden cursor-pointer dark:bg-dark-surface dark:border-dark-border border border-light-border shadow-2xl flex-col w-full"
+                className="max-w-xs rounded-2xl overflow-hidden cursor-pointer dark:bg-dark-surface dark:border-dark-border border border-light-border shadow-2xl flex-col w-full"
             >
                 <div className="p-6 h-60 bg-light-fg dark:bg-dark-accent">
                     <motion.img

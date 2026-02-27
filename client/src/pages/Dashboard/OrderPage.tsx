@@ -10,7 +10,7 @@ import { format } from 'date-fns';
 import { Eye, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
-export const OrderPage = () => {
+export const OrderHistory = () => {
     const identity = useAuthStore(s => s.identity);
     const { data, isLoading } = useQuery(useMyOrders());
 
@@ -68,7 +68,7 @@ export const OrderPage = () => {
     ];
 
     return (
-        <div className='bg-light-fg dark:bg-dark-bg p-10'>
+        <div className="bg-light-fg dark:bg-dark-bg p-10">
             <div className="">
                 <ReusableTable columns={columns} data={data.slice(0, 5)} />
             </div>

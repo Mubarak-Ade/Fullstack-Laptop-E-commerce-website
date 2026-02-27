@@ -22,7 +22,7 @@ export const MobileMenu = ({ showMenu, identity, onClose, logout }: MobileMenuPr
                     animate={{ x: 0 }}
                     exit={{ x: '-100%' }}
                     transition={{ duration: 0.25 }}
-                    className="fixed top-0 left-0 z-60 flex h-screen w-80 flex-col bg-light-bg p-6 shadow-2xl dark:bg-dark-surface lg:hidden"
+                    className="fixed top-0 left-0 z-60 flex h-screen overflow-auto w-80 flex-col bg-light-bg p-6 shadow-2xl dark:bg-dark-surface lg:hidden"
                 >
                     <div className="mb-8 flex items-center justify-between">
                         <h1 className="text-2xl font-semibold font dark:text-light-bg md:text-4xl">
@@ -86,7 +86,11 @@ export const MobileMenu = ({ showMenu, identity, onClose, logout }: MobileMenuPr
                                 key={link.label}
                             >
                                 <NavLink
-                                    to={link.path}
+                                    to={
+                                        identity.type === 'user' && identity.user.role === 'admin'
+                                            ? `/admin${link.path}`
+                                            : `/dashboard/${link.path}`
+                                    }
                                     onClick={onClose}
                                     className="flex items-center gap-3 rounded-md px-3 py-2 text-black dark:text-white"
                                 >

@@ -62,8 +62,8 @@ const Toast = ({ type, message, onClose }: ToastProps) => {
                 {getIcon()}
             </span>
             <div className="space-y-0.5 flex-1">
-                <h4 className="capitalize font-extrabold text-lg">{type}</h4>
-                <p className="text-sm text-secondary flex-1">{message}</p>
+                <h4 className="capitalize font-extrabold text-sm md:text-lg">{type}</h4>
+                <p className="md:text-sm text-xs text-secondary flex-1">{message}</p>
             </div>
             <button onClick={onClose} className={`text-secondary transition`}>
                 <Icon icon={X} />

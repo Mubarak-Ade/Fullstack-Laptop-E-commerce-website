@@ -90,9 +90,9 @@ export const ProfilePage = () => {
             <Card className="bg-light-bg dark:bg-dark-surface max-w-2xl">
                 <form id="profile-form" onSubmit={handleSubmit(onSubmit)}>
                     <CardHeader>
-                        <div className="flex gap-10 p-4">
+                        <div className="flex md:flex-row flex-col gap-10 p-4">
                             <div className="relative">
-                                <div className="aspect-square size-30 border border-secondary/50 shadow-2xl rounded-full overflow-hidden">
+                                <div className="aspect-square size-30 justify-self-center border border-secondary/50 shadow-2xl rounded-full overflow-hidden">
                                     {file ? (
                                         <img
                                             src={URL.createObjectURL(file)}
@@ -125,7 +125,7 @@ export const ProfilePage = () => {
                                 <h4 className="text-sm text-secondary mt-2">
                                     JPG, GIF, PNG. Max size of 800K
                                 </h4>
-                                <div className="mt-4 flex gap-4">
+                                <div className="mt-4 flex md:flex-row flex-col gap-4">
                                     <button
                                         type="button"
                                         onClick={() => imageRef.current?.click()}
@@ -133,7 +133,7 @@ export const ProfilePage = () => {
                                     >
                                         Upload Now
                                     </button>
-                                    <button className="px-5 py-2.5 text-error font-semibold">
+                                    <button className="px-5 py-2.5 border border-slate-400 rounded-xl text-error font-semibold">
                                         Remove Photo
                                     </button>
                                 </div>
@@ -143,7 +143,7 @@ export const ProfilePage = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="p-5">
-                            <div className="flex gap-5">
+                            <div className="flex md:flex-row flex-col gap-5">
                                 <InputField
                                     {...register('firstName')}
                                     errors={errors.firstName}
@@ -157,7 +157,7 @@ export const ProfilePage = () => {
                                     placeholder="Doe"
                                 />
                             </div>
-                            <div className="flex gap-5">
+                            <div className="flex md:flex-row flex-col gap-5">
                                 <InputField
                                     {...register('email')}
                                     errors={errors.email}
@@ -200,7 +200,7 @@ export const ProfilePage = () => {
                                 variants={PrimaryBtnVariant}
                                 whileHover="hover"
                                 whileTap="tap"
-                                className="px-6 py-3 bg-primary font-bold cursor-pointer shadow-[0_0_10px] text-white rounded-xl"
+                                className="md:px-6 px-4 py-3 bg-primary md:text-base text-xs font-bold cursor-pointer shadow-[0_0_10px] shadow-black/20 text-white rounded-xl"
                             >
                                 Save Changes
                             </motion.button>

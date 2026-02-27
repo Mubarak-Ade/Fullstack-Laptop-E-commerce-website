@@ -35,7 +35,7 @@ export const AdminOverview = () => {
 
     return (
         <div>
-            <div className="p-5 grid grid-cols-4 gap-5">
+            <div className="p-5 grid md:grid-cols-2 grid-cols-1 lg:grid-cols-4 gap-5">
                 <AdminCard
                     title="Total Revenue"
                     value={priceFormat(dashboard?.stats.totalRevenue as number)}
@@ -58,13 +58,13 @@ export const AdminOverview = () => {
                 />
             </div>
 
-            <div className="p-5 flex h-full overflow-hidden gap-5">
-                <div className="max-w-2xl w-full border rounded-xl bg-light-fg dark:bg-dark-surface p-5">
+            <div className="p-5 flex lg:flex-row flex-col h-full overflow-hidden gap-5">
+                <div className="w-full border rounded-xl bg-light-fg dark:bg-dark-surface p-5">
                     {dashboard?.revenueLast7Days && (
                         <Bar data={data} options={{ maintainAspectRatio: false }} />
                     )}
                 </div>
-                <div className="p-5 border w-full max-w-xs rounded-xl overflow-hidden h-full bg-light-fg dark:bg-dark-surface">
+                <div className="p-5 border w-full rounded-xl overflow-hidden h-full bg-light-fg dark:bg-dark-surface">
                     <h2 className="text-xl font-bold text-black dark:text-white">Recent Orders</h2>
                     <ul className="mt-5 space-y-2">
                         {dashboard?.recentOrders.map(order => {

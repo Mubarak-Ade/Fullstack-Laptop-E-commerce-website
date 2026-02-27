@@ -7,7 +7,10 @@ interface Props {
         productId: string,
         productName: string,
         quantity: number,
-        image: string,
+        image: {
+            url: string,
+            public_id: string
+        },
         unitPriceAtPurchase: number,
     }[],
     shippingFee: number,
@@ -19,6 +22,7 @@ interface Props {
 
 export const OrderSummary = ({products, shippingFee, subTotal, tax, total}: Props) => {
 
+    console.log(products);
     
 
     return (
@@ -34,11 +38,11 @@ export const OrderSummary = ({products, shippingFee, subTotal, tax, total}: Prop
                 {products.map(product => (
                     <li key={product.productId} className="flex items-center gap-4 mt-5">
                         <img
-                            src={formatImage(product.image)}
-                            alt={product.image}
+                            src={product.image.url}
+                            alt={product.image.url}
                             className="w-16 h-16 object-cover aspect-square rounded border border-light-border dark:border-dark-border"
                         />
-                        <div className="flex justify-between w-full">
+                        <div className="flex md:flex-row flex-col overflow-hidden justify-between w-full">
                             <div className="w-50">
                                 <h4 className="font-bold text-coral-black dark:text-white line-clamp-1">
                                     {product.productName}
