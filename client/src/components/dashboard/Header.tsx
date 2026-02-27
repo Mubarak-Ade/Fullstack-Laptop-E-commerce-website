@@ -1,12 +1,7 @@
-import { IconVariant } from '@/animation/Variants';
-import { useAuthStore } from '@/store/AuthStore';
-import { useThemeStore } from '@/store/ThemeStore';
-import { Bell, Moon, Search, ShoppingBag, Star } from 'lucide-react';
-import { motion } from 'motion/react';
-import { Icon } from '../shared/Icon';
-import { SidebarTrigger } from '../ui/sidebar';
-import { NavbarSearch } from '../shared/navbar/NavbarSearch';
+import { Bell } from 'lucide-react';
 import { useLocation } from 'react-router';
+import { NavbarSearch } from '../shared/navbar/NavbarSearch';
+import { SidebarTrigger } from '../ui/sidebar';
 
 export const Header = () => {
     const location = useLocation()

@@ -1,5 +1,4 @@
 import { priceFormat } from '@/utils/format';
-import { formatImage } from '@/utils/imageFormat';
 import { motion } from 'motion/react';
 
 interface Props {

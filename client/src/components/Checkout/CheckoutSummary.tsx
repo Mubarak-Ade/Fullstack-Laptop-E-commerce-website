@@ -1,10 +1,9 @@
-import { formatImage } from '@/utils/imageFormat';
+import { useCheckout } from '@/features/cart/hooks';
+import { priceFormat } from '@/utils/format';
 import { useQuery } from '@tanstack/react-query';
 import { LockKeyhole } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Icon } from '../shared/Icon';
-import { priceFormat } from '@/utils/format';
-import { useCheckout } from '@/features/cart/hooks';
 export const CheckoutSummary = () => {
     const { data: checkout, isFetching } = useQuery(useCheckout());
 
