@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {Icon} from '../shared/Icon'
 import {CheckCircle, ShieldCheck, ShoppingCart, Star, Truck} from 'lucide-react'
 import { motion } from 'motion/react';
+import { priceFormat } from '@/utils/format';
 
 interface Props {
     images: {url: string, public_id: string}[], 
@@ -15,10 +16,10 @@ interface Props {
 export const Preview=({images, name, price, brand, memory, processor }: Props) => {
 
     const [currentIndex, setCurrentIndex] = useState(0)
-    const formattedPrice = typeof price === 'number' ? price.toFixed(2) : price
+    const formattedPrice = priceFormat(price as number)
 
     return (
-        <div className="flex mt-5 gap-10">
+        <div className="flex lg:flex-row flex-col-reverse mt-5 gap-10">
             <div className="max-w-2xl w-full">
                 <div className="dark:bg-dark-fg bg-light-fg rounded-2xl h-140">
                     <img src={images![currentIndex].url} alt="" className="size-full aspect-square object-cover" />

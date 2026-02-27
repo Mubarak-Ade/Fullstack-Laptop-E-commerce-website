@@ -26,7 +26,7 @@ export const OrderSchema = z.object({
             productId: z.string(),
             productName: z.string(),
             quantity: z.number(),
-            image: z.object({url: z.string(), public_id: z.string()}),
+            image: z.string(),
             unitPriceAtPurchase: z.number(),
         })
     ),

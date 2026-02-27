@@ -35,7 +35,7 @@ export const ProductGrid = () => {
             transition={{
                 duration: 1,
             }}
-            className="mt-10 bg-light-surface dark:bg-dark-bg overflow-hidden"
+            className="mt-10 lg:p-10 bg-light-surface dark:bg-dark-bg overflow-hidden"
         >
             <div className="flex lg:flex-row flex-col gap-4 items-center p-5 justify-between">
                 <motion.div

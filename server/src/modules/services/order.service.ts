@@ -15,7 +15,7 @@ class OrderService {
             productId: item.productId,
             productName: item.name,
             quantity: item.quantity,
-            image: item.image,
+            image: item.image.url,
             unitPriceAtPurchase: item.unitPriceAtCheckout,
         }));
 

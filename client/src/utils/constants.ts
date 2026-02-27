@@ -9,7 +9,7 @@ export const PRIMARY_LINKS = [
 export const ACCOUNT_LINKS = [
     { label: 'Profile', icon: User, path: '/me' },
     { label: 'Dashboard', icon: LayoutDashboard, path: '/overview' },
-    { label: 'Order History', icon: Clipboard, path: '/order' },
+    { label: 'Order History', icon: Clipboard, path: '/orders' },
     { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 

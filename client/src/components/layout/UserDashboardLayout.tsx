@@ -20,7 +20,7 @@ export const UserDashboardLayout = () => {
         },
         {
             label: 'Order',
-            link: 'order',
+            link: 'orders',
             icon: <Trophy />,
         },
         {

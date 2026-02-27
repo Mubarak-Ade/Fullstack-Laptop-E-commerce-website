@@ -17,7 +17,7 @@ import { useAuthStore } from './store/AuthStore';
 import { useThemeStore } from './store/ThemeStore';
 import { CartSkeleton } from './components/layout/skeleton/CartSkeleton';
 import { CheckoutPage } from './pages/CheckoutPage';
-import { OrderTrackPage } from './pages/OrderTable';
+import { OrderTrackPage } from './pages/OrderTrackPage';
 import { Overview } from './pages/Dashboard/Overview';
 import { ProfilePage } from './pages/Dashboard/ProfilePage';
 import { UserDashboardLayout } from './components/layout/UserDashboardLayout';
@@ -123,7 +123,7 @@ function App() {
                 >
                     <Route index element={<Navigate to="overview" replace />} />
                     <Route path='overview' Component={Overview} />
-                    <Route path="order" Component={OrderHistory} />
+                    <Route path="orders" Component={OrderHistory} />
                     <Route path="me" Component={ProfilePage} />
                 </Route>
             </Routes>
