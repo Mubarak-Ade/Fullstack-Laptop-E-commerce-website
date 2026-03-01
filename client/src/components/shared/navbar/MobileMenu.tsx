@@ -125,7 +125,7 @@ export const MobileMenu = ({ showMenu, identity, onClose, logout }: MobileMenuPr
                             ))}
                         </ul>
 
-                        <div className="mt-auto pt-4">
+                        <div className="mt-auto">
                             {isUser ? (
                                 <button
                                     onClick={handleLogout}
