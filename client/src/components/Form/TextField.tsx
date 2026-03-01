@@ -38,7 +38,7 @@ export const TextField = ({
             className="flex flex-row rounded-sm dark:border-dark-border border-light-border group-focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-1 dark:text-white outline-none bg-light-fg dark:bg-dark-fg overflow-hidden items-center justify-center"
         >
             <div className="dark:bg-dark-surface h-full p-3">
-                <Icon icon={icon} />
+                <Icon icon={icon as LucideIcon} />
             </div>
             <Textarea
                 // whileFocus={{ border: '1px solid var(--color-primary)' }}

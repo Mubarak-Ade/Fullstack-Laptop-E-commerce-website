@@ -1,5 +1,3 @@
-import React from 'react'
-
 import LaptopImage from "../assets/Images/joshua-reddekopp-SyYmXSDnJ54-unsplash.jpg"
 
 export const ComingSoon = () => {

@@ -1,7 +1,6 @@
 import { useCart } from '@/features/cart/hooks';
 import { logoutUser } from '@/features/auth/api';
 import { useAuthStore } from '@/store/AuthStore';
-import { useThemeStore } from '@/store/ThemeStore';
 import { useQuery } from '@tanstack/react-query';
 import { Menu } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'motion/react';
@@ -12,7 +11,6 @@ import { DesktopNavLinks } from './navbar/DesktopNavLinks';
 import { MobileMenu } from './navbar/MobileMenu';
 import { NavbarActions } from './navbar/NavbarActions';
 import { NavbarLogo } from './navbar/NavbarLogo';
-import { ThemeToggle } from './navbar/ThemeToggle';
 import { UserMenu } from './navbar/UserMenu';
 
 const headerAnimation = {

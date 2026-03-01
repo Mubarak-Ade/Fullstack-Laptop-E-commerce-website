@@ -1,7 +1,5 @@
-import { PrimaryBtnVariant } from '@/motion/button';
 import { format } from 'date-fns';
-import { Box, Check, HandCoins, Hourglass, LocateFixedIcon, Truck } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Box, Check, HandCoins, Hourglass, Truck } from 'lucide-react';
 import { Icon } from '../shared/Icon';
 
 const progressSteps = [

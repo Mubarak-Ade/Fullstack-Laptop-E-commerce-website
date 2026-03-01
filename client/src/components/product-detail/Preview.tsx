@@ -3,7 +3,6 @@ import { Icon } from '../shared/Icon';
 import { CheckCircle, ShieldCheck, ShoppingCart, Star, Truck } from 'lucide-react';
 import { motion } from 'motion/react';
 import { priceFormat } from '@/utils/format';
-import { useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
 import { useAddToCart } from '@/features/cart/hooks';
 import { useToast } from '@/context/ToastContext';

@@ -14,7 +14,7 @@ const glowAnimation = {
         y: [0, 200, 0],
     },
     transition: { duration: 5, repeat: Infinity },
-} as const;
+};
 
 export const Hero = () => {
     return (

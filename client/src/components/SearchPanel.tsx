@@ -41,10 +41,11 @@ export const SearchPanel = () => {
         ...queryOptions,
         enabled: isOpen && hasQuery,
     });
+    const products = data?.product ?? [];
 
     if (!isOpen || location.pathname === '/search') return null;
 
-    const hasResults = Boolean(data?.product.length);
+    const hasResults = products.length > 0;
     const handleViewAll = () => {
         const keyword = query.trim();
         close();
@@ -78,7 +79,7 @@ export const SearchPanel = () => {
                     <p className="text-secondary mt-4 text-sm">Searching products...</p>
                 ) : hasResults ? (
                     <div className="mt-4 space-y-2 max-h-96 overflow-auto">
-                        {data.product.map(product => (
+                        {products.map(product => (
                             <Link
                                 to={`/products/${product.slug}`}
                                 key={product._id}
