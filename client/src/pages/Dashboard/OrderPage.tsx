@@ -70,7 +70,7 @@ export const OrderHistory = () => {
     return (
         <div className="bg-light-fg dark:bg-dark-bg p-10">
             <div className="">
-                <ReusableTable columns={columns} data={data.slice(0, 5)} />
+                <ReusableTable columns={columns} data={data} />
             </div>
         </div>
     );

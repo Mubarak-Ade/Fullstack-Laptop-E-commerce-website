@@ -3,10 +3,15 @@ import { PersonStanding, XCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { Icon } from '../shared/Icon';
+import { useEffect } from 'react';
 export const LoginModal = () => {
     const closeModal = useStore(s => s.closeModal);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        closeModal();
+    }, [navigate]);
 
     const overlayAnimation = {
         initial: { opacity: 0 },

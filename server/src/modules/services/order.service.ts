@@ -54,7 +54,7 @@ class OrderService {
         if (!user) {
             throw createHttpError(403, 'Unauthorize User');
         }
-        const order = await Order.find({ userId: user }).lean();
+        const order = await Order.find({ userId: user }).sort({ createdAt: -1 }).lean();
         return order;
     }
 

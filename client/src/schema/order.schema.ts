@@ -6,7 +6,7 @@ export const ShippingSchema = z.object({
     lastname: z.string().min(3, 'lastname is required'),
     phone: z.string().min(9, 'phone number is required'),
     email: z.string().email(),
-    state: z.string().min(3, 'state is required'),
+    state: z.string().min(2, 'state is required'),
     address: z.string().min(3, 'address is required'),
     city: z.string().min(3, 'city is required'),
     postalCode: z.string().min(3, 'postal code is required'),

@@ -113,7 +113,7 @@ export class PaymentService {
             'https://api.paystack.co/transaction/initialize',
             {
                 email: order.shippingAddress?.email,
-                amount: order.total * 100,
+                amount: Number((order.total) * 100).toFixed(0),
                 metadata: { orderId: order._id.toString() },
                 callback_url: `${env.CLIENT_URL}/order/${order._id}`,
             },
