@@ -5,12 +5,7 @@ export const getOrders = async (filter: Partial<Filter>): Promise<FilteredOrder>
     const params = new URLSearchParams();
 
     Object.entries(filter).forEach(([key, value]) => {
-        if (
-            value === undefined ||
-            value === null ||
-            value === '' ||
-            value === 'ALL'
-        ) {
+        if (value === undefined || value === null || value === '' || value === 'ALL') {
             return;
         }
         params.append(key, String(value));
@@ -20,7 +15,7 @@ export const getOrders = async (filter: Partial<Filter>): Promise<FilteredOrder>
     return res.data;
 };
 
-export const getOrderById = async (id: string) : Promise<Order> => {
+export const getOrderById = async (id: string): Promise<Order> => {
     const res = await api.get(`/admin/orders/${id}`);
     return res.data;
 };
@@ -50,7 +45,10 @@ export type UpdateManyOrdersStatusPayload = {
     status: string;
 };
 
-export const updateManyOrdersStatus = async ({ orderIds, status }: UpdateManyOrdersStatusPayload) => {
+export const updateManyOrdersStatus = async ({
+    orderIds,
+    status,
+}: UpdateManyOrdersStatusPayload) => {
     const res = await api.patch('/admin/orders', { orderIds, status });
     return res.data;
-}
+};

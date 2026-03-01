@@ -4,6 +4,8 @@ import { NavLink } from 'react-router';
 import { NavbarSearch } from './NavbarSearch';
 
 const MotionNavLink = motion.create(NavLink);
+const baseDelay = 0.3;
+const delayStep = 0.1;
 
 export const DesktopNavLinks = () => (
     <ul className="hidden gap-10 lg:flex items-center w-full max-w-2xl">
@@ -14,7 +16,7 @@ export const DesktopNavLinks = () => (
                 whileHover="hover"
                 initial={{ opacity: 0, y: -40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+                transition={{ duration: 0.6, delay: baseDelay + index * delayStep }}
                 className="relative flex flex-col text-base text-secondary"
             >
                 {link.name}

@@ -41,7 +41,11 @@ export const Checkbox = ({ checked, indeterminate = false, disabled = false, cla
                     'peer-disabled:cursor-not-allowed peer-disabled:opacity-50'
                 )}
             >
-                {indeterminate && !checked ? <Minus size={13} strokeWidth={3} /> : <Check size={13} strokeWidth={3} />}
+                {indeterminate && !checked ? (
+                    <Minus size={13} strokeWidth={3} />
+                ) : (
+                    <Check size={13} strokeWidth={3} />
+                )}
             </label>
         </div>
     );

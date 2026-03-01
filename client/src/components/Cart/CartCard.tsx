@@ -18,27 +18,23 @@ export const CartCard = (cart: CartItem) => {
 
     const [quantityCount, setQuantityCount] = useState(quantity);
 
-    const handleQuantity = useMutation(useCartQuantity());
+    const updateQuantityMutation = useMutation(useCartQuantity());
     const deleteCartItem = useMutation(useDeleteCartItem());
 
     const { showToast } = useToast();
 
-    const handleIncrease = () => {
-        const newQuantity = quantityCount + 1;
+    const updateQuantity = (newQuantity: number) => {
         if (newQuantity < 1) return;
         if (typeof productStock === 'number' && newQuantity > productStock) {
             showToast('warning', `Only ${productStock} in stock`);
             return;
         }
         setQuantityCount(newQuantity);
-        handleQuantity.mutate({ productId: product._id as string, quantity: newQuantity });
+        updateQuantityMutation.mutate({ productId: product._id as string, quantity: newQuantity });
     };
-    const handleDecrease = () => {
-        const newQuantity = quantityCount - 1;
-        if (newQuantity < 1) return;
-        setQuantityCount(newQuantity);
-        handleQuantity.mutate({ productId: product._id as string, quantity: newQuantity });
-    };
+
+    const handleIncrease = () => updateQuantity(quantityCount + 1);
+    const handleDecrease = () => updateQuantity(quantityCount - 1);
 
     const stockStatus =
         typeof productStock !== 'number'

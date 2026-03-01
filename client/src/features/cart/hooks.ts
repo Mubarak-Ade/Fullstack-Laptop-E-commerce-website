@@ -1,9 +1,9 @@
 import { mutationOptions, queryOptions, useQueryClient } from '@tanstack/react-query';
-import { addItemToCart, checkout, deleteCartItem, getUserCart, modifyCartQuantity } from './api';
+import { addItemToCart, checkout, clearCart, deleteCartItem, getUserCart, modifyCartQuantity } from './api';
 import type { Cart, Checkout } from '@/schema/cart.schema';
 import { useAuthStore } from '@/store/AuthStore';
 
-const cartQueryKey = (identityType: string) => ['cart', identityType] as const
+const cartQueryKey = (identityType: string) => ['cart', identityType] as const;
 
 export const useCart = () => {
     const identity = useAuthStore(s => s.identity);
@@ -12,7 +12,7 @@ export const useCart = () => {
         queryFn: getUserCart,
         enabled: !!identity,
         retry: false,
-        staleTime: 60_000,
+        staleTime: 60000,
         refetchOnWindowFocus: false,
     });
 };
@@ -25,7 +25,7 @@ export const useAddToCart = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: cartQueryKey(identity.type) });
         },
-    })
+    });
 };
 
 export const useCartQuantity = () => {
@@ -50,9 +50,20 @@ export const useDeleteCartItem = () => {
     });
 };
 
-export const useCheckout = () => {
+export const useClearCart = () => {
+    const queryClient = useQueryClient();
+    const identity = useAuthStore(s => s.identity);
+    return mutationOptions({
+        mutationFn: clearCart,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['cart', identity.type] });
+        },
+    });
+}
+
+export const useCheckout = () => {``
     return queryOptions<Checkout>({
         queryKey: ['checkout'],
-        queryFn: checkout
-    })
-}
+        queryFn: checkout,
+    });
+};

@@ -12,6 +12,8 @@ export const SearchPanel = () => {
     const location = useLocation();
     const { query, isOpen, close } = useSearchStore();
     const [debouncedQuery, setDebouncedQuery] = useState(query);
+    const trimmedQuery = debouncedQuery.trim();
+    const hasQuery = trimmedQuery.length > 0;
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -37,10 +39,17 @@ export const SearchPanel = () => {
     const queryOptions = useProducts(productQuery);
     const { data, isFetching } = useQuery({
         ...queryOptions,
-        enabled: isOpen && debouncedQuery.length > 0,
+        enabled: isOpen && hasQuery,
     });
 
     if (!isOpen || location.pathname === '/search') return null;
+
+    const hasResults = Boolean(data?.product.length);
+    const handleViewAll = () => {
+        const keyword = query.trim();
+        close();
+        navigate(keyword ? `/search?q=${encodeURIComponent(keyword)}` : '/search');
+    };
 
     return (
         <>
@@ -63,11 +72,11 @@ export const SearchPanel = () => {
                     </button>
                 </div>
 
-                {!debouncedQuery ? (
+                {!hasQuery ? (
                     <p className="text-secondary mt-4 text-sm">Type to search products.</p>
                 ) : isFetching ? (
                     <p className="text-secondary mt-4 text-sm">Searching products...</p>
-                ) : data?.product.length ? (
+                ) : hasResults ? (
                     <div className="mt-4 space-y-2 max-h-96 overflow-auto">
                         {data.product.map(product => (
                             <Link
@@ -99,7 +108,7 @@ export const SearchPanel = () => {
                     <div className="mt-5 rounded-xl border border-dashed border-light-border dark:border-dark-border p-5 text-center">
                         <Icon icon={Search} className="mx-auto mb-2 text-secondary" />
                         <p className="text-secondary text-sm">
-                            No products found for "{debouncedQuery}".
+                            No products found for "{trimmedQuery}".
                         </p>
                     </div>
                 )}
@@ -107,15 +116,7 @@ export const SearchPanel = () => {
                 <div className="mt-4 flex justify-end">
                     <button
                         type="button"
-                        onClick={() => {
-                            const keyword = query.trim();
-                            close();
-                            navigate(
-                                keyword
-                                    ? `/search?q=${encodeURIComponent(keyword)}`
-                                    : '/search'
-                            );
-                        }}
+                        onClick={handleViewAll}
                         className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white"
                     >
                         View All Results

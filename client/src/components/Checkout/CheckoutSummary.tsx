@@ -7,15 +7,13 @@ import { Icon } from '../shared/Icon';
 export const CheckoutSummary = () => {
     const { data: checkout, isFetching } = useQuery(useCheckout());
 
-    if(!checkout) {
+    if (!checkout) {
         return <div>No checkout data available</div>;
     }
 
     if (isFetching) {
         return <div>Loading...</div>;
     }
-
-    console.log(checkout.items)
 
     return (
         <motion.div
@@ -39,9 +37,11 @@ export const CheckoutSummary = () => {
                                 <h4 className="font-bold text-coral-black dark:text-white line-clamp-1">
                                     {product.name}
                                 </h4>
-                                <h6 className='text-sm text-secondary'>Qty: {product.quantity}</h6>
+                                <h6 className="text-sm text-secondary">Qty: {product.quantity}</h6>
                             </div>
-                            <p className="text-black dark:text-white">{priceFormat(product.unitPriceAtCheckout)}</p>
+                            <p className="text-black dark:text-white">
+                                {priceFormat(product.unitPriceAtCheckout)}
+                            </p>
                         </div>
                     </li>
                 ))}
@@ -49,15 +49,21 @@ export const CheckoutSummary = () => {
             <ul className="mt-2 border-b dark:border-dark-border border-light-border p-4">
                 <li className="flex justify-between p-2">
                     <span className="text-secondary">Sub Total</span>
-                    <p className="dark:text-white text-coral-block font-bold">{priceFormat(checkout.subTotal)}</p>
+                    <p className="dark:text-white text-coral-block font-bold">
+                        {priceFormat(checkout.subTotal)}
+                    </p>
                 </li>
                 <li className="flex justify-between p-2">
                     <span className="text-secondary">Shipping</span>
-                    <p className="dark:text-white text-coral-block font-bold">{priceFormat(checkout.shipping)}</p>
+                    <p className="dark:text-white text-coral-block font-bold">
+                        {priceFormat(checkout.shipping)}
+                    </p>
                 </li>
                 <li className="flex justify-between p-2">
                     <span className="text-secondary">Taxes (Estimated)</span>
-                    <p className="dark:text-white text-coral-block font-bold">{priceFormat(checkout.tax)}</p>
+                    <p className="dark:text-white text-coral-block font-bold">
+                        {priceFormat(checkout.tax)}
+                    </p>
                 </li>
             </ul>
             <div className="flex justify-between mt-5">
@@ -67,8 +73,8 @@ export const CheckoutSummary = () => {
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
-                type='submit'
-                form='checkout'
+                type="submit"
+                form="checkout"
                 className="w-full py-3 text-white mt-5 justify-center font-semibold rounded-xl text-base flex items-center gap-5 bg-primary cursor-pointer"
             >
                 Place Order

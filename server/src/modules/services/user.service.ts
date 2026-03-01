@@ -1,7 +1,9 @@
 import createHttpError from 'http-errors';
 import User from '../../models/User.js';
 import { UserDTO } from '../schema/user.schema.js';
-import CartService from './cart.service.js';
+import jwt from 'jsonwebtoken';
+import env from '../../env.js';
+import { createAccessToken, createRefreshToken } from '../../utils/tokenGenerator.js';
 
 interface UserState {
     userId: string;
@@ -28,7 +30,7 @@ class UserServices {
 
         await user.save();
 
-        const token = user.getJWTToken();
+        const token = createAccessToken(user._id.toString(), user.role);
 
         return {
             id: user._id,
@@ -50,13 +52,16 @@ class UserServices {
             throw createHttpError(400, 'Email doesnt exist');
         }
 
-        const isMatch = user.comparePassword(password);
+        const isMatch = await user.comparePassword(password);
 
         if (!isMatch) {
             throw createHttpError(400, 'Password does not match');
         }
 
-        const token = user.getJWTToken();
+        const token = createAccessToken(user._id.toString(), user.role);
+        const refreshToken = createRefreshToken(user._id.toString(), user.role);
+
+
 
         return {
             id: user._id,
@@ -64,9 +69,23 @@ class UserServices {
             avatar: user.avatar,
             role: user.role,
             token,
-            fullname: user.firstName + " " + user.lastName
+            refreshToken,
+            fullname: user.firstName + ' ' + user.lastName,
         };
     }
+
+    static async refreshToken(refreshToken?: string) {
+        if (!refreshToken) {
+            throw createHttpError(401, 'No refresh token provided');
+        }
+
+        const payload = jwt.verify(refreshToken, env.REFRESH_TOKEN_SECRET) as any
+
+        const accessToken = createAccessToken(payload.id, payload.role);
+
+        return accessToken 
+    }
+
     static async getUser(userId: string) {
         if (!userId) {
             throw createHttpError(401, 'user not authorize');

@@ -1,32 +1,54 @@
 import createHttpError from 'http-errors';
 import { CartItem } from '../schema/cart.schema.js';
-import Cart, { PopulatedCart, Cart as CartDocument } from '../../models/Cart.js';
+import Cart, { Cart as CartDocument } from '../../models/Cart.js';
 import Product, { Product as ProductType } from '../../models/Product.js';
-import { PopulateOption } from 'mongoose';
+import type { ClientSession } from 'mongoose';
 
 type UserType = { type: 'user'; userId: string } | { type: 'guest'; guestId: string };
+type LeanPopulatedCart = {
+    items: Array<{ product?: ProductType }>;
+} & Record<string, unknown>;
+
 class CartService {
     /* ---------------- GET CART ---------------- */
     static async getUserCart(identity: UserType) {
-        const cart = (await this.findCartByIdentity(identity)
+        let cart = (await this.findCartByIdentity(identity)
             ?.populate({
                 path: 'items.product user',
                 select: 'name images storage ram cpu price email',
             })
             .lean()
-            .exec()) as PopulatedCart | null;
+            .exec()) as LeanPopulatedCart | null;
 
         if (!cart) {
-            throw createHttpError(404, 'Cart not found');
+            const newCart = await Cart.create(
+                identity.type === 'user'
+                    ? { user: identity.userId, items: [] }
+                    : { guestId: identity.guestId, items: [] }
+            );
+
+            cart = (await Cart.findById(newCart._id)
+                .populate({
+                    path: 'items.product user',
+                    select: 'name images storage ram cpu price email',
+                })
+                .lean()
+                .exec()) as LeanPopulatedCart | null;
+
+            if (!cart) {
+                throw createHttpError(500, 'Failed to initialize cart');
+            }
         }
 
         // Keep only the first image per product
         cart.items.forEach(item => {
+            if (!item.product) return;
             const images = item.product?.images;
             if (images?.length) {
-                item.product.images = [item.product?.images[0]] as ProductType['images'];
+                item.product.images = [images[0]] as ProductType['images'];
             }
         });
+
 
         return cart;
     }
@@ -250,22 +272,24 @@ class CartService {
         return index;
     }
 
-    static async clearCart(
-        userId: string,
-    ) {
-        const cart = await Cart.findOne({ user: userId });
+    static async clearCart(userId: string, session?: ClientSession) {
+        const sessionOptions = session ? { session } : undefined;
+        const cart = await Cart.findOne({ user: userId }, null, sessionOptions);
 
         if (!cart) {
-            throw createHttpError(404, "Cart Not Found")
+            return null;
         }
+        
+        cart.items.splice(0);
+        cart.totalPrice = 0;
+        cart.totalItems = 0;
 
-        cart.items.length = 0
-        cart.totalPrice = 0
-        cart.totalItems = 0
+        await cart.save(sessionOptions);
 
-        await cart.save()
 
-        return cart
+        this.recalculateCart(cart);
+
+        return cart;
     }
 }
 

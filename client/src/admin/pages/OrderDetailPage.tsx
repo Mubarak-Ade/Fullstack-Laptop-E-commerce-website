@@ -28,9 +28,9 @@ export const OrderDetailPage = () => {
 
     const { showToast } = useToast();
 
-    const paymentStatus = orderStatuses;
+    const statusOptions = orderStatuses;
 
-    const [selectedStatus, setSelectedStatus] = useState<(typeof paymentStatus)[number] | null>(
+    const [selectedStatus, setSelectedStatus] = useState<(typeof statusOptions)[number] | null>(
         null
     );
 
@@ -107,15 +107,15 @@ export const OrderDetailPage = () => {
                             </h2>
                             <Select
                                 value={selectedStatus ?? ''}
-                                onValueChange={e =>
-                                    setSelectedStatus(e as (typeof paymentStatus)[number])
+                                onValueChange={value =>
+                                    setSelectedStatus(value as (typeof statusOptions)[number])
                                 }
                             >
                                 <SelectTrigger className="py-3 rounded-xl border border-primary bg-light-bg dark:bg-dark-bg text-black dark:text-white mt-4 w-full">
                                     <SelectValue placeholder="Select Status" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-light-bg cursor-pointer dark:bg-dark-bg border border-primary rounded-xl shadow-lg text-white shadow-light-fg dark:shadow-dark-bg">
-                                    {paymentStatus.map(orderStatus => (
+                                    {statusOptions.map(orderStatus => (
                                         <SelectItem key={orderStatus} value={orderStatus}>
                                             {resolveStatus(orderStatus).label}
                                         </SelectItem>

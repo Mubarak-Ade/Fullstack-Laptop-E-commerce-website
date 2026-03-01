@@ -1,4 +1,5 @@
 import { useCart } from '@/features/cart/hooks';
+import { logoutUser } from '@/features/auth/api';
 import { useAuthStore } from '@/store/AuthStore';
 import { useThemeStore } from '@/store/ThemeStore';
 import { useQuery } from '@tanstack/react-query';
@@ -14,13 +15,18 @@ import { NavbarLogo } from './navbar/NavbarLogo';
 import { ThemeToggle } from './navbar/ThemeToggle';
 import { UserMenu } from './navbar/UserMenu';
 
+const headerAnimation = {
+    initial: { y: -100 },
+    animate: { y: 0 },
+    transition: { duration: 1, ease: 'easeOut' },
+} as const;
+
 export const Navbar = () => {
     const { scrollY } = useScroll();
     const navOpacity = useTransform(scrollY, [0, 100], [1, 0.92]);
 
-    const { identity, logout } = useAuthStore();
+    const { identity, logout: clearAuth } = useAuthStore();
     const { data: cart } = useQuery(useCart());
-    const { theme, toggleTheme } = useThemeStore();
 
     const navigate = useNavigate();
     const userMenuRef = useRef<HTMLDivElement>(null);
@@ -31,6 +37,33 @@ export const Navbar = () => {
 
     const count = cart?.items.length ?? 0;
     const userAvatar = identity.type === 'user' ? identity.user.avatar : '';
+
+    const closeMenus = () => {
+        setShowUserMenu(false);
+        setShowMobileMenu(false);
+    };
+
+    const handleCartClick = () => {
+        closeMenus();
+        navigate('/carts');
+    };
+
+    const handleUserMenuToggle = () => {
+        setShowUserMenu(prev => !prev);
+    };
+
+    const handleMobileMenuOpen = () => {
+        setShowMobileMenu(true);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+        } catch {}
+        clearAuth();
+        closeMenus();
+        navigate('/login');
+    };
 
     useEffect(() => {
         const handleScroll = () => setIsFixed(window.scrollY >= 10);
@@ -60,14 +93,14 @@ export const Navbar = () => {
     return (
         <>
             <motion.header
-                initial={{ y: -100 }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1, ease: 'easeOut' }}
+                initial={headerAnimation.initial}
+                animate={headerAnimation.animate}
+                transition={headerAnimation.transition}
                 style={{ opacity: navOpacity }}
                 className={`z-50 flex w-full items-center justify-between border-b border-light-border bg-light-bg/10 px-4 py-4 backdrop-blur-md dark:border-dark-border md:px-8 ${isFixed ? 'fixed top-0 shadow-2xl' : 'relative'}`}
             >
                 <button
-                    onClick={() => setShowMobileMenu(true)}
+                    onClick={handleMobileMenuOpen}
                     className="block lg:hidden text-black dark:text-white"
                 >
                     <Icon icon={Menu} />
@@ -75,24 +108,21 @@ export const Navbar = () => {
 
                 <NavbarLogo />
                 <DesktopNavLinks />
-                <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+                {/* <ThemeToggle theme={theme} toggleTheme={toggleTheme} /> */}
 
                 <NavbarActions
                     count={count}
                     avatar={userAvatar}
-                    onCartClick={() => {
-                        setShowUserMenu(false);
-                        setShowMobileMenu(false);
-                        navigate('/carts');
-                    }}
-                    onUserMenuToggle={() => setShowUserMenu(prev => !prev)}
+                    onCartClick={handleCartClick}
+                    onWishlistClick={() => navigate('/wishlist')}
+                    onUserMenuToggle={handleUserMenuToggle}
                 />
 
                 <UserMenu
                     showMenu={showUserMenu}
                     menuRef={userMenuRef}
                     identity={identity}
-                    logout={logout}
+                    logout={handleLogout}
                     onClose={() => setShowUserMenu(false)}
                 />
             </motion.header>
@@ -100,7 +130,7 @@ export const Navbar = () => {
             <MobileMenu
                 showMenu={showMobileMenu}
                 identity={identity}
-                logout={logout}
+                logout={handleLogout}
                 onClose={() => setShowMobileMenu(false)}
             />
         </>

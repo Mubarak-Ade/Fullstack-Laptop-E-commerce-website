@@ -1,12 +1,16 @@
-import {Award,CircleQuestionMark,Clock,ShieldCheckIcon} from "lucide-react"
-import {Icon} from "../shared/Icon"
-import {motion} from "motion/react"
+import { Award, CircleQuestionMark, Clock, ShieldCheckIcon } from 'lucide-react';
+import { Icon } from '../shared/Icon';
+import { motion } from 'motion/react';
 
-export const CTASection=() => {
+const benefitItems = [
+    { icon: Clock, label: 'FAST SHIPPING' },
+    { icon: ShieldCheckIcon, label: 'SECURE PAYMENT' },
+    { icon: CircleQuestionMark, label: '24/7 SUPPORT' },
+] as const;
+
+export const CTASection = () => {
     return (
-        <motion.div 
-        
-        className="mt-24 p-16 rounded-4xl backdrop-blur-md border border-slate-200 dark:border-dark-border text-center flex flex-col items-center justify-center bg-light-bg dark:bg-dark-surface shadow-2xl dark:shadow-dark-surface/50 shadow-slate-200/90">
+        <motion.div className="mt-24 p-16 rounded-4xl backdrop-blur-md border border-slate-200 dark:border-dark-border text-center flex flex-col items-center justify-center bg-light-bg dark:bg-dark-surface shadow-2xl dark:shadow-dark-surface/50 shadow-slate-200/90">
             <span>
                 <Icon icon={Award} className="text-blue-700" size={80} />
             </span>
@@ -16,19 +20,13 @@ export const CTASection=() => {
             </p>
 
             <div className="flex  dark:text-secondary items-center justify-center mt-10 gap-10 flex-wrap">
-                <span className="flex items-center tracking-widest gap-2">
-                    <Icon className="text-blue-700" icon={Clock} />
-                    FAST SHIPPING
-                </span>
-                <span className="flex items-center gap-2">
-                    <Icon className="text-blue-700" icon={ShieldCheckIcon} />
-                    SECURE PAYMENT
-                </span>
-                <span className="flex items-center gap-2">
-                    <Icon className="text-blue-700" icon={CircleQuestionMark} />
-                    24/7 SUPPORT
-                </span>
+                {benefitItems.map(item => (
+                    <span key={item.label} className="flex items-center gap-2 tracking-widest">
+                        <Icon className="text-blue-700" icon={item.icon} />
+                        {item.label}
+                    </span>
+                ))}
             </div>
         </motion.div>
-    )
-}
+    );
+};

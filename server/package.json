@@ -17,7 +17,7 @@
   "description": "",
   "dependencies": {
     "@sindresorhus/slugify": "^3.0.0",
-    "axios": "^1.13.2",
+    "axios": "^1.13.6",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",

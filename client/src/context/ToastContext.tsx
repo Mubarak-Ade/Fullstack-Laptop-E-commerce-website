@@ -1,5 +1,5 @@
-import Toast from "@/components/Toast";
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import Toast from '@/components/Toast';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
 interface Toast {
 	id: number;
@@ -11,18 +11,14 @@ interface ToastContextType {
 	showToast: (type: ToastKind, message: string) => void;
 }
 
-export type ToastKind = "success" | "error" | "info" | "warning";
+export type ToastKind = 'success' | 'error' | 'info' | 'warning';
 
-export const ToastContext = createContext<
-	ToastContextType | undefined
->(undefined);
+export const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export const useToast = () => {
 	const context = useContext(ToastContext);
 	if (!context) {
-		throw new Error(
-			"useToast must be used within ToastProvider"
-		);
+		throw new Error('useToast must be used within ToastProvider');
 	}
 	return context;
 };
@@ -30,15 +26,12 @@ export const useToast = () => {
 let externalShowToast: ToastContextType["showToast"] | null = null;
 
 export const setExternalToastHandler = (
-	handler: ToastContextType["showToast"] | null
+	handler: ToastContextType['showToast'] | null
 ) => {
 	externalShowToast = handler;
 };
 
-export const showGlobalToast = (
-	type: ToastKind,
-	message: string
-) => {
+export const showGlobalToast = (type: ToastKind, message: string) => {
 	if (externalShowToast) {
 		externalShowToast(type, message);
 	}
@@ -46,6 +39,7 @@ export const showGlobalToast = (
 
 let toastId = 0;
 const toastDedupeWindowMs = 5000;
+const toastAutoDismissMs = 10000;
 const lastToastAt = new Map<string, number>();
 
 interface ToastProviderProps {
@@ -75,7 +69,7 @@ const ToastProvider: React.FC<ToastProviderProps> = ({
 		});
 		setTimeout(() => {
 			removeToast(id);
-		}, 10000);
+		}, toastAutoDismissMs);
 	}, []);
 
 	const removeToast = (id: number) => {

@@ -7,13 +7,30 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { logoutUser } from '@/features/auth/api';
 import type { Links } from '@/features/dashboard/types';
 import { useAuthStore } from '@/store/AuthStore';
 import { LogOut } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link, useNavigate } from 'react-router';
 
-const SideBarBtn = ({
+const sidebarButtonMotion = {
+    whileHover: {
+        backgroundColor: '--alpha(var(--color-primary) / 50%)',
+        color: 'var(--color-primary)',
+    },
+    whileTap: { scale: 0.8 },
+} as const;
+
+const logoutButtonMotion = {
+    whileHover: {
+        backgroundColor: '#0b66fe33',
+        color: '#0b66fe',
+    },
+    whileTap: { scale: 0.8 },
+} as const;
+
+const SidebarButton = ({
     label,
     icon,
     link,
@@ -26,13 +43,8 @@ const SideBarBtn = ({
 }) => {
     return (
         <motion.div
-            whileHover={{
-                backgroundColor: '--alpha(var(--color-primary) / 50%)',
-                color: 'var(--color-primary)',
-            }}
-            whileTap={{
-                scale: 0.8,
-            }}
+            whileHover={sidebarButtonMotion.whileHover}
+            whileTap={sidebarButtonMotion.whileTap}
             className="rounded-full dark:text-white"
         >
             <SidebarMenuItem className="px-4 bg-transparent py-2">
@@ -51,16 +63,19 @@ const SideBarBtn = ({
 };
 
 export const SideBar = ({ links }: { links: Links[] }) => {
-    const logout = useAuthStore(s => s.logout);
+    const clearAuth = useAuthStore(s => s.logout);
     const navigate = useNavigate();
 
-    const logOut = () => {
-        logout();
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+        } catch {}
+        clearAuth();
         navigate('/login');
     };
 
     return (
-        <div className='relative z-50'>
+        <div className="relative z-50">
             <Sidebar className="border-l  border-light-border dark:border-dark-border">
                 <SidebarHeader className="flex flex-row gap-3 p-5 bg-light-bg dark:bg-dark-surface items-center border-b dark:border-dark-border border-light-border">
                     <Link to="/" className="flex flex-col">
@@ -73,7 +88,7 @@ export const SideBar = ({ links }: { links: Links[] }) => {
                 <SidebarContent className="px-3 bg-light-bg dark:bg-dark-surface py-4">
                     <SidebarMenu className="space-y-2">
                         {links.map(link => (
-                            <SideBarBtn
+                            <SidebarButton
                                 key={link.link}
                                 title={link.title}
                                 label={link.label}
@@ -85,14 +100,9 @@ export const SideBar = ({ links }: { links: Links[] }) => {
                 </SidebarContent>
                 <SidebarFooter className="bg-light-bg dark:bg-dark-surface">
                     <motion.button
-                        whileHover={{
-                            backgroundColor: '#0b66fe33',
-                            color: '#0b66fe',
-                        }}
-                        whileTap={{
-                            scale: 0.8,
-                        }}
-                        onClick={logOut}
+                        whileHover={logoutButtonMotion.whileHover}
+                        whileTap={logoutButtonMotion.whileTap}
+                        onClick={handleLogout}
                         className="flex items-center gap-4 px-5 py-2.5 rounded-md text-white font-medium cursor-pointer"
                     >
                         <LogOut />

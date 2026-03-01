@@ -2,32 +2,32 @@ import { Card } from '@/components/Hero/Card';
 import Image from '@/assets/pexels-life-of-pix-7974.jpg';
 import { motion } from 'motion/react';
 
+const heroAnimation = {
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    transition: { duration: 1, type: 'spring', damping: 200 },
+} as const;
+
+const glowAnimation = {
+    animate: {
+        x: [0, -200, 0],
+        y: [0, 200, 0],
+    },
+    transition: { duration: 5, repeat: Infinity },
+} as const;
+
 export const Hero = () => {
     return (
         <motion.section
-            initial={{
-                opacity: 0,
-            }}
-            whileInView={{
-                opacity: 1,
-            }}
-            transition={{
-                duration: 1,
-                type: 'spring',
-                damping: 200,
-            }}
+            initial={heroAnimation.initial}
+            whileInView={heroAnimation.whileInView}
+            transition={heroAnimation.transition}
             layout
             className="relative min-h-[85vh] flex items-center overflow-hidden"
         >
             <motion.div
-                animate={{
-                    x: [0, -200, 0],
-                    y: [0, 200, 0],
-                }}
-                transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                }}
+                animate={glowAnimation.animate}
+                transition={glowAnimation.transition}
                 className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-1/2 h-[90%] bg-linear-to-br from-primary/90 to-transparent rounded-l-[100px] blur-3xl opacity-30"
             />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">

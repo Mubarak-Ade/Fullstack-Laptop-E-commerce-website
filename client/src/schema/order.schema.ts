@@ -1,5 +1,5 @@
 import { status } from '@/utils/constants';
-import z, { number } from 'zod';
+import z from 'zod';
 
 export const ShippingSchema = z.object({
     firstname: z.string().min(3, 'firstname is required'),
@@ -11,7 +11,7 @@ export const ShippingSchema = z.object({
     city: z.string().min(3, 'city is required'),
     postalCode: z.string().min(3, 'postal code is required'),
     country: z.string().min(3, 'country is required'),
-    shippingMethod: z.string(),
+    paymentProvider: z.enum(['FAKE', 'PAYSTACK']),
 });
 
 export const OrderSchema = z.object({
@@ -52,12 +52,12 @@ const filterSchema = z.object({
 
 const filteredOrderSchema = z.object({
     order: z.array(OrderSchema),
-    total: number
-})
+    total: z.number(),
+});
 
 export type Order = z.infer<typeof OrderSchema>;
 
-export type FilteredOrder = z.infer<typeof filteredOrderSchema>
+export type FilteredOrder = z.infer<typeof filteredOrderSchema>;
 
 export type Filter = z.infer<typeof filterSchema>;
 

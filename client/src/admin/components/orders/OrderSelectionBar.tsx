@@ -6,7 +6,7 @@ type SelectedOrdersBarProps = {
     selectedCount: number;
     onClear: () => void;
     variants: Variants;
-    showModal: (type: "updateStatus" | "deleteMany") => void;
+    showModal: (type: 'updateStatus' | 'deleteMany') => void;
 };
 
 export const SelectedOrdersBar = ({
@@ -15,10 +15,7 @@ export const SelectedOrdersBar = ({
     variants,
     showModal,
 }: SelectedOrdersBarProps) => {
-
     if (selectedCount === 0) return null;
-
-    
 
     return (
         <div className="max-w-4xl gap-5 z-40 items-center p-5 text-white w-full shadow-[0_0_45px] shadow-black/50 h-20 fixed bg-primary bottom-10 left-1/2 -translate-x-1/2 rounded-xl flex ">
@@ -32,7 +29,7 @@ export const SelectedOrdersBar = ({
                 variants={variants}
                 whileHover="hover"
                 whileTap="tap"
-                onClick={() => showModal("updateStatus")}
+                onClick={() => showModal('updateStatus')}
                 className="flex gap-1 font-semibold cursor-pointer border py-3 px-4 rounded-xl border-white/20 items-center"
             >
                 <Icon icon={EditIcon} />
@@ -42,7 +39,7 @@ export const SelectedOrdersBar = ({
                 variants={variants}
                 whileHover="hover"
                 whileTap="tap"
-                onClick={() => showModal("deleteMany")}
+                onClick={() => showModal('deleteMany')}
                 className="flex gap-1 font-semibold cursor-pointer border py-3 px-4 rounded-xl border-white/20 items-center"
             >
                 <Icon icon={Trash2} />

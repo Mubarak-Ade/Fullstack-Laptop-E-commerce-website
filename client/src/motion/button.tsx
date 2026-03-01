@@ -1,5 +1,11 @@
 import type { Variants } from 'motion/react';
 
+const tapTransition = {
+    duration: 0.2,
+    type: 'spring',
+    stiffness: 50,
+} as const;
+
 export const PrimaryBtnVariant: Variants = {
     hover: {
         scale: 1.05,
@@ -9,11 +15,7 @@ export const PrimaryBtnVariant: Variants = {
     },
     tap: {
         scale: 0.8,
-        transition: {
-            duration: 0.2,
-            type: 'spring',
-            stiffness: 50,
-        },
+        transition: tapTransition,
     },
 };
 
@@ -28,10 +30,6 @@ export const SecondaryBtnVariant: Variants = {
     },
     tap: {
         scale: 0.8,
-        transition: {
-            duration: 0.2,
-            type: 'spring',
-            stiffness: 50,
-        },
+        transition: tapTransition,
     },
 };

@@ -25,7 +25,7 @@ class OrderService {
             subTotal: checkout.subTotal,
             total: checkout.total,
             shippingFee: checkout.shipping,
-            shippingMethod: shippingInfo.shippingMethod,
+            paymentProvider: shippingInfo.paymentProvider,
             shippingAddress: {
                 fullName: `${shippingInfo.firstname} ${shippingInfo.lastname}`,
                 phone: shippingInfo.phone,

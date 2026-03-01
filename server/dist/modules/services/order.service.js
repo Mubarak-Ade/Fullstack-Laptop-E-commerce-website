@@ -9,7 +9,7 @@ class OrderService {
             productId: item.productId,
             productName: item.name,
             quantity: item.quantity,
-            image: item.image,
+            image: item.image.url,
             unitPriceAtPurchase: item.unitPriceAtCheckout,
         }));
         const orderCreate = {
@@ -18,7 +18,7 @@ class OrderService {
             subTotal: checkout.subTotal,
             total: checkout.total,
             shippingFee: checkout.shipping,
-            shippingMethod: shippingInfo.shippingMethod,
+            paymentProvider: shippingInfo.paymentProvider,
             shippingAddress: {
                 fullName: `${shippingInfo.firstname} ${shippingInfo.lastname}`,
                 phone: shippingInfo.phone,

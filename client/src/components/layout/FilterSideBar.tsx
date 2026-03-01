@@ -4,22 +4,24 @@ import React from 'react';
 import { Icon } from '../shared/Icon';
 import { X } from 'lucide-react';
 
-
 interface Props {
-    show: boolean,
-    close: () => void
+    show: boolean;
+    close: () => void;
 }
-export const FilterSideBar = ({show, close}: Props) => {
-    const MIN = 100000;
-    const MAX = 5000000;
-    const cpus = ['INTEL Ultra i9 185H', 'INTEL Ultra i7 155H', 'Apple Silicon', 'Snapdragon X Elite'];
-    const brands = ['Apple', 'Hp', 'Dell', 'Acer', 'Toshiba'];
-    const storageOptions = ['128GB', '256GB', '512GB', '1TB'];
-    const ramOptions = ['4GB', '8GB', '16GB', '32GB'];
+
+const MIN_PRICE = 100000;
+const MAX_PRICE = 5000000;
+const cpuOptions = ['INTEL Ultra i9 185H', 'INTEL Ultra i7 155H', 'Apple Silicon', 'Snapdragon X Elite'];
+const brandOptions = ['Apple', 'Hp', 'Dell', 'Acer', 'Toshiba'];
+const storageOptions = ['128GB', '256GB', '512GB', '1TB'];
+const ramOptions = ['4GB', '8GB', '16GB', '32GB'];
+
+export const FilterSideBar = ({ show, close }: Props) => {
 
     const { toggleFilter, setPrice, filter } = useFilterProductStore();
-    const minValue = filter.min ?? MIN;
-    const maxValue = filter.max ?? MAX;
+    const minValue = filter.min ?? MIN_PRICE;
+    const maxValue = filter.max ?? MAX_PRICE;
+    const isOpen = show;
 
     const handleMinValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = Math.min(Number(e.target.value), maxValue - 1);
@@ -32,14 +34,16 @@ export const FilterSideBar = ({show, close}: Props) => {
     };
 
     return (
-        <form className={`dark:bg-dark-surface ${show ? 'fixed inset-0 z-50' : 'lg:static lg:block hidden'} bg-light-fg h-screen overflow-auto rounded-xl p-5 max-w-xs w-full`}>
+        <form
+            className={`dark:bg-dark-surface ${isOpen ? 'fixed inset-0 z-50' : 'lg:static lg:block hidden'} bg-light-fg h-screen overflow-auto rounded-xl p-5 max-w-xs w-full`}
+        >
             <button onClick={close} className="absolute top-5 lg:hidden block right-5 text-secondary dark:text-white">
                 <Icon icon={X} />
             </button>
             <div className="">
                 <h2 className="text-xl dark:text-white font-bold">Brands</h2>
                 <ul className="space-y-2 mt-5 block text-secondary">
-                    {brands.map(brand => (
+                    {brandOptions.map(brand => (
                         <li key={brand}>
                             <label htmlFor={brand} className="w-full">
                                 <input
@@ -59,7 +63,7 @@ export const FilterSideBar = ({show, close}: Props) => {
             <div className="mt-5">
                 <h2 className="text-xl dark:text-white font-bold">CPU</h2>
                 <ul className="space-y-2 mt-5 block text-secondary">
-                    {cpus.map(cpu => (
+                    {cpuOptions.map(cpu => (
                         <li key={cpu}>
                             <label htmlFor={cpu} className="w-full">
                                 <input
@@ -125,8 +129,8 @@ export const FilterSideBar = ({show, close}: Props) => {
                             type="range"
                             className="w-full appearance-none not-in-range:bg-primary"
                             name="min-range"
-                            min={MIN}
-                            max={MAX}
+                            min={MIN_PRICE}
+                            max={MAX_PRICE}
                             value={minValue}
                             onChange={handleMinValueChange}
                             id="min-range"
@@ -135,8 +139,8 @@ export const FilterSideBar = ({show, close}: Props) => {
                             type="range"
                             className="w-full appearance-none"
                             name="max-range"
-                            min={MIN}
-                            max={MAX}
+                            min={MIN_PRICE}
+                            max={MAX_PRICE}
                             onChange={handleMaxValueChange}
                             value={maxValue}
                             id="max-range"

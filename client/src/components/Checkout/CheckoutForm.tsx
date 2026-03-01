@@ -3,13 +3,27 @@ import { useCreateOrder } from '@/features/order/hooks';
 import { ShippingSchema, type ShippingInput } from '@/schema/order.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { CreditCard, Mailbox, Truck, Wallet } from 'lucide-react';
+import { Mailbox, Truck } from 'lucide-react';
 import { motion, type Variants } from 'motion/react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { InputField } from '../Form/InputField';
 import { Icon } from '../shared/Icon';
-import { useConfirmFakePayment, useInitFakePayment } from '@/features/payment/hooks';
+import { useConfirmFakePayment, useInitPayment } from '@/features/payment/hooks';
+
+const checkoutVariants: Variants = {
+    hidden: {
+        opacity: 0,
+        x: -50,
+    },
+    visible: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.5,
+        },
+    },
+};
 
 export const CheckoutForm = () => {
     const {
@@ -22,42 +36,37 @@ export const CheckoutForm = () => {
     const navigate = useNavigate();
 
     const order = useMutation(useCreateOrder());
-    const initializePayment = useMutation(useInitFakePayment());
+    const initializePayment = useMutation(useInitPayment());
     const confirmPayment = useMutation(useConfirmFakePayment());
-    const CheckoutVariants: Variants = {
-        hidden: {
-            opacity: 0,
-            x: -50,
-        },
-        visible: {
-            opacity: 1,
-            x: 0,
-            transition: {
-                duration: 0.5,
-            },
-        },
+
+    const handleError = (error: { message: string }) => {
+        showToast('error', error.message);
     };
 
     const onSubmit = (data: ShippingInput) => {
         order.mutate(data, {
             onSuccess: order => {
-                initializePayment.mutate(order._id, {
+                initializePayment.mutate({ orderId: order._id, paymentMethod: data.paymentProvider }, {
                     onSuccess: payment => {
-                        confirmPayment.mutate(payment.reference, {
-                            onSuccess: () => navigate(`/order/${order._id as string}`),
-                            onError: error => {
-                                showToast('error', error.message);
-                            },
-                        });
+                        if (data.paymentProvider === 'PAYSTACK' && payment.authorization_url) {
+                            window.location.href = payment.authorization_url;
+                            return;
+                        }
+
+                        if (data.paymentProvider === 'FAKE' && payment.reference) {
+                            confirmPayment.mutate(payment.reference, {
+                                onSuccess: () => navigate(`/order/${order._id as string}`),
+                                onError: handleError,
+                            });
+                            return;
+                        }
+
+                        handleError({ message: 'Unable to continue payment. Please try again.' });
                     },
-                    onError: error => {
-                        showToast('error', error.message);
-                    },
+                    onError: handleError,
                 });
             },
-            onError: error => {
-                showToast('error', error.message);
-            },
+            onError: handleError,
         });
     };
 
@@ -66,7 +75,7 @@ export const CheckoutForm = () => {
             <form id="checkout" onSubmit={handleSubmit(onSubmit)}>
                 {/* Shipping Form Fields */}
                 <motion.div
-                    variants={CheckoutVariants}
+                    variants={checkoutVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -137,7 +146,7 @@ export const CheckoutForm = () => {
                 </motion.div>
 
                 <motion.div
-                    variants={CheckoutVariants}
+                    variants={checkoutVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -145,24 +154,24 @@ export const CheckoutForm = () => {
                 >
                     <h4 className="text-xl font-bold flex items-center gap-4 dark:text-white text-black">
                         {' '}
-                        <Icon icon={Mailbox} size={30} className="text-primary" /> Shipping Method
+                        <Icon icon={Mailbox} size={30} className="text-primary" /> Payment Method
                     </h4>
 
                     <div className="flex md:flex-row flex-col justify-between w-full gap-4">
                         <label
-                            htmlFor="standard"
+                            htmlFor="custom"
                             className="flex gap-5 w-full has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
                         >
                             <input
                                 type="radio"
-                                id="standard"
-                                value={'standard'}
-                                {...register('shippingMethod')}
+                                id="custom"
+                                value={'FAKE'}
+                                {...register('paymentProvider')}
                                 className=" accent-primary size-5 "
                             />
                             <div className="">
                                 <h4 className="font-bold text-black dark:text-white">
-                                    Standard Shipping <span className="text-green-600">Free</span>
+                                    AIM PAYMENT <span className="text-green-600">Free</span>
                                 </h4>
                                 <p className="text-sm text-secondary">
                                     Delivery in 3-5 bussiness days
@@ -170,32 +179,32 @@ export const CheckoutForm = () => {
                             </div>
                         </label>
                         <label
-                            htmlFor="express"
+                            htmlFor="paystack"
                             className="flex gap-5 w-full has-checked:border-2 p-5 rounded-xl has-checked:border-primary bg-light-fg dark:bg-dark-fg has-checked:bg-light-bg dark:has-checked:bg-dark-surface"
                         >
                             <input
                                 type="radio"
-                                value={'express'}
-                                id="express"
-                                {...register('shippingMethod')}
+                                value={'PAYSTACK'}
+                                id="paystack"
+                                {...register('paymentProvider')}
                                 className="rounded-xl checked:accent-primary size-5"
                             />
                             <div className="">
                                 <h4 className="font-bold text-black dark:text-white">
-                                    Standard Shipping <span className="text-green-600">Free</span>
+                                    Paystack  <span className="text-green-600">Free</span>
                                 </h4>
                                 <p className="text-sm text-secondary">
-                                    Delivery in 3-5 bussiness days
+                                    Pay securely with Paystack
                                 </p>
                             </div>
                         </label>
                     </div>
-                    {errors.shippingMethod && (
-                        <p className="text-red-500">{errors.shippingMethod.message}</p>
+                    {errors.paymentProvider && (
+                        <p className="text-red-500">{errors.paymentProvider.message}</p>
                     )}
                 </motion.div>
-                <motion.div
-                    variants={CheckoutVariants}
+                {/* <motion.div
+                    variants={checkoutVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true }}
@@ -212,14 +221,14 @@ export const CheckoutForm = () => {
                         >
                             <input
                                 type="radio"
-                                name="payment"
+                                value={'FAKE'}
                                 id="card"
                                 className="accent-primary size-5"
                             />
                             <div className="">
                                 <h4 className="font-bold text-black dark:text-white flex items-center gap-2">
                                     <Icon icon={CreditCard} className="text-primary" />
-                                    Credit / Debit Card
+                                    Wallet
                                 </h4>
                                 <p className="text-sm text-secondary">
                                     Pay securely with your card
@@ -232,21 +241,21 @@ export const CheckoutForm = () => {
                         >
                             <input
                                 type="radio"
-                                name="payment"
                                 id="wallet"
+                                value="PAYSTACK"
                                 className="rounded-xl checked:accent-primary size-5"
                             />
                             <div className="">
                                 <h4 className="font-bold text-black dark:text-white flex items-center gap-2">
                                     <Icon icon={Wallet} className="text-primary" />
-                                    Wallet
+                                    Credit Card
                                 </h4>
-                                <p className="text-sm text-secondary">Pay with a saved wallet</p>
+                                <p className="text-sm text-secondary">Pay with </p>
                             </div>
                         </label>
                     </div>
                     <motion.div
-                        variants={CheckoutVariants}
+                        variants={checkoutVariants}
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true }}
@@ -259,7 +268,7 @@ export const CheckoutForm = () => {
                             <InputField label="CVV" placeholder="123" />
                         </div>
                     </motion.div>
-                </motion.div>
+                </motion.div> */}
             </form>
         </div>
     );

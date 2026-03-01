@@ -30,6 +30,15 @@ export const addItemsToCart = async (req, res, next) => {
         next(error);
     }
 };
+export const clearCart = async (req, res, next) => {
+    try {
+        const cart = await CartService.clearCart(req.user?.id);
+        res.status(200).json(cart);
+    }
+    catch (error) {
+        next(error);
+    }
+};
 export const deleteCartItem = async (req, res, next) => {
     try {
         const identity = resolveIdentity(req);

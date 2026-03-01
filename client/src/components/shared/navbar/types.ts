@@ -7,6 +7,7 @@ export type NavbarActionsProps = {
     count: number;
     onCartClick: () => void;
     onUserMenuToggle: () => void;
+    onWishlistClick?: () => void;
     avatar?: string;
 };
 
@@ -14,7 +15,7 @@ export type UserMenuProps = {
     showMenu: boolean;
     menuRef: RefObject<HTMLDivElement | null>;
     identity: Identity;
-    logout: () => void;
+    logout: () => Promise<void> | void;
     onClose: () => void;
 };
 
@@ -22,10 +23,12 @@ export type MobileMenuProps = {
     showMenu: boolean;
     identity: Identity;
     onClose: () => void;
-    logout: () => void;
+    logout: () => Promise<void> | void;
 };
 
+export type ThemeMode = 'light' | 'dark';
+
 export type ThemeToggleProps = {
-    theme: 'light' | 'dark';
+    theme: ThemeMode;
     toggleTheme: () => void;
 };

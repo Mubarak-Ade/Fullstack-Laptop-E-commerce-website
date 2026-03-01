@@ -19,7 +19,7 @@ const DashboardSchema = z.object({
             user: z.object({
                 _id: z.string(),
                 firstName: z.string(),
-                lastName: z.string()
+                lastName: z.string(),
             }),
             total: z.number(),
             status: z.enum(['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED']),
@@ -28,4 +28,4 @@ const DashboardSchema = z.object({
     ),
 });
 
-export type Dashboard = z.infer<typeof DashboardSchema>
+export type Dashboard = z.infer<typeof DashboardSchema>;

@@ -1,46 +1,83 @@
-import { useState } from 'react'
-import {Icon} from '../shared/Icon'
-import {CheckCircle, ShieldCheck, ShoppingCart, Star, Truck} from 'lucide-react'
+import { useMemo, useState } from 'react';
+import { Icon } from '../shared/Icon';
+import { CheckCircle, ShieldCheck, ShoppingCart, Star, Truck } from 'lucide-react';
 import { motion } from 'motion/react';
 import { priceFormat } from '@/utils/format';
+import { useNavigate } from 'react-router';
+import { useMutation } from '@tanstack/react-query';
+import { useAddToCart } from '@/features/cart/hooks';
+import { useToast } from '@/context/ToastContext';
+import { PrimaryBtnVariant } from '@/motion/button';
 
 interface Props {
-    images: {url: string, public_id: string}[], 
-    name: string,
-    price: number | string,
-    brand: string,
-    processor?: string,
-    memory?: string,
+    images: { url: string; public_id: string }[];
+    name: string;
+    price: number | string;
+    brand: string;
+    processor?: string;
+
+    id: string;
+    memory?: string;
 }
 
-export const Preview=({images, name, price, brand, memory, processor }: Props) => {
+const THUMBNAIL_COUNT = 3;
+const thumbnailAnimation = {
+    whileHover: {
+        backgroundColor: 'var(--color-light-)',
+        border: '2px solid var(--color-primary)',
+    },
+    whileTap: { scale: 0.9 },
+} as const;
 
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const formattedPrice = priceFormat(price as number)
+const thumbnailImageAnimation = {
+    whileHover: { scale: 1.1 },
+} as const;
+
+export const Preview = ({ images, name, price, brand, memory, processor, id }: Props) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const formattedPrice = priceFormat(price as number);
+
+    const addToCartMutation = useMutation(useAddToCart());
+
+    const {showToast} = useToast();
+
+
+    const highlightText = `${brand} ${processor} ${memory}`;
+    const highlights = useMemo(() => Array.from({ length: THUMBNAIL_COUNT }, () => highlightText), [highlightText]);
+    const activeImage = images[currentIndex];
+
+    const handleAddToCartClick = () => {
+        addToCartMutation.mutate(id, {
+            onSuccess: () => {
+                showToast('success', `${name} added to cart successfully`);
+            },
+            onError: error => {
+                showToast('error', error.message);
+            },
+        });
+    };
 
     return (
         <div className="flex lg:flex-row flex-col-reverse mt-5 gap-10">
             <div className="max-w-2xl w-full">
                 <div className="dark:bg-dark-fg bg-light-fg rounded-2xl h-140">
-                    <img src={images![currentIndex].url} alt="" className="size-full aspect-square object-cover" />
+                    <img src={activeImage.url} alt="" className="size-full aspect-square object-cover" />
                 </div>
                 <div className="p-5 flex items-center gap-5 w-160 overflow-auto">
                     {Array.from(images).map((img, index) => (
-                        <motion.div 
-                        whileHover={{
-                            backgroundColor: "var(--color-light-)",
-                            border: "2px solid var(--color-primary)"
-                        }}
-                        whileTap={{
-                            scale: 0.9
-                        }}
-                        onClick={() => setCurrentIndex(index)}
-                        key={index} className={`size-35 aspect-square bg-light-fg dark:bg-dark-fg p-2 border-2 rounded-xl cursor-pointer ${currentIndex === index ? "border-primary" : "border-secondary"}`}>
-                            <motion.img 
-                            whileHover={{
-                                scale: 1.1
-                            }}
-                            src={img.url} alt="" className='size-full object-cover' />
+                        <motion.div
+                            whileHover={thumbnailAnimation.whileHover}
+                            whileTap={thumbnailAnimation.whileTap}
+                            onClick={() => setCurrentIndex(index)}
+                            key={index}
+                            className={`size-35 aspect-square bg-light-fg dark:bg-dark-fg p-2 border-2 rounded-xl cursor-pointer ${currentIndex === index ? 'border-primary' : 'border-secondary'}`}
+                        >
+                            <motion.img
+                                whileHover={thumbnailImageAnimation.whileHover}
+                                src={img.url}
+                                alt=""
+                                className="size-full object-cover"
+                            />
                         </motion.div>
                     ))}
                 </div>
@@ -60,9 +97,14 @@ export const Preview=({images, name, price, brand, memory, processor }: Props) =
                     <h6 className="dark:text-secondary">KEY HIGHLIGHTS</h6>
 
                     <div className="mt-5 space-y-4">
-                        <p className="flex gap-2 items-center text-secondary dark:text-light-bg"><span className="text-primary fill-primary"><Icon icon={CheckCircle} /></span> {`${brand} ${processor} ${memory}`} </p>
-                        <p className="flex gap-2 items-center text-secondary dark:text-light-bg"><span className="text-primary fill-primary"><Icon icon={CheckCircle} /></span> {`${brand} ${processor} ${memory}`} </p>
-                        <p className="flex gap-2 items-center text-secondary dark:text-light-bg"><span className="text-primary fill-primary"><Icon icon={CheckCircle} /></span> {`${brand} ${processor} ${memory}`} </p>
+                        {highlights.map((text, index) => (
+                            <p key={index} className="flex gap-2 items-center text-secondary dark:text-light-bg">
+                                <span className="text-primary fill-primary">
+                                    <Icon icon={CheckCircle} />
+                                </span>
+                                {text}
+                            </p>
+                        ))}
                     </div>
                 </div>
                 <div className="mt-5">
@@ -81,12 +123,12 @@ export const Preview=({images, name, price, brand, memory, processor }: Props) =
                         <button className="w-35 py-2.5 border rounded-xl border-dark-border bg-transparent text-secondary dark:text-light-bg">120GB</button>
                     </div>
                 </div>
-                <button className="bg-primary w-full mt-8 rounded-xl text-xl font-bold text-light-bg gap-2 flex items-center py-4 justify-center"><Icon icon={ShoppingCart} /> Add To Cart</button>
+                <motion.button variants={PrimaryBtnVariant} whileHover="hover" whileTap="tap" onClick={handleAddToCartClick} className="bg-primary w-full mt-8 rounded-xl cursor-pointer text-xl font-bold text-light-bg gap-2 flex items-center py-4 justify-center"><Icon icon={ShoppingCart} /> Add To Cart</motion.button>
                 <div className="mt-4 flex gap-5 text-secondary">
                     <p className="flex gap-4"><Icon icon={Truck} /> Free Express Shipping</p>
                     <p className="flex gap-4"><Icon icon={ShieldCheck} /> 2-Year Warranty</p>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};

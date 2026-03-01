@@ -1,14 +1,14 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
   ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
   Tooltip,
-  Legend
-} from "chart.js";
+} from 'chart.js';
 
 ChartJS.register(
   CategoryScale,

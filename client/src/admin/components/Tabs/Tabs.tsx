@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import {
 	createContext,
 	useContext,
 	useState,
 	type ReactNode
-} from "react";
+} from 'react';
 
 interface TabsContextProps {
 	activeTab: string;
@@ -19,7 +19,7 @@ interface TabsProps {
 
 interface TabsContentProps {
 	value: string;
-    className?: string
+	className?: string;
 	children: ReactNode;
 }
 
@@ -29,7 +29,7 @@ const useTabs = () => {
 	const context = useContext(TabsContext);
 
 	if (!context) {
-		throw new Error("Tabs components must be used inside Tabs");
+		throw new Error('Tabs components must be used inside Tabs');
 	}
 	return context;
 };
@@ -45,7 +45,7 @@ const Tabs = ({ defaultValue = "tab1", children, className }: TabsProps) => {
 		<TabsContext.Provider value={{ activeTab, setActiveTab }}>
 			<div
 				className={cn(
-					"w-full",
+					'w-full',
 					className
 				)}
 			>
@@ -59,9 +59,9 @@ const TabsList = ({ children }: { children: ReactNode }) => {
 	return <div className="">{children}</div>;
 };
 
-const TabsHeader = ({ children, className }: { children: ReactNode,className?: string }) => {
+const TabsHeader = ({ children, className }: { children: ReactNode; className?: string }) => {
 	return (
-		<div className={cn("flex w-full border-b-2 relative border-gray-200 px-4 items-center", className)}>
+		<div className={cn('flex w-full border-b-2 relative border-gray-200 px-4 items-center', className)}>
 			{children}
 		</div>
 	);
@@ -83,7 +83,7 @@ const TabsButton = ({ value, children }: TabsButtonProps) => {
 			<button
 				onClick={() => setActiveTab(value)}
 				className={`px-6 py-2 cursor-pointer ${
-					activeTab === value ? "border-b-2  border-green-500 text-green-500" : ""
+					activeTab === value ? 'border-b-2  border-green-500 text-green-500' : ''
 				}`}
 			>
 				{children}
@@ -93,4 +93,3 @@ const TabsButton = ({ value, children }: TabsButtonProps) => {
 };
 
 export { Tabs, TabsButton, TabsContent, TabsHeader, TabsList, useTabs };
-

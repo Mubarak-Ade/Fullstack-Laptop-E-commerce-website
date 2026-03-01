@@ -20,14 +20,14 @@ export const ProductDetail = () => {
         return <div className="p-5">Product not found.</div>
     }
     
-    const { name, images, brand, price, cpu, storage, ram, gpu, os, screenSize, battery } = product as Product;
+    const { name, images, brand, price, cpu, storage, ram, gpu, os, screenSize, battery, _id } = product as Product;
 
 
     return (
         <div className="p-5">
             <BreadCrumbs />
 
-            <Preview brand={ brand } name={ name } images={ images ?? [] } memory={ ram } processor={ cpu } price={ price } />
+            <Preview brand={ brand } name={ name } id={ _id } images={ images ?? [] } memory={ ram } processor={ cpu } price={ price } />
 
             <hr className="dark:border-dark-border border-light-border mt-15 mb-5" />
 

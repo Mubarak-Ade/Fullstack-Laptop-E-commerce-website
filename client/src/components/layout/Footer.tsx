@@ -1,19 +1,24 @@
-import {AtSign, Code, Earth, SendHorizonal} from "lucide-react"
-import {Icon} from "../shared/Icon"
-import {motion} from "motion/react"
-export const Footer=() => {
+import { AtSign, Code, Earth, SendHorizonal } from 'lucide-react';
+import { Icon } from '../shared/Icon';
+import { motion } from 'motion/react';
+
+const footerAnimation = {
+    initial: { y: 60 },
+    whileInView: { y: 0 },
+    viewport: { once: true },
+    transition: { duration: 1.5 },
+} as const;
+
+const productLinks = ['Performance Laptops', 'Gaming Rigs', 'Pro Accessories', 'Software Licenses'] as const;
+const companyLinks = ['Our Mission', 'Technical Blog', 'Certifications', 'Privacy Policy'] as const;
+
+export const Footer = () => {
     return (
-        <motion.footer 
-        initial={{
-            y: 60
-        }}
-        whileInView={{
-            y: 0
-        }}
-        viewport={{once: true}}
-        transition={{
-            duration: 1.5
-        }}
+        <motion.footer
+        initial={footerAnimation.initial}
+        whileInView={footerAnimation.whileInView}
+        viewport={footerAnimation.viewport}
+        transition={footerAnimation.transition}
         className="px-15 py-10 bg-light-surface dark:bg-dark-bg border-t dark:border-dark-border border-light-border">
             <div className="flex flex-wrap justify-between gap-10">
                 <div className="">
@@ -28,19 +33,17 @@ export const Footer=() => {
                 <div className="">
                     <h6 className="text-primary font-semibold tracking-[0.2em]">PRODUCTS</h6>
                     <ul className="mt-5 dark:text-secondary space-y-4">
-                        <li>Performance Laptops</li>
-                        <li>Gaming Rigs</li>
-                        <li>Pro Accessories</li>
-                        <li>Software Licenses</li>
+                        {productLinks.map(item => (
+                            <li key={item}>{item}</li>
+                        ))}
                     </ul>
                 </div>
                 <div className="">
                     <h6 className="text-primary font-semibold tracking-[0.2em]">COMPANY</h6>
                     <ul className="mt-5 dark:text-secondary  space-y-4">
-                        <li>Our Mission</li>
-                        <li>Technical Blog</li>
-                        <li>Certifications</li>
-                        <li>Privacy Policy</li>
+                        {companyLinks.map(item => (
+                            <li key={item}>{item}</li>
+                        ))}
                     </ul>
                 </div>
                 <div className="">

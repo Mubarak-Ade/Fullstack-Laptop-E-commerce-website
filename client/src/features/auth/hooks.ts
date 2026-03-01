@@ -25,17 +25,17 @@ export const useRegister = () => {
 
 export const useUserProfile = () => {
     return queryOptions<Profile>({
-        queryKey: ["user"],
-        queryFn: userProfile
-    })
-}
+        queryKey: ['user'],
+        queryFn: userProfile,
+    });
+};
 
 export const useEditUser = () => {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     return mutationOptions({
         mutationFn: editProfile,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: useUserProfile().queryKey})
-        }
-    })
-}
+            queryClient.invalidateQueries({ queryKey: useUserProfile().queryKey });
+        },
+    });
+};

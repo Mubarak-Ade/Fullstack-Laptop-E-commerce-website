@@ -1,12 +1,16 @@
 import { Router } from 'express';
 import {
-    confirmeFakePayment,
-    initializeFakePayment,
+    confirmFakePayment,
+    initialize,
+    paystackWebHook,
 } from '../controllers/payment.controller.js';
+import { requireAuth } from '../../middlewares/authorization.js';
 
 const router = Router();
 
-router.route('/fake/initialize').post(initializeFakePayment);
-router.route('/fake/confirm').post(confirmeFakePayment);
+router.route('/webhook/paystack').post(paystackWebHook);
+router.use(requireAuth);
+router.route('/initialize').post(initialize);
+router.route('/fake/confirm').post(confirmFakePayment);
 
 export default router;

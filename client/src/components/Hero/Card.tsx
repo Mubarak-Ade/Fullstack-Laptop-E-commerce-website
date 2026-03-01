@@ -2,16 +2,31 @@ import { ArrowRight } from 'lucide-react';
 import { Icon } from '../shared/Icon';
 import { motion, type Variants } from 'motion/react';
 
-export const Card = () => {
-    const CardContentVariant: Variants = {
-        initial: {
-            opacity: 0,
-        },
-        animate: {
-            opacity: 1,
-        },
-    };
+const cardContentVariant: Variants = {
+    initial: {
+        opacity: 0,
+    },
+    animate: {
+        opacity: 1,
+    },
+};
 
+const primaryButtonAnimation = {
+    whileHover: { scale: 1.1 },
+    whileTap: { scale: 0.8 },
+    transition: { type: 'spring', duration: 0.5 },
+} as const;
+
+const secondaryButtonAnimation = {
+    whileTap: { scale: 0.8 },
+    whileHover: {
+        border: '1px solid var(--color-blue-600)',
+        color: 'var(--color-blue-600)',
+        scale: 1.1,
+    },
+} as const;
+
+export const Card = () => {
     return (
         <motion.div
             initial={{
@@ -31,7 +46,7 @@ export const Card = () => {
             className=" mt-6 overflow-hidden rounded-4xl shadow-[0_10px_40px_-2px] shadow-dark-bg/10 w-full bg-white/3 [--webkit-backdrop-filter:blur(12px)] backdrop-blur-3xl border-light-border/50 px-10 py-15 border"
         >
             <motion.h4
-                variants={CardContentVariant}
+                variants={cardContentVariant}
                 animate="animate"
                 initial="initial"
                 transition={{ duration: 1, delay: 0.4 }}
@@ -40,7 +55,7 @@ export const Card = () => {
                 ULTIMATE PRECISION
             </motion.h4>
             <motion.h1
-                variants={CardContentVariant}
+                variants={cardContentVariant}
                 animate="animate"
                 initial="initial"
                 transition={{ duration: 1, delay: 0.5 }}
@@ -50,7 +65,7 @@ export const Card = () => {
                 <span className="text-primary">Shina Store</span>
             </motion.h1>
             <motion.p
-                variants={CardContentVariant}
+                variants={cardContentVariant}
                 animate="animate"
                 initial="initial"
                 transition={{ duration: 1, delay: 0.6 }}
@@ -61,36 +76,23 @@ export const Card = () => {
             </motion.p>
 
             <motion.div
-                variants={CardContentVariant}
+                variants={cardContentVariant}
                 animate="animate"
                 initial="initial"
                 className="mt-10  flex items-center justify-center flex-wrap gap-5"
             >
                 <motion.button
-                    whileHover={{
-                        scale: 1.1,
-                    }}
-                    whileTap={{
-                        scale: 0.8,
-                    }}
-                    transition={{
-                        type: 'spring',
-                        duration: 0.5,
-                    }}
+                    whileHover={primaryButtonAnimation.whileHover}
+                    whileTap={primaryButtonAnimation.whileTap}
+                    transition={primaryButtonAnimation.transition}
                     className="bg-primary justify-center cursor-pointer flex gap-2 items-center text-white px-8 py-4 rounded-[10px] font-semibold text-base"
                 >
                     EXPLORE NOW
                     <Icon icon={ArrowRight} />
                 </motion.button>
                 <motion.button
-                    whileTap={{
-                        scale: 0.8,
-                    }}
-                    whileHover={{
-                        border: '1px solid var(--color-blue-600)',
-                        color: 'var(--color-blue-600)',
-                        scale: 1.1,
-                    }}
+                    whileTap={secondaryButtonAnimation.whileTap}
+                    whileHover={secondaryButtonAnimation.whileHover}
                     className="border border-dark-border dark:border-dark-border bg-transparent text-coral-black dark:text-light-bg cursor-pointer text-blace px-8 py-4 rounded-[10px] font-semibold text-base"
                 >
                     VIEW CATALOG

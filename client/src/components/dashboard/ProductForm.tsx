@@ -26,6 +26,10 @@ type ExistingImage = {
 const definedStrings = (values: Array<string | undefined>) =>
     values.filter((value): value is string => Boolean(value));
 
+const baseBrandOptions = ['Hp', 'Dell', 'Acer', 'Apple', 'Asus', 'Lenovo'] as const;
+const baseRamOptions = ['4GB', '8GB', '16GB', '32GB', '64GB'] as const;
+const baseStorageOptions = ['128GB', '256GB', '512GB', '1TB', '2TB'] as const;
+
 export const ProductForm = () => {
     const location = useLocation();
 
@@ -35,6 +39,7 @@ export const ProductForm = () => {
     const { showToast } = useToast();
     const createProduct = useCreateProduct();
     const updateProduct = useMutation(useUpdateProduct(product?._id as string));
+    const isEditing = Boolean(product);
 
     const {
         register,
@@ -84,15 +89,24 @@ export const ProductForm = () => {
     }, [product, reset]);
 
     const brands = useMemo(
-        () => Array.from(new Set(definedStrings(['Hp', 'Dell', 'Acer', 'Apple', 'Asus', 'Lenovo', product?.brand]))),
+        () =>
+            Array.from(
+                new Set(definedStrings([...baseBrandOptions, product?.brand]))
+            ),
         [product?.brand]
     );
     const ramOptions = useMemo(
-        () => Array.from(new Set(definedStrings(['4GB', '8GB', '16GB', '32GB', '64GB', product?.ram]))),
+        () =>
+            Array.from(
+                new Set(definedStrings([...baseRamOptions, product?.ram]))
+            ),
         [product?.ram]
     );
     const storageOptions = useMemo(
-        () => Array.from(new Set(definedStrings(['128GB', '256GB', '512GB', '1TB', '2TB', product?.storage]))),
+        () =>
+            Array.from(
+                new Set(definedStrings([...baseStorageOptions, product?.storage]))
+            ),
         [product?.storage]
     );
 
@@ -173,25 +187,20 @@ export const ProductForm = () => {
         selectedFiles.forEach(file => fd.append('product', file));
         removedImageIds.forEach(id => fd.append('removedImage', id));
 
-        product
-            ? updateProduct.mutate(fd, {
-                      onSuccess: () => {
-                          showToast('success', 'Product updated successfully');
-                          navigate('/admin/products');
-                      },
-                      onError: error => {
-                          showToast('error', error.message);
-                      },
-                  })
-            : createProduct.mutate(fd, {
-                  onSuccess: () => {
-                      showToast('success', 'Product created successfully');
-                      navigate('/admin/products');
-                  },
-                  onError: error => {
-                      showToast('error', error.message);
-                  },
-              });
+        const mutation = isEditing ? updateProduct : createProduct;
+        const successMessage = isEditing
+            ? 'Product updated successfully'
+            : 'Product created successfully';
+
+        mutation.mutate(fd, {
+            onSuccess: () => {
+                showToast('success', successMessage);
+                navigate('/admin/products');
+            },
+            onError: error => {
+                showToast('error', error.message);
+            },
+        });
     };
 
     return (

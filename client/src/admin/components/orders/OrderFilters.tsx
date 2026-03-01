@@ -21,6 +21,22 @@ type FilterPanelProps = {
     onReset: () => void;
 };
 
+const statusOptions = [
+    { value: 'ALL', label: 'All Statuses' },
+    { value: 'PENDING_PAYMENT', label: 'PENDING PAYMENT' },
+    { value: 'PAID', label: 'PAID' },
+    { value: 'PROCESSING', label: 'PROCESSING' },
+    { value: 'SHIPPED', label: 'SHIPPED' },
+    { value: 'DELIVERED', label: 'DELIVERED' },
+    { value: 'CANCELLED', label: 'CANCELLED' },
+] as const;
+
+const paymentOptions = [
+    { value: 'ALL', label: 'All Providers' },
+    { value: 'FAKE', label: 'FAKE' },
+    { value: 'PAYSTACK', label: 'PAYSTACK' },
+] as const;
+
 export const FilterPanel = ({
     searchInput,
     status,
@@ -52,13 +68,11 @@ export const FilterPanel = ({
                 onChange={event => onFilterChange('status', event.target.value)}
                 className="h-10 rounded-xl border border-light-border dark:border-dark-border bg-light-fg dark:bg-dark-fg px-3 text-sm text-coral-black dark:text-white outline-none focus:border-primary"
             >
-                <option value="ALL">All Statuses</option>
-                <option value="PENDING_PAYMENT">PENDING PAYMENT</option>
-                <option value="PAID">PAID</option>
-                <option value="PROCESSING">PROCESSING</option>
-                <option value="SHIPPED">SHIPPED</option>
-                <option value="DELIVERED">DELIVERED</option>
-                <option value="CANCELLED">CANCELLED</option>
+                {statusOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                        {option.label}
+                    </option>
+                ))}
             </select>
         </div>
         <div className="flex flex-col gap-2">
@@ -106,9 +120,11 @@ export const FilterPanel = ({
                 onChange={event => onFilterChange('paymentProvider', event.target.value)}
                 className="h-10 rounded-xl border border-light-border dark:border-dark-border bg-light-fg dark:bg-dark-fg px-3 text-sm text-coral-black dark:text-white outline-none focus:border-primary"
             >
-                <option value="ALL">All Providers</option>
-                <option value="FAKE">FAKE</option>
-                <option value="PAYSTACK">PAYSTACK</option>
+                {paymentOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                        {option.label}
+                    </option>
+                ))}
             </select>
         </div>
         <button

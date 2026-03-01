@@ -33,6 +33,15 @@ export const addItemsToCart: RequestHandler = async (req, res, next): Promise<vo
     }
 };
 
+export const clearCart: RequestHandler = async (req, res, next): Promise<void> => {
+    try {
+        const cart = await CartService.clearCart(req.user?.id as string);
+        res.status(200).json(cart);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export const deleteCartItem: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const identity = resolveIdentity(req);

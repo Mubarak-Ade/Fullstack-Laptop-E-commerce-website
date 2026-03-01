@@ -4,7 +4,7 @@ import Product from '../../models/Product.js';
 class CartService {
     /* ---------------- GET CART ---------------- */
     static async getUserCart(identity) {
-        const cart = (await this.findCartByIdentity(identity)
+        let cart = (await this.findCartByIdentity(identity)
             ?.populate({
             path: 'items.product user',
             select: 'name images storage ram cpu price email',
@@ -12,13 +12,27 @@ class CartService {
             .lean()
             .exec());
         if (!cart) {
-            throw createHttpError(404, 'Cart not found');
+            const newCart = await Cart.create(identity.type === 'user'
+                ? { user: identity.userId, items: [] }
+                : { guestId: identity.guestId, items: [] });
+            cart = (await Cart.findById(newCart._id)
+                .populate({
+                path: 'items.product user',
+                select: 'name images storage ram cpu price email',
+            })
+                .lean()
+                .exec());
+            if (!cart) {
+                throw createHttpError(500, 'Failed to initialize cart');
+            }
         }
         // Keep only the first image per product
         cart.items.forEach(item => {
+            if (!item.product)
+                return;
             const images = item.product?.images;
             if (images?.length) {
-                item.product.images = [item.product?.images[0]];
+                item.product.images = [images[0]];
             }
         });
         return cart;
@@ -188,15 +202,17 @@ class CartService {
         const index = cart.items.findIndex(item => item.product.toString() === productId);
         return index;
     }
-    static async clearCart(userId) {
-        const cart = await Cart.findOne({ user: userId });
+    static async clearCart(userId, session) {
+        const sessionOptions = session ? { session } : undefined;
+        const cart = await Cart.findOne({ user: userId }, null, sessionOptions);
         if (!cart) {
-            throw createHttpError(404, "Cart Not Found");
+            return null;
         }
-        cart.items.length = 0;
+        cart.items.splice(0);
         cart.totalPrice = 0;
         cart.totalItems = 0;
-        await cart.save();
+        await cart.save(sessionOptions);
+        this.recalculateCart(cart);
         return cart;
     }
 }

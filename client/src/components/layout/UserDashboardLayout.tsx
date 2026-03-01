@@ -6,33 +6,35 @@ import type { Links } from '@/features/dashboard/types';
 import { SideBar } from '../Sidebar';
 import { Header } from '../dashboard/Header';
 
-export const UserDashboardLayout = () => {
-    const links: Links[] = [
-        {
-            label: 'Dashboard',
-            link: 'overview',
-            icon: <Grid2X2 />,
-        },
-        {
-            label: 'Profile',
-            link: 'me',
-            icon: <User />,
-        },
-        {
-            label: 'Order',
-            link: 'orders',
-            icon: <Trophy />,
-        },
-        {
-            label: 'Setting',
-            link: 'overview',
-            icon: <Settings />,
-        },
-    ];
+const SIDEBAR_WIDTH = '18rem';
 
+const userLinks: Links[] = [
+    {
+        label: 'Dashboard',
+        link: 'overview',
+        icon: <Grid2X2 />,
+    },
+    {
+        label: 'Profile',
+        link: 'me',
+        icon: <User />,
+    },
+    {
+        label: 'Order',
+        link: 'orders',
+        icon: <Trophy />,
+    },
+    {
+        label: 'Setting',
+        link: 'overview',
+        icon: <Settings />,
+    },
+];
+
+export const UserDashboardLayout = () => {
     return (
-        <SidebarProvider style={{ ['--sidebar-width']: '18rem' } as CSSProperties}>
-            <SideBar links={links} />
+        <SidebarProvider style={{ ['--sidebar-width']: SIDEBAR_WIDTH } as CSSProperties}>
+            <SideBar links={userLinks} />
             <main className="bg-light-fg dark:bg-dark-bg overflow-hidden w-full">
                 <Header />
                 <Outlet />

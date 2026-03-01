@@ -1,4 +1,4 @@
-import createHttpError from "http-errors";
+import createHttpError from 'http-errors';
 const resolveIdentity = (req) => {
     if (req.user?.id) {
         return { type: 'user', userId: req.user.id };

@@ -20,3 +20,8 @@ export const editProfile = async (data: FormData) => {
     const res = await api.patch('/user/me', data);
     return res.data;
 };
+
+export const logoutUser = async () => {
+    const res = await api.post('/user/logout');
+    return res.data;
+};

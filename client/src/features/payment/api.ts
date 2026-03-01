@@ -1,7 +1,13 @@
 import api from "@/utils/axios";
 
-export const initializeFakePayment = async (orderId: string)  => {
-    const res = await api.post('payment/fake/initialize', {orderId})
+export const initialize = async ({
+    orderId,
+    paymentMethod,
+}: {
+    orderId: string;
+    paymentMethod: string;
+}) => {
+    const res = await api.post('payment/initialize', { orderId, paymentMethod });
     return res.data
 }
 

@@ -1,5 +1,6 @@
 import UserServices from '../services/user.service.js';
-import CartService from '../services/cart.service.js';
+import createHttpError from 'http-errors';
+import env from '../../env.js';
 export const register = async (req, res, next) => {
     try {
         const user = await UserServices.regiserUser(req.body);
@@ -12,13 +13,37 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
     try {
         const user = await UserServices.loginUser(req.body);
-        const guest = req.headers['x-guest-id'];
-        const cart = await CartService.mergeCart(guest, user.id.toString());
-        res.status(200).json(user);
+        res.cookie('jid', user.refreshToken, {
+            httpOnly: true,
+            secure: env.NODE_ENV === 'production',
+            sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: '/api/user/refresh',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+        const { refreshToken, ...payload } = user;
+        res.status(200).json(payload);
     }
     catch (error) {
         next(error);
     }
+};
+export const refreshToken = async (req, res, next) => {
+    try {
+        const refreshToken = req.cookies?.jid;
+        const token = await UserServices.refreshToken(refreshToken);
+        res.status(200).json({ token });
+    }
+    catch (error) {
+        next(createHttpError(401, 'Invalid refresh token'));
+    }
+};
+export const logout = async (req, res, next) => {
+    res.clearCookie('jid', {
+        path: '/api/user/refresh',
+        secure: env.NODE_ENV === 'production',
+        sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+    });
+    res.json({ message: 'Logged out successfully' });
 };
 export const getUser = async (req, res, next) => {
     try {

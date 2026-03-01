@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 export const OrderSchema = z.object({
     firstname: z.string(),
@@ -10,7 +10,7 @@ export const OrderSchema = z.object({
     city: z.string(),
     postalCode: z.string(),
     country: z.string(),
-    shippingMethod: z.string(),
-})
+    paymentProvider: z.string(),
+});
 
-export type OrderDTO = z.infer<typeof OrderSchema>
+export type OrderDTO = z.infer<typeof OrderSchema>;

@@ -3,24 +3,19 @@ import { motion } from 'motion/react';
 
 interface Props {
     products: {
-        productId: string,
-        productName: string,
-        quantity: number,
-        image: string,
-        unitPriceAtPurchase: number,
-    }[],
-    shippingFee: number,
-    subTotal: number,
-    tax: number,
-    total: number
-
+        productId: string;
+        productName: string;
+        quantity: number;
+        image: string;
+        unitPriceAtPurchase: number;
+    }[];
+    shippingFee: number;
+    subTotal: number;
+    tax: number;
+    total: number;
 }
 
-export const OrderSummary = ({products, shippingFee, subTotal, tax, total}: Props) => {
-
-    console.log(products.map(prod => prod.image));
-    
-
+export const OrderSummary = ({ products, shippingFee, subTotal, tax, total }: Props) => {
     return (
         <motion.div
             layout
@@ -44,9 +39,13 @@ export const OrderSummary = ({products, shippingFee, subTotal, tax, total}: Prop
                                     {product.productName}
                                 </h4>
                                 {/* <h6 className='text-sm text-secondary'>{` ${product.ram ? product.ram : "8"}GB RAM  ${product.storage ? product.storage : "500"}GB`}</h6> */}
-                                <h6 className='text-xs mt-2 text-black dark:text-white'>QTY: {product.quantity}</h6>
+                                <h6 className="text-xs mt-2 text-black dark:text-white">
+                                    QTY: {product.quantity}
+                                </h6>
                             </div>
-                            <p className="text-black dark:text-white">{priceFormat(product.unitPriceAtPurchase)}</p>
+                            <p className="text-black dark:text-white">
+                                {priceFormat(product.unitPriceAtPurchase)}
+                            </p>
                         </div>
                     </li>
                 ))}
@@ -54,15 +53,21 @@ export const OrderSummary = ({products, shippingFee, subTotal, tax, total}: Prop
             <ul className="mt-2 border-b dark:border-dark-border border-light-border p-2">
                 <li className="flex justify-between p-2">
                     <span className="text-secondary text-sm">Sub Total</span>
-                    <p className="dark:text-white text-coral-block font-medium">{priceFormat(subTotal)}</p>
+                    <p className="dark:text-white text-coral-block font-medium">
+                        {priceFormat(subTotal)}
+                    </p>
                 </li>
                 <li className="flex justify-between p-2">
                     <span className="text-secondary text-sm">Shipping</span>
-                    <p className="dark:text-white text-coral-block font-medium">{priceFormat(shippingFee)}</p>
+                    <p className="dark:text-white text-coral-block font-medium">
+                        {priceFormat(shippingFee)}
+                    </p>
                 </li>
                 <li className="flex justify-between p-2">
                     <span className="text-secondary text-sm">Taxes (Estimated)</span>
-                    <p className="dark:text-white text-coral-block font-medium">{priceFormat(tax)}</p>
+                    <p className="dark:text-white text-coral-block font-medium">
+                        {priceFormat(tax)}
+                    </p>
                 </li>
             </ul>
             <div className="flex justify-between mt-2">
@@ -70,5 +75,5 @@ export const OrderSummary = ({products, shippingFee, subTotal, tax, total}: Prop
                 <h2 className="text-xl font-bold text-primary font-technical">{priceFormat(total)}</h2>
             </div>
         </motion.div>
-  )
-}
+    );
+};

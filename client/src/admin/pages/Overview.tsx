@@ -19,19 +19,20 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 export const AdminOverview = () => {
     const { data: dashboard } = useQuery(useDashboard());
 
+    const revenueLabels = dashboard?.revenueLast7Days.map(revenue => format(revenue._id, 'EEEE'));
+    const revenueValues = dashboard?.revenueLast7Days.map(revenue => revenue.revenue);
+
     const data = {
-        labels: dashboard?.revenueLast7Days.map(revenue => format(revenue._id, 'EEEE')),
+        labels: revenueLabels,
         datasets: [
             {
                 height: '1000px',
                 backgroundColor: '#0b66fe23',
                 label: 'Sales Performance',
-                data: dashboard?.revenueLast7Days.map(revenue => revenue.revenue),
+                data: revenueValues,
             },
         ],
     };
-
-    console.log(dashboard);
 
     return (
         <div>

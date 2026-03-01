@@ -9,6 +9,7 @@ const generateGuestId = () => `guest_${crypto.randomUUID()}`;
 interface AuthState {
     identity: UserType;
     setUser: (user: User) => void;
+    setAccessToken: (token: string) => void;
     setGuestId: () => void;
     logout: () => void;
 }
@@ -21,9 +22,15 @@ export const useAuthStore = create<AuthState>()(
                 guestId: generateGuestId(),
             },
             setUser: user => set({ identity: { type: 'user', user } }),
+            setAccessToken: token =>
+                set(state =>
+                    state.identity.type === 'user'
+                        ? { identity: { type: 'user', user: { ...state.identity.user, token } } }
+                        : state
+                ),
             setGuestId: () => {
-                const guest = get().identity
-                set({identity: guest})
+                const guest = get().identity;
+                set({ identity: guest });
             },
             logout: () => {
                 set({ identity: { type: 'guest', guestId: generateGuestId() } });

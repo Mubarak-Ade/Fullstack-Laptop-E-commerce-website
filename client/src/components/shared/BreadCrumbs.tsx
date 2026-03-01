@@ -1,11 +1,13 @@
-import { ChevronRight } from "lucide-react";
-import { Link, useLocation } from "react-router";
-import {Icon} from "./Icon";
+import { ChevronRight } from 'lucide-react';
+import { Link, useLocation } from 'react-router';
+import { Icon } from './Icon';
 
 const BreadCrumbs = () => {
     const location = useLocation();
+    const pathnames = location.pathname.split('/').filter(Boolean);
 
-    const pathnames = location.pathname.split("/").filter((x) => x);
+    const formatSegment = (value: string) =>
+        decodeURIComponent(value.charAt(0).toUpperCase() + value.slice(1));
 
     return (
         <nav className="flex flex-wrap dark:text-dark-text-primary items-center text-sm">
@@ -17,18 +19,18 @@ const BreadCrumbs = () => {
                     </span>
                 </li>
                 {pathnames.map((value, index) => {
-                    const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+                    const to = `/${pathnames.slice(0, index + 1).join('/')}`;
                     const isLast = index === pathnames.length - 1;
+                    const label = formatSegment(value);
+
                     return (
                         <li key={to}>
                             {isLast ? (
-                                <span className="text-custom">
-                                    {decodeURIComponent(value.charAt(0).toUpperCase() + value.slice(1))}
-                                </span>
+                                <span className="text-custom">{label}</span>
                             ) : (
                                 <div className="flex items-center justify-center">
                                     <Link to={to}>
-                                    {decodeURIComponent(value.charAt(0).toUpperCase() + value.slice(1))}
+                                        {label}
                                     </Link>
                                     <span className="text-2xl">
                                         <ChevronRight />

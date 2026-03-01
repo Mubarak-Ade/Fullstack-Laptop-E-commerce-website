@@ -1,4 +1,12 @@
-import { Clipboard, Home, Laptop, LayoutDashboard, Settings, ToolCaseIcon, User } from 'lucide-react';
+import {
+    Clipboard,
+    Home,
+    Laptop,
+    LayoutDashboard,
+    Settings,
+    ToolCaseIcon,
+    User,
+} from 'lucide-react';
 
 export const PRIMARY_LINKS = [
     { name: 'Home', link: '/', icon: Home },
@@ -13,4 +21,11 @@ export const ACCOUNT_LINKS = [
     { label: 'Settings', icon: Settings, path: '/settings' },
 ];
 
-export const status = ['PENDING_PAYMENT', 'PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const
+export const status = [
+    'PENDING_PAYMENT',
+    'PAID',
+    'PROCESSING',
+    'SHIPPED',
+    'DELIVERED',
+    'CANCELLED',
+] as const;

@@ -26,6 +26,7 @@ import { AdminOverview } from './admin/pages/Overview';
 import { OrderManagement } from './admin/pages/OrderManagement';
 import { OrderDetailPage } from './admin/pages/OrderDetailPage';
 import { SearchPage } from './pages/SearchPage';
+import { ComingSoon } from './pages/ComingSoon';
 
 function App() {
     const theme = useThemeStore(s => s.theme);
@@ -66,6 +67,7 @@ function App() {
                     <Route path="/products/:slug" Component={ProductDetail} />
                     <Route path="/products" Component={ProductPage} />
                     <Route path="/search" Component={SearchPage} />
+                    <Route path="*" Component={ComingSoon} />
                     <Route
                         path="/carts"
                         loader={CartSkeleton}

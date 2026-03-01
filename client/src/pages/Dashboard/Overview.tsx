@@ -112,8 +112,7 @@ export const Overview = () => {
             cell: ({ row }) => {
                 const status = resolveStatus(row.original.status);
                 return (
-                    <span className={`${status.className}import type { Order } from '@/schema/order.schema';
- rounded-xl py-1 px-6`}>
+                    <span className={`${status.className} rounded-xl py-1 px-6`}>
                         {status.label}
                     </span>
                 );
@@ -141,7 +140,6 @@ export const Overview = () => {
     ];
 
     const lastItem = data?.at(-1)?.updatedAt;
-    console.log(lastItem);
 
     return (
         <div className="px-6 py-10">

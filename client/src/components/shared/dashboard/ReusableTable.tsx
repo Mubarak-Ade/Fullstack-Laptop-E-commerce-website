@@ -63,6 +63,9 @@ export const ReusableTable = <T,>({
             setSelectedIds(new Set(Object.keys(newSelection)));
         },
     });
+    const rows = table.getRowModel().rows;
+    const hasRows = rows.length > 0;
+    const pageState = table.getState().pagination;
 
     return (
         <div className="w-full  space-y-4">
@@ -101,8 +104,8 @@ export const ReusableTable = <T,>({
                                     Loading orders...
                                 </TableCell>
                             </TableRow>
-                        ) : table.getRowModel().rows.length ? (
-                            table.getRowModel().rows.map(row => (
+                        ) : hasRows ? (
+                            rows.map(row => (
                                 <TableRow
                                     key={row.id}
                                     className="border-b border-light-border dark:border-dark-border transition-colors duration-200"
@@ -137,11 +140,11 @@ export const ReusableTable = <T,>({
             {/* Pagination Controls */}
             <div className="flex flex-wrap items-center justify-between gap-3 px-4">
                 <div className="text-sm text-secondary/80">
-                    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                    Page {pageState.pageIndex + 1} of {table.getPageCount()}
                 </div>
                 <div className="flex items-center gap-3">
                     <select
-                        value={table.getState().pagination.pageSize}
+                        value={pageState.pageSize}
                         onChange={event => table.setPageSize(Number(event.target.value))}
                         disabled={isLoading}
                         className="h-9 rounded-lg border border-light-border dark:border-dark-border bg-transparent px-2 text-sm text-secondary outline-none"

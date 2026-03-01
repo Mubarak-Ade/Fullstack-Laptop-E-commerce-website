@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
     addItemsToCart,
     CheckoutController,
+    clearCart,
     deleteCartItem,
     getCart,
     getCartItems,
@@ -18,6 +19,7 @@ router.post('/items', addItemsToCart);
 // router.post('/cart/inc', decreaseQuantity)
 router.post('/item/quantity', inputQuantity);
 router.delete('/item/remove', deleteCartItem);
+router.delete('/clear', requireAuth, clearCart);
 router.get('/checkout', requireAuth, CheckoutController);
 
 export default router;

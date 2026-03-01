@@ -8,14 +8,13 @@ export const attachUser = (req, res, next) => {
     }
     const token = authHeader.split(' ')[1];
     if (!token) {
-        throw createHttpError(401, "No token, unauthorize user");
+        throw createHttpError(401, 'No token, unauthorize user');
     }
     try {
         const decode = jwt.verify(token, env.JWT_SECRET);
         req.user = decode;
     }
-    catch (error) {
-    }
+    catch (error) { }
     next();
 };
 export const requireAuth = (req, res, next) => {
@@ -27,8 +26,8 @@ export const requireAuth = (req, res, next) => {
 };
 export const authorizeRole = async (req, res, next) => {
     const user = req.user;
-    if (!user || user.role !== "admin") {
-        throw createHttpError(403, "Forbidden, Admin only");
+    if (!user || user.role !== 'admin') {
+        throw createHttpError(403, 'Forbidden, Admin only');
     }
     next();
 };

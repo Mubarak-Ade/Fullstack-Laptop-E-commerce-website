@@ -24,11 +24,13 @@ export const ConfirmationModal: React.FC<Props> = ({ selectedRows, closeModal })
     const deleteOrders = useMutation(useDeleteManyOrders());
     const { showToast } = useToast();
 
+    const handleClose = () => closeModal();
+
     const handleDeleteOrders = () => {
         deleteOrders.mutate(selectedRows, {
             onSuccess: () => {
                 showToast('success', 'Orders deleted successfully');
-                closeModal();
+                handleClose();
             },
             onError: error => {
                 showToast('error', error.message || 'Failed to delete orders');
@@ -53,7 +55,7 @@ export const ConfirmationModal: React.FC<Props> = ({ selectedRows, closeModal })
                         </p>
                         <div className="flex justify-end gap-3 mt-5 border-t border-gray-300 dark:border-gray-600 p-5">
                             <button
-                                onClick={closeModal}
+                                onClick={handleClose}
                                 className="px-4 py-3 cursor-pointer bg-gray-300 dark:bg-gray-600 text-sm rounded-md hover:bg-gray-400 dark:hover:bg-gray-500"
                             >
                                 Cancel
@@ -67,7 +69,7 @@ export const ConfirmationModal: React.FC<Props> = ({ selectedRows, closeModal })
                         </div>
                     </div>
                     <button
-                        onClick={closeModal}
+                        onClick={handleClose}
                         className="absolute top-5 right-5 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                     >
                         <Icon icon={X} />
@@ -83,6 +85,8 @@ export const UpdateStatusModal: React.FC<Props> = ({ selectedRows, closeModal })
     const [selectedStatus, setSelectedStatus] = useState<(typeof status)[number] | null>(null);
     const { showToast } = useToast();
 
+    const handleClose = () => closeModal();
+
     const handleStatusChange = () => {
         if (!selectedStatus) {
             showToast('error', 'Please select a status to update');
@@ -93,7 +97,7 @@ export const UpdateStatusModal: React.FC<Props> = ({ selectedRows, closeModal })
             {
                 onSuccess: () => {
                     showToast('success', 'Order statuses updated successfully');
-                    closeModal();
+                    handleClose();
                 },
                 onError: error => {
                     showToast('error', error.message || 'Failed to update order statuses');
@@ -141,7 +145,7 @@ export const UpdateStatusModal: React.FC<Props> = ({ selectedRows, closeModal })
                     </div>
                     <div className="flex justify-end gap-3 mt-5 border-t border-gray-300 dark:border-gray-600 p-5">
                         <button
-                            onClick={closeModal}
+                            onClick={handleClose}
                             className="px-4 py-3 cursor-pointer bg-gray-300 dark:bg-gray-600 text-sm rounded-md hover:bg-gray-400 dark:hover:bg-gray-500"
                         >
                             Cancel
@@ -155,7 +159,7 @@ export const UpdateStatusModal: React.FC<Props> = ({ selectedRows, closeModal })
                     </div>
                 </div>
                 <button
-                    onClick={closeModal}
+                    onClick={handleClose}
                     className="absolute top-5 right-5 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                 >
                     <Icon icon={X} />

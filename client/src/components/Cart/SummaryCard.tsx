@@ -8,7 +8,7 @@ import { useAuthStore } from '@/store/AuthStore';
 import { useToast } from '@/context/ToastContext';
 
 interface Props {
-    isEmpty: boolean
+    isEmpty: boolean;
     totalItems: number;
     totalPrice: number;
 }
@@ -16,19 +16,22 @@ interface Props {
 export const SummaryCard = ({ totalItems, totalPrice, isEmpty }: Props) => {
     const navigate = useNavigate();
     const showModal = useStore(s => s.showModal);
-    const showToast = useToast().showToast
+    const showToast = useToast().showToast;
     const identity = useAuthStore(s => s.identity);
+    const isGuest = identity.type === 'guest';
 
     const goToCheckout = () => {
-        if (identity.type === 'guest') {
+        if (isGuest) {
             showModal();
-        } else {
-            if (!isEmpty) {
-                navigate('/checkout');
-            } else {
-                showToast("error", "Cart is Empty, Nothing to Checkout")
-            }
+            return;
         }
+
+        if (isEmpty) {
+            showToast('error', 'Cart is Empty, Nothing to Checkout');
+            return;
+        }
+
+        navigate('/checkout');
     };
 
     return (

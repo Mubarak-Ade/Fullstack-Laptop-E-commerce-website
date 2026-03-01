@@ -2,7 +2,7 @@ import z from 'zod';
 import { ProductApiSchema } from './product.schema';
 
 export const CartItemSchema = z.object({
-    product: ProductApiSchema.pick({_id: true, name: true, images: true}),
+    product: ProductApiSchema.pick({ _id: true, name: true, images: true }),
     quantity: z.number(),
     price: z.number(),
 });
@@ -11,9 +11,9 @@ export const CartSchema = z.object({
     items: z.array(CartItemSchema),
     totalPrice: z.number(),
     totalItems: z.number(),
-    status: z.enum(['active', 'completed', 'cancelled']).default("active"),
+    status: z.enum(['active', 'completed', 'cancelled']).default('active'),
     createdAt: z.string(),
-    udpatedAt: z.string()
+    udpatedAt: z.string(),
 });
 
 const CheckoutItemSchema = z.object({
@@ -24,18 +24,18 @@ const CheckoutItemSchema = z.object({
     }),
     productId: z.string(),
     quantity: z.number(),
-    unitPriceAtCheckout: z.number()
-})
+    unitPriceAtCheckout: z.number(),
+});
 
 const CheckoutSchema = z.object({
     items: z.array(CheckoutItemSchema),
     shipping: z.number(),
     subTotal: z.number(),
     tax: z.number(),
-    total: z.number()
-})
+    total: z.number(),
+});
 
-export type Cart = z.infer<typeof CartSchema>
+export type Cart = z.infer<typeof CartSchema>;
 
-export type Checkout = z.infer<typeof CheckoutSchema>
-export type CartItem = z.infer<typeof CartItemSchema>
+export type Checkout = z.infer<typeof CheckoutSchema>;
+export type CartItem = z.infer<typeof CartItemSchema>;

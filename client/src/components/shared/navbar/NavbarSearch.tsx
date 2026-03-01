@@ -12,13 +12,14 @@ export const NavbarSearch = () => {
     const [params] = useSearchParams();
     const { query, setQuery, open, close } = useSearchStore();
     const [value, setValue] = useState(query);
+    const isSearchPage = location.pathname === '/search';
 
     useEffect(() => {
         setValue(query);
     }, [query]);
 
     useEffect(() => {
-        if (location.pathname === '/search') {
+        if (isSearchPage) {
             const q = params.get('q') ?? '';
             setValue(q);
             setQuery(q);
@@ -26,7 +27,7 @@ export const NavbarSearch = () => {
         }
 
         close();
-    }, [close, location.pathname, params, setQuery]);
+    }, [close, isSearchPage, params, setQuery]);
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -42,6 +43,30 @@ export const NavbarSearch = () => {
         navigate(`/search?q=${encodeURIComponent(keyword)}`);
     };
 
+    const handleFocus = () => {
+        if (value.trim()) {
+            open();
+        }
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Escape') {
+            close();
+        }
+    };
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const nextValue = event.target.value;
+        setValue(nextValue);
+        setQuery(nextValue);
+
+        if (nextValue.trim()) {
+            open();
+        } else {
+            close();
+        }
+    };
+
     return (
         <motion.form
             onSubmit={handleSubmit}
@@ -54,27 +79,9 @@ export const NavbarSearch = () => {
             <motion.input
                 type="text"
                 value={value}
-                onFocus={() => {
-                    if (value.trim()) {
-                        open();
-                    }
-                }}
-                onKeyDown={event => {
-                    if (event.key === 'Escape') {
-                        close();
-                    }
-                }}
-                onChange={event => {
-                    const nextValue = event.target.value;
-                    setValue(nextValue);
-                    setQuery(nextValue);
-
-                    if (nextValue.trim()) {
-                        open();
-                    } else {
-                        close();
-                    }
-                }}
+                onFocus={handleFocus}
+                onKeyDown={handleKeyDown}
+                onChange={handleChange}
                 placeholder="Search for laptops and accessories"
                 className="h-full w-full py-3 md:text-sm text-xs outline-0"
             />

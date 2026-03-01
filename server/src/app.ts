@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { uptime } from 'process';
 import { isHttpError } from 'http-errors';
 import morgan from 'morgan';
@@ -8,10 +9,10 @@ import productRoutes from './modules/routes/product.routes.js';
 import cartRoutes from './modules/routes/cart.routes.js';
 import orderRoutes from './modules/routes/order.routes.js';
 import userRoutes from './modules/routes/user.route.js';
-import AdminRoutes from './admin/routes/main.routes.js'
+import AdminRoutes from './admin/routes/main.routes.js';
 import paymentRoutes from './modules/routes/payment.route.js';
 import path from 'path';
-import { attachUser, authorizeRole, requireAuth } from './middlewares/authorization.js';
+import { attachUser, requireAuth } from './middlewares/authorization.js';
 
 const app = express();
 
@@ -19,18 +20,27 @@ app.use(morgan('dev'));
 
 app.use(attachUser);
 
-app.use(cors());
+app.use(
+    cors({
+        origin: true,
+        credentials: true,
+    })
+);
+app.use(cookieParser());
+
+app.use('/api/payment/webhook/paystack', express.raw({ type: 'application/json' }));
+
 app.use(express.json());
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.use('/api/admin', AdminRoutes)
+app.use('/api/admin', AdminRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/order', requireAuth, orderRoutes);
-app.use('/api/payment', requireAuth, paymentRoutes);
+app.use('/api/payment', paymentRoutes);
 
 app.get('/', (req, res) => {
     res.send({

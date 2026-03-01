@@ -1,24 +1,27 @@
-import { mutationOptions, useQueryClient } from "@tanstack/react-query";
-import { confirmFakePayment, initializeFakePayment } from "./api";
+import { mutationOptions, useQueryClient } from '@tanstack/react-query';
+import { confirmFakePayment, initialize } from './api';
+import { useAuthStore } from '@/store/AuthStore';
 
-export const useInitFakePayment = () => {
-    const queryClient = useQueryClient()
+export const useInitPayment = () => {
+    const queryClient = useQueryClient();
     return mutationOptions({
-        mutationFn: initializeFakePayment,
+        mutationFn: initialize,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['orders']})
-            queryClient.invalidateQueries({queryKey: ['user-orders']})
-        }
-    })
-}
+            queryClient.invalidateQueries({ queryKey: ['orders'] });
+            queryClient.invalidateQueries({ queryKey: ['user-orders'] });
+        },
+    });
+};
 
 export const useConfirmFakePayment = () => {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
+    const identity = useAuthStore(s => s.identity);
     return mutationOptions({
         mutationFn: confirmFakePayment,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['orders']})
-            queryClient.invalidateQueries({queryKey: ['user-orders']})
-        }
-    })
-}
+            queryClient.invalidateQueries({ queryKey: ['orders'] });
+            queryClient.invalidateQueries({ queryKey: ['user-orders'] });
+            queryClient.invalidateQueries({ queryKey: ['cart', identity.type] });
+        },
+    });
+};

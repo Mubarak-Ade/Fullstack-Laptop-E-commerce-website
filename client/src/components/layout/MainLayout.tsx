@@ -14,6 +14,9 @@ const ToggleIcon = motion.create(Icon);
 export const MainLayout = () => {
     const visible = useStore(s => s.visible);
     const { theme, toggleTheme } = useThemeStore();
+    const isLight = theme === 'light';
+    const toggleIcon = isLight ? Moon : Star;
+
     return (
         <>
             <Navbar />
@@ -21,12 +24,11 @@ export const MainLayout = () => {
                 <SearchPanel />
                 <AnimatePresence>{visible && <LoginModal />}</AnimatePresence>
                 <div className="fixed bottom-30 z-50 right-10">
-                    <button onClick={toggleTheme} className="p-5 cursor-pointer rounded-full bg-primary text-white">
-                        {theme === 'light' ? (
-                            <ToggleIcon size={25} icon={Moon} />
-                        ) : (
-                            <ToggleIcon icon={Star} size={25} />
-                        )}
+                    <button
+                        onClick={toggleTheme}
+                        className="p-5 cursor-pointer rounded-full bg-primary text-white"
+                    >
+                        <ToggleIcon size={25} icon={toggleIcon} />
                     </button>
                 </div>
                 <Outlet />

@@ -3,44 +3,56 @@ import type { FieldError as FE, FieldValues, Path } from 'react-hook-form';
 import { Controller, type Control } from 'react-hook-form';
 import { Field, FieldError, FieldLabel } from '../ui/field';
 
-
 interface Props<T extends FieldValues> {
-    control: Control<T>,
-    placeholder: string
-    data: string[],
-    errors?: FE,
-    name: Path<T>,
-    label: string
-
+    control: Control<T>;
+    placeholder: string;
+    data: string[];
+    errors?: FE;
+    name: Path<T>;
+    label: string;
 }
 
-export const SelectField = <T extends FieldValues>({control, placeholder, name,  data, errors, label} : Props<T>) => {
-    
+export const SelectField = <T extends FieldValues>({
+    control,
+    placeholder,
+    name,
+    data,
+    errors,
+    label,
+}: Props<T>) => {
     return (
-        <Field className=''>
-            <FieldLabel className='dark:text-white'>{label}</FieldLabel>
+        <Field className="">
+            <FieldLabel className="dark:text-white">{label}</FieldLabel>
             <Controller
-                control={ control }
+                control={control}
                 name={name}
-                render={ ( { field } ) => (
+                render={({ field }) => {
+                    const selectedValue =
+                        typeof field.value === 'string' ? field.value : undefined;
+
+                    return (
                     <Select
-                        onValueChange={ field.onChange }
-                        value={typeof field.value === 'string' ? field.value : undefined}
+                        onValueChange={field.onChange}
+                        value={selectedValue}
                     >
-                        <SelectTrigger className='border-none outline-none focus-visible:ring-primary focus-visible:ring-1 rounded-sm dark:text-white bg-light-fg dark:bg-dark-fg py-5'>
+                        <SelectTrigger className="border-none outline-none focus-visible:ring-primary focus-visible:ring-1 rounded-sm dark:text-white bg-light-fg dark:bg-dark-fg py-5">
                             <SelectValue placeholder={placeholder} />
                         </SelectTrigger>
                         <SelectContent className="bg-light-fg border-none dark:bg-dark-fg rounded-xl">
-                            { data.map( ( item ) => (
-                                <SelectItem key={ item } className='px-4 py-2 m-0.5 rounded-md hover:bg-primary text-secondary cursor-pointer' value={ item }>
-                                    { item }
+                            {data.map(item => (
+                                <SelectItem
+                                    key={item}
+                                    className="px-4 py-2 m-0.5 rounded-md hover:bg-primary text-secondary cursor-pointer"
+                                    value={item}
+                                >
+                                    {item}
                                 </SelectItem>
-                            ) ) }
+                            ))}
                         </SelectContent>
                     </Select>
-                ) }
+                )}}
             />
-            { errors && <FieldError>{ errors.message }</FieldError> }
+            {errors && <FieldError>{errors.message}</FieldError>}
         </Field>
     );
 };

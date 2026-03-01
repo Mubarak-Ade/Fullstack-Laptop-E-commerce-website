@@ -71,11 +71,7 @@ export const ProfilePage = () => {
                 showToast('error', error.message);
             },
         });
-
-        console.log(data);
     };
-
-    console.log(errors);
 
     return (
         <div className="px-6 py-10">

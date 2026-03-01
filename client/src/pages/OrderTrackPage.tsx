@@ -2,6 +2,7 @@ import { OrderSummary } from '@/components/Order/OrderSummary';
 import { TrackOrder } from '@/components/Order/TrackOrder';
 import { Icon } from '@/components/shared/Icon';
 import { useOrder } from '@/features/order/hooks';
+import { PrimaryBtnVariant } from '@/motion/button';
 import { useQuery } from '@tanstack/react-query';
 import {
     CheckCircle2Icon,
@@ -10,10 +11,13 @@ import {
     MapPin,
     MessageCircleQuestionMark,
 } from 'lucide-react';
-import { useParams } from 'react-router';
+import { motion } from 'motion/react';
+import { useNavigate, useParams } from 'react-router';
 
 export const OrderTrackPage = () => {
     const { id } = useParams();
+
+    const navigate = useNavigate();
 
     const { data: order, isLoading } = useQuery(useOrder(id as string));
 
@@ -33,7 +37,7 @@ export const OrderTrackPage = () => {
                     Thank You For Your Order
                 </h1>
                 <h4 className="mt-2 text-secondary ">
-                    Order {order._id} . We've Sent a confirmation email to your registered email
+                    Order {order.orderNumber} . We've Sent a confirmation email to your registered email
                     address.
                 </h4>
             </div>
@@ -99,9 +103,15 @@ export const OrderTrackPage = () => {
                         </div>
                     </div>
 
-                    <button className="bg-white dark:bg-dark-surface border border-primary text-primary py-3 px-5 rounded-xl w-full mt-5 font-semibold">
+                    <motion.button
+                        variants={PrimaryBtnVariant}
+                        whileHover="hover"
+                        whileTap="tap"
+                        onClick={() => navigate('/products')}
+                        className="bg-white cursor-pointer dark:bg-dark-surface border border-primary text-primary py-3 px-5 rounded-xl w-full mt-5 font-semibold"
+                    >
                         Continue Shopping
-                    </button>
+                    </motion.button>
                 </div>
             </div>
         </div>

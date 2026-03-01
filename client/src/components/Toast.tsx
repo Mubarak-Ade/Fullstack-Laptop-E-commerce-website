@@ -3,6 +3,13 @@ import { motion } from 'motion/react';
 import { Icon } from './shared/Icon';
 import { memo } from 'react';
 
+const toastStyles = {
+    success: { icon: <Icon icon={Check} />, border: 'border-green-500', badge: 'bg-green-500' },
+    error: { icon: <Icon icon={AlertCircle} />, border: 'border-red-500', badge: 'bg-red-500' },
+    info: { icon: <Icon icon={Info} />, border: 'border-blue-500', badge: 'bg-blue-500' },
+    warning: { icon: <AlertTriangle />, border: 'border-yellow-500', badge: 'bg-yellow-500' },
+} as const;
+
 interface ToastProps {
     type: string;
     message: string;
@@ -11,42 +18,15 @@ interface ToastProps {
 
 const Toast = ({ type, message, onClose }: ToastProps) => {
     const getIcon = () => {
-        switch (type) {
-            case 'success':
-                return <Icon icon={Check} />;
-            case 'error':
-                return <Icon icon={AlertCircle} />;
-            case 'info':
-                return <Icon icon={Info} />;
-            case 'warning':
-                return <AlertTriangle />;
-        }
+        return toastStyles[type as keyof typeof toastStyles]?.icon;
     };
 
     const getBgColor = () => {
-        switch (type) {
-            case 'success':
-                return 'border-green-500';
-            case 'error':
-                return 'border-red-500';
-            case 'info':
-                return 'border-blue-500';
-            case 'warning':
-                return 'border-yellow-500';
-        }
+        return toastStyles[type as keyof typeof toastStyles]?.border;
     };
 
     const getTextColor = () => {
-        switch (type) {
-            case 'success':
-                return 'bg-green-500';
-            case 'error':
-                return 'bg-red-500';
-            case 'info':
-                return 'bg-blue-500';
-            case 'warning':
-                return 'bg-yellow-500';
-        }
+        return toastStyles[type as keyof typeof toastStyles]?.badge;
     };
 
     return (

@@ -22,6 +22,18 @@ import { Checkbox } from '../components/shared/Checkbox';
 import { useTableSelectionStore } from '../store/TableStore';
 import { ConfirmationModal, UpdateStatusModal } from '../components/orders/ActionModal';
 
+const searchDebounceMs = 400;
+
+const buttonVariants: Variants = {
+    hover: {
+        backgroundColor: 'var(--color-white)',
+        color: 'var(--color-primary)',
+    },
+    tap: {
+        scale: 0.9,
+    },
+};
+
 export const OrderManagement = () => {
     const identity = useAuthStore(s => s.identity);
     const {
@@ -59,7 +71,7 @@ export const OrderManagement = () => {
             if (searchInput !== search) {
                 setFilter('search', searchInput);
             }
-        }, 400);
+        }, searchDebounceMs);
 
         return () => clearTimeout(handler);
     }, [search, searchInput, setFilter]);
@@ -77,6 +89,9 @@ export const OrderManagement = () => {
     const { selectedIds, clear } = useTableSelectionStore();
 
     const selectedRows = Array.from(selectedIds);
+    const handleCloseModal = () => setShowModal(null);
+    const handleOpenModal = (type: 'deleteOne' | 'deleteMany' | 'updateStatus') =>
+        setShowModal(type);
 
     const pagination = useMemo(() => {
         return {
@@ -215,28 +230,18 @@ export const OrderManagement = () => {
 
     if (identity.type !== 'user') return null;
 
-    const buttonVariants: Variants = {
-        hover: {
-            backgroundColor: 'var(--color-white)',
-            color: 'var(--color-primary)',
-        },
-        tap: {
-            scale: 0.9,
-        },
-    };
-
     return (
         <div className="bg-light-fg dark:bg-dark-bg p-10">
             {showModal === 'updateStatus' && (
                 <UpdateStatusModal
                     selectedRows={selectedRows}
-                    closeModal={() => setShowModal(null)}
+                    closeModal={handleCloseModal}
                 />
             )}
             {showModal === 'deleteMany' && (
                 <ConfirmationModal
                     selectedRows={selectedRows}
-                    closeModal={() => setShowModal(null)}
+                    closeModal={handleCloseModal}
                 />
             )}
             <div>
@@ -254,7 +259,7 @@ export const OrderManagement = () => {
                 />
                 <ActiveFilterChips filters={activeFilters} />
                 <SelectedOrdersBar
-                    showModal={(type: 'updateStatus' | 'deleteMany') => setShowModal(type)}
+                    showModal={handleOpenModal}
                     selectedCount={selectedRows.length}
                     onClear={clear}
                     variants={buttonVariants}

@@ -65,7 +65,10 @@ export const parseProductQuery = (query: RawQuery) => {
 
     const search = typeof query.search === 'string' ? query.search.trim() : '';
     if (search) {
-        filter.$or = [{ name: { $regex: search, $options: 'i' } }, { slug: { $regex: search, $options: 'i' } }];
+        filter.$or = [
+            { name: { $regex: search, $options: 'i' } },
+            { slug: { $regex: search, $options: 'i' } },
+        ];
     }
 
     const rawSort = typeof query.sort === 'string' ? query.sort : 'newest';
